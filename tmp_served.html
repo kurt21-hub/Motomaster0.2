@@ -1,0 +1,997 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial;
+    }
+
+    body {
+        background: #000;
+        color: #fff;
+    }
+
+    /* BACKGROUND */
+    .container {
+        width: 100%;
+        height: 100vh;
+        background: url('images/garage.png') no-repeat center/cover;
+        position: relative;
+    }
+
+    /* OVERLAY */
+    .container::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+    }
+
+    /* HEADER */
+    .header {
+        position: relative;
+        z-index: 5;
+
+        display: flex;
+        align-items: center;
+
+        padding: 20px 40px;
+    }
+
+    .header::before {
+        content: "";
+        position: absolute;
+        width: 92.7%;
+        top: 5px;
+        left: 80px;
+        /* ð KEY FIX */
+        right: 0;
+
+        height: 2px;
+        background: red;
+    }
+
+    .header::after {
+        content: "";
+        position: absolute;
+        width: 97.3%;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin-left: 10px;
+        height: 2px;
+        background: red;
+    }
+
+    .header .right-corner {
+        position: absolute;
+        top: 5px;
+        right: 2%;
+        width: 2px;
+        height: 74px;
+        background: red;
+        z-index: 6%;
+    }
+
+    .back-btn {
+        position: absolute;
+        left: 0;
+        top: -2px;
+        /* ð move slightly up to cover line */
+
+        width: 150px;
+        /* ð increase width */
+        height: 90px;
+        /* ð increase height */
+
+        background: red;
+
+        clip-path: polygon(0 0, 100% 0, 65% 100%, 0% 100%);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 26px;
+        z-index: 8;
+        /* ð make sure it's ABOVE the line */
+    }
+
+    .back-btn img {
+        width: 40px;
+        /* ð smaller size */
+        height: 40px;
+        /* keep it square */
+        object-fit: contain;
+        /* ð prevents stretching */
+        filter: brightness(0) invert(1);
+        margin-left: 2px;
+    }
+
+    .header-content {
+        margin-left: 40px;
+    }
+
+    .title {
+        margin-left: 100px;
+        font-size: 22px;
+        font-weight: 600;
+    }
+
+
+    .title span {
+        color: red;
+    }
+
+    .logout {
+        margin-left: 73%;
+        margin-top: 5px;
+    }
+
+    .logout img {
+        width: 28px;
+    }
+
+    /* TOOLS PANEL */
+    /* TOOLS PANEL */
+    .tools {
+        position: absolute;
+        left: 40px;
+        top: 120px;
+
+        width: 320px;
+        height: 72vh;
+
+        padding: 18px;
+
+        background: #000;
+
+        border: 2px solid #ff3b30;
+        border-radius: 16px;
+
+        z-index: 5;
+
+        overflow-y: auto;
+
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: transparent transparent;
+    }
+
+    /* TITLE */
+    .tools-title {
+        font-size: 30px;
+        font-weight: bold;
+
+        color: #ff3b30;
+
+        letter-spacing: 2px;
+
+        margin-bottom: 18px;
+    }
+
+    /* GRID */
+    .tools-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+    }
+
+    /* CARD */
+    .tool {
+        background: #000;
+
+        border: 1.5px solid rgba(255, 60, 60, 0.25);
+
+        border-radius: 24px;
+
+        overflow: hidden;
+
+        transition: 0.3s ease;
+
+        cursor: pointer;
+
+        box-shadow:
+            0 0 10px rgba(255, 0, 0, 0.08),
+            inset 0 0 12px rgba(255, 255, 255, 0.02);
+    }
+
+    .tool:hover {
+        transform: translateY(-5px) scale(1.02);
+
+        border-color: #ff3b30;
+
+        box-shadow:
+            0 0 18px rgba(255, 59, 48, 0.35),
+            0 0 40px rgba(255, 0, 0, 0.12);
+    }
+
+    /* 3D AREA */
+    .tool-3d-placeholder {
+        height: 100px;
+
+        background: #000;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        color: rgba(255, 255, 255, 0.35);
+
+        font-size: 14px;
+        font-weight: 700;
+
+        letter-spacing: 2px;
+    }
+
+    /* LABEL */
+    .tool span {
+        display: block;
+
+        background: linear-gradient(90deg,
+                #ff2d2d,
+                #ff4b4b);
+
+        color: white;
+
+        text-align: center;
+
+        padding: 12px 8px;
+
+        font-size: 11px;
+        font-weight: 600;
+
+        letter-spacing: 1px;
+
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .tools::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    /* TRACK */
+    .tools::-webkit-scrollbar-track {
+        background: transparent;
+        margin: 18px 0;
+    }
+
+    /* THUMB */
+    .tools::-webkit-scrollbar-thumb {
+        background: rgba(255, 45, 45, 0);
+        border-radius: 20px;
+
+        transition: 0.3s;
+    }
+
+    /* SHOW ONLY WHEN HOVER/SCROLL */
+    .tools:hover::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg,
+                #ff2d2d,
+                #990000);
+    }
+
+    /* FIREFOX */
+    .tools:hover {
+        scrollbar-color: #ff2d2d transparent;
+    }
+
+    /* RIGHT PANEL */
+    .panel {
+        position: absolute;
+        right: 60px;
+        top: 120px;
+        left: 77%;
+        width: 320px;
+
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(6px);
+
+        padding: 20px;
+        border-radius: 10px;
+        border: 2px solid red;
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+
+        z-index: 5;
+    }
+
+    .task h4 {
+        color: red;
+        font-size: 14px;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+    }
+
+    .task p {
+        color: #ddd;
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+
+    .task-desc {
+        font-size: 14px;
+        color: #ccc;
+        line-height: 1.5;
+
+        margin-bottom: 20px;
+    }
+
+
+    /* PROGRESS */
+    .bar {
+        width: 90%;
+        height: 8px;
+        background: #333;
+        margin: 5px 0;
+        border-radius: 3px;
+    }
+
+    .progress span,
+    .time-box span {
+        color: #ff2a2a;
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 1px;
+
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .progress-label {
+        display: block;
+        color: red;
+        font-size: 13px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+    }
+
+    .bar {
+        flex: 1;
+        /* ð takes remaining space */
+        height: 6px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .fill {
+        height: 100%;
+        width: 0%;
+        background: red;
+    }
+
+    /* percentage */
+    #progressText {
+        font-size: 13px;
+        color: red;
+        min-width: 35px;
+        /* ð keeps alignment clean */
+        text-align: right;
+    }
+
+    .progress-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .time-box p {
+        font-size: 16px;
+        color: #fff;
+    }
+
+    /* HIDE ANIMATION */
+    .panel,
+    .time-box {
+        transition:
+            transform 0.4s ease,
+            opacity 0.4s ease;
+    }
+
+    /* hidden state */
+    .hide-ui {
+        opacity: 0;
+
+        transform: translateX(40px);
+
+        pointer-events: none;
+    }
+
+    .time-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .time-icon {
+        width: 18px;
+        filter: brightness(2) saturate(2);
+    }
+
+    .time-row p {
+        font-size: 15px;
+        font-weight: 500;
+        color: #fff;
+    }
+
+    .fill {
+        width: 0%;
+        height: 100%;
+        background: red;
+    }
+
+    /* BUTTON */
+    .next-btn {
+        position: absolute;
+        right: 30px;
+        bottom: 40px;
+
+        padding: 14px 35px;
+
+        background: #ff1a1a;
+        /* ð BRIGHT RED */
+        border: none;
+
+        color: #fff;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 1px;
+
+        border-radius: 6px;
+
+        cursor: pointer;
+
+        z-index: 20;
+        /* ð VERY IMPORTANT (bring forward) */
+
+        box-shadow:
+            0 0 20px rgba(255, 0, 0, 0.9),
+            /* strong glow */
+            0 0 40px rgba(255, 0, 0, 0.4);
+    }
+
+    .next-btn:hover {
+        background: linear-gradient(180deg, #ff3333, #e60000);
+
+        box-shadow:
+            0 0 20px rgba(255, 0, 0, 0.9),
+            0 6px 15px rgba(0, 0, 0, 0.8);
+
+        transform: translateY(-2px);
+    }
+
+    .next-btn::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 6px;
+
+        pointer-events: none;
+    }
+
+    .divider-line {
+        width: 100%;
+        height: 1px;
+
+        background: rgba(248, 241, 241, 0.5);
+        /* subtle red */
+
+        margin: 15px 0;
+        /* spacing above & below */
+    }
+
+    .time-box {
+        position: absolute;
+        right: 28px;
+        top: 300px;
+
+        width: 320px;
+        padding: 12px 18px;
+
+        background: rgba(0, 0, 0, 0.75);
+        /* ð darker for contrast */
+
+        border: 1px solid rgba(255, 0, 0, 0.8);
+
+        border-radius: 10px;
+
+        box-shadow:
+            0 0 12px rgba(255, 0, 0, 0.5),
+            /* glow */
+            inset 0 0 10px rgba(255, 0, 0, 0.2);
+        /* inner glow */
+
+        z-index: 10;
+        /* ð bring forward */
+    }
+
+    /* 3D SIMULATION AREA */
+    .simulation-area {
+        position: absolute;
+
+        left: 390px;
+        top: 120px;
+
+        width: 760px;
+        height: 72vh;
+
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(6px);
+
+        border: 2px solid rgba(255, 0, 0, 0.9);
+        border-radius: 18px;
+
+        box-shadow:
+            0 0 20px rgba(255, 0, 0, 0.25),
+            inset 0 0 25px rgba(255, 0, 0, 0.08);
+
+        z-index: 5;
+
+        overflow: hidden;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .sim-error {
+        color: #ffb3b3;
+        font-size: 16px;
+        font-weight: 700;
+        text-align: center;
+        padding: 20px;
+    }
+
+    /* EXPAND ANIMATION */
+    .simulation-area {
+        transition: all 0.45s ease;
+    }
+
+    /* expanded mode */
+    .simulation-area.expand {
+        width: 1090px;
+    }
+
+    /* PANEL + TIME ANIMATION */
+    .panel,
+    .time-box {
+        transition:
+            opacity 0.4s ease,
+            transform 0.4s ease;
+    }
+
+    /* hidden state */
+    .hide-ui {
+        opacity: 0;
+        transform: translateX(60px);
+        pointer-events: none;
+    }
+
+    /* TOGGLE BUTTON (moved outside panel so it stays clickable when panel is hidden) */
+
+    .toggle-ui {
+        position: absolute;
+
+        /* JS will place the button precisely; keep defaults small */
+        left: 0;
+        top: 0;
+
+        width: 36px;
+        height: 36px;
+
+        border-radius: 50%;
+
+        background: #ff1a1a;
+
+        border: 2px solid #fff;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        cursor: pointer;
+
+        z-index: 9999;
+
+        box-shadow:
+            0 6px 18px rgba(0, 0, 0, 0.6),
+            0 0 12px rgba(255, 0, 0, 0.45);
+        outline: 2px solid rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(2px);
+
+        transition: left 0.25s ease, top 0.25s ease, transform 0.25s ease;
+        transform: translate(0, 0);
+    }
+
+    /* removed hover scaling to keep arrow size fixed */
+
+    .toggle-ui img {
+        width: 16px;
+        height: 16px;
+        filter: brightness(0) invert(1);
+        transition: 0.3s ease;
+    }
+
+    /* rotate arrow */
+    .rotate-arrow img {
+        transform: rotate(180deg);
+    }
+
+
+    /* FULLY HIDE PANEL */
+    .hide-ui {
+        opacity: 0;
+
+        transform: translateX(120px);
+
+        pointer-events: none;
+    }
+
+    /* Placeholder */
+    .simulation-placeholder {
+        color: rgba(255, 255, 255, 0.3);
+
+        font-size: 30px;
+        font-weight: bold;
+
+        letter-spacing: 3px;
+    }
+</style>
+
+<script type="module" src="ThreeScene2.js"></script>
+
+<body>
+
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="header">
+            <a href="feature.html" class="back-btn">
+                <img src="images/back.png" alt="Back Arrow" class="back-img">
+            </a>
+
+            <div class="header-content">
+                <div class="title">ASSESSMENT</div>
+            </div>
+
+            <div class="logout">
+                <img src="images/logout.png">
+            </div>
+            <div class="right-corner"></div>
+        </div>
+
+        <!-- LEFT TOOLS -->
+        <div class="tools">
+
+            <div class="tools-title">TOOLS</div>
+
+            <div class="tools-grid">
+
+                <div class="tool">
+                    <div class="tool-3d-placeholder" id="socket-model"></div>
+                    <span>WRENCH</span>
+                </div>
+
+                <div class="tool">
+                    <div class="tool-3d-placeholder" id="battery-model"></div>
+                    <span>BATTERY</span>
+                </div>
+
+                <div class="tool">
+                    <div class="tool-3d-placeholder" id="water-model"></div>
+                    <span>ENGINE OIL</span>
+                </div>
+
+                <div class="tool">
+                    <div class="tool-3d-placeholder" id="wire-model"></div>
+                    <span>SCREWDRIVER</span>
+                </div>
+
+                <div class="tool">
+                    <div class="tool-3d-placeholder" id="gloves-model"></div>
+                    <span>SPARK PLUG</span>
+                </div>
+
+                <div class="tool">
+                    <div class="tool-3d-placeholder" id="baking-model"></div>
+                    <span>HAMMER</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- 3D SIMULATION AREA -->
+        <div class="simulation-area">
+            <button class="hood-btn" id="hoodBtn">Open Hood</button>
+            <!-- model-viewer fallback (appears if ThreeScene2 doesn't attach a canvas) -->
+            <model-viewer id="carModel" src="models/NEW_CARWITHENGINE.glb" alt="Car" camera-controls auto-rotate
+                exposure="1" style="width:100%;height:100%;position:absolute;inset:0;z-index:5;background:transparent;"
+                shadow-intensity="0.5"></model-viewer>
+        </div>
+        <!-- RIGHT PANEL -->
+        <div class="panel clickable-ui">
+
+            <div class="task">
+                <h4>CURRENT TASK</h4>
+
+                <h3 class="task-title">Drain the Engine Oil</h3>
+            </div>
+            <div class="divider-line"></div>
+            <div class="progress">
+                <span class="progress-label">PROGRESS</span>
+
+                <div class="progress-row">
+                    <div class="bar">
+                        <div class="fill" id="progressFill"></div>
+                    </div>
+
+                    <span id="progressText">0%</span>
+                </div>
+            </div>
+
+        </div>
+        <!-- toggle button placed outside panel so it remains clickable when panel is hidden -->
+        <div class="toggle-ui" id="toggleBtn">
+            <img src="images/back.png" alt="">
+        </div>
+        <div class="time-box clickable-ui">
+            <span>TIME ELAPSED</span>
+
+            <div class="time-row">
+                <img src="images/consistency.png" class="time-icon">
+                <p id="timer">00:00:07</p>
+            </div>
+        </div>
+        <!-- BUTTON -->
+        <button class="next-btn">SUBMIT</button>
+
+    </div>
+
+    <!-- app.js removed because it was not present on the server and caused a 404 that could interrupt page scripts -->
+
+    <script type="module">
+        import { initGlovesViewer } from './GlovesViewer.js';
+        window.addEventListener('load', () => initGlovesViewer('gloves-model'));
+    </script>
+
+    <script type="module">
+        import { initBatteryViewer } from './BatteryViewer.js';
+
+        window.addEventListener('load', () => {
+            initBatteryViewer('battery-model');
+        });
+    </script>
+    <script type="module">
+        import { initWaterViewer } from './WaterBottleViewer.js';
+
+        window.addEventListener('load', () => {
+            initWaterViewer('water-model');
+        });
+    </script>
+    <script type="module">
+        import { initBakingViewer } from './BakingSodaViewer.js';
+
+        window.addEventListener('load', () => {
+            initBakingViewer('baking-model');
+        });
+    </script>
+    <script type="module">
+        import { initWireViewer } from './WireBrushViewer.js';
+
+        window.addEventListener('load', () => {
+            initWireViewer('wire-model');
+        });
+    </script>
+    <script type="module">
+        import { initSocketViewer } from './SocketWrenchViewer.js';
+
+        window.addEventListener('load', () => {
+            initSocketViewer('socket-model');
+        });
+    </script>
+
+    <script>
+
+        const toggleBtn = document.getElementById('toggleBtn');
+
+        const panel = document.querySelector('.panel');
+
+        const timeBox = document.querySelector('.time-box');
+
+        const simulation = document.querySelector('.simulation-area');
+
+        let hidden = false;
+
+        function positionToggle() {
+            const toggleRect = toggleBtn.getBoundingClientRect();
+            const panelRect = panel.getBoundingClientRect();
+            const simRect = simulation.getBoundingClientRect();
+
+            // try to align with the panel's divider line to avoid overlapping task text
+            const divider = panel.querySelector('.divider-line');
+
+            if (!hidden) {
+                let top;
+                if (divider) {
+                    const dRect = divider.getBoundingClientRect();
+                    top = dRect.top + (dRect.height / 2) - (toggleRect.height / 2);
+                } else {
+                    top = panelRect.top + 40;
+                }
+
+                // overlap the panel's left border slightly
+                const left = panelRect.left - (toggleRect.width / 2) - 4;
+                toggleBtn.style.left = Math.round(left) + 'px';
+                toggleBtn.style.top = Math.round(top) + 'px';
+                toggleBtn.style.zIndex = '10005';
+                toggleBtn.classList.remove('rotate-arrow');
+            } else {
+                // center vertically on the simulation area's right border so it visually overlaps the border line
+                const top = simRect.top + (simRect.height / 2) - (toggleRect.height / 2);
+                const left = simRect.right - (toggleRect.width / 2) - 2;
+                toggleBtn.style.left = Math.round(left) + 'px';
+                toggleBtn.style.top = Math.round(top) + 'px';
+                toggleBtn.style.zIndex = '10010';
+                toggleBtn.classList.add('rotate-arrow');
+            }
+        }
+
+        // initial placement
+        window.addEventListener('load', () => {
+            positionToggle();
+        });
+
+        // reposition on resize/scroll
+        window.addEventListener('resize', positionToggle);
+        window.addEventListener('scroll', positionToggle);
+
+        toggleBtn.addEventListener('click', () => {
+            hidden = !hidden;
+
+            if (hidden) {
+                panel.classList.add('hide-ui');
+                timeBox.classList.add('hide-ui');
+                simulation.classList.add('expand');
+            } else {
+                panel.classList.remove('hide-ui');
+                timeBox.classList.remove('hide-ui');
+                simulation.classList.remove('expand');
+            }
+
+            // reposition toggle after the transition ends
+            setTimeout(positionToggle, 250);
+        });
+
+    </script>
+    <script>
+        // Ensure the ThreeScene is loaded; if not, try dynamic import and show a friendly error.
+        window.addEventListener('load', () => {
+            const sim = document.querySelector('.simulation-area');
+            if (!sim) return;
+            // If no canvas appended by the module, attempt to (re)import the scene module
+            const hasCanvas = !!sim.querySelector('canvas') || !!sim.querySelector('renderer');
+            if (!hasCanvas) {
+                import('./ThreeScene2.js').then(() => {
+                    // give the module a moment to attach renderer
+                    setTimeout(() => {
+                        if (!sim.querySelector('canvas')) {
+                            sim.innerHTML = '<div class="sim-error">3D viewer failed to initialize â check console for errors</div>';
+                        }
+                    }, 400);
+                }).catch((err) => {
+                    console.error('ThreeScene2 import failed', err);
+                    sim.innerHTML = '<div class="sim-error">3D viewer import failed â check console</div>';
+                });
+            }
+        });
+    </script>
+    <!-- model-viewer fallback script -->
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <script>
+        // If ThreeScene2 attaches a canvas, hide model-viewer fallback.
+        window.addEventListener('load', () => {
+            const sim = document.querySelector('.simulation-area');
+            if (!sim) return;
+            const mv = document.getElementById('carModel');
+            // decide visibility: only hide the <model-viewer> if ThreeScene2 actually loaded the car model
+            function decideViewerVisibility() {
+                if (!mv) return;
+                if (window.__originalModel || window.__meshReport) {
+                    mv.style.display = 'none';
+                    return;
+                }
+                const canvas = sim.querySelector('canvas');
+                if (canvas) {
+                    // canvas exists but model may not be loaded yet; wait briefly for ThreeScene2 signals
+                    const start = Date.now();
+                    const interval = setInterval(() => {
+                        if (window.__originalModel || window.__meshReport) {
+                            mv.style.display = 'none';
+                            clearInterval(interval);
+                            return;
+                        }
+                        if (Date.now() - start > 2000) {
+                            // no model signal within timeout â show fallback
+                            mv.style.display = 'block';
+                            clearInterval(interval);
+                        }
+                    }, 200);
+                } else {
+                    mv.style.display = 'block';
+                }
+            }
+
+            decideViewerVisibility();
+        });
+    </script>
+    <script>
+        // Hood button wiring: calls window.toggleHood if available
+        window.addEventListener('load', () => {
+            const btn = document.getElementById('hoodBtn');
+            if (!btn) return;
+            btn.addEventListener('click', () => {
+                if (typeof window.toggleHood === 'function') {
+                    const open = window.toggleHood(0);
+                    if (open === null) return;
+                    btn.textContent = open ? 'Close Hood' : 'Open Hood';
+                } else {
+                    console.warn('toggleHood not available on window â hood control not initialized.');
+                }
+            });
+        });
+    </script>
+    <script>
+        // Time elapsed display: starts at current value and ticks every second.
+        function startAssessmentTimer() {
+            const timerEl = document.getElementById('timer');
+            if (!timerEl) return;
+
+            const formatTime = (totalSeconds) => {
+                const hrs = Math.floor(totalSeconds / 3600);
+                const mins = Math.floor((totalSeconds % 3600) / 60);
+                const secs = totalSeconds % 60;
+                return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            };
+
+            // if the timer already shows an HH:MM:SS value, parse it as the starting point
+            const parts = (timerEl.textContent || '').trim().split(':').map(p => parseInt(p, 10));
+            let elapsedSeconds = 0;
+            if (parts.length === 3 && parts.every(p => !isNaN(p))) {
+                elapsedSeconds = parts[0] * 3600 + parts[1] * 60 + parts[2];
+            }
+            timerEl.textContent = formatTime(elapsedSeconds);
+
+            if (window.__assessmentTimerInterval) {
+                clearInterval(window.__assessmentTimerInterval);
+            }
+
+            window.__assessmentTimerInterval = setInterval(() => {
+                elapsedSeconds += 1;
+                timerEl.textContent = formatTime(elapsedSeconds);
+            }, 1000);
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', startAssessmentTimer, { once: true });
+            window.addEventListener('load', startAssessmentTimer, { once: true });
+        } else {
+            startAssessmentTimer();
+        }
+    </script>
+</body>
+
+</html>

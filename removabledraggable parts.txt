@@ -1,0 +1,10 @@
+Air_Intake_Hose
+ Air_Filter
+ Engine_Cover1
+ Engine_Cover1 Air_Filter_Box
+ Oil_cap
+Oil_filter
+ Ignition_Coil
+Sparkplug
+ Brake_pad
+Disc_brake

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MotoMaster – Sign Up</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Nunito:wght@400;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css">
+  <style>
+    html,
+    body {
+      overflow: hidden;
+      height: 100%;
+    }
+
+    body {
+      position: relative;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 20;
+    }
+
+    main {
+      position: fixed;
+      inset: 0;
+      padding: 92px 80px 20px 100px;
+      min-height: 0;
+    }
+
+    .signup-panel,
+    .logo-panel {
+      max-height: calc(100vh - 120px);
+    }
+
+    .logo-panel {
+      align-self: center;
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      z-index: 99999;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-card {
+      background: rgba(18, 18, 18, 0.95);
+      border: 1.5px solid rgba(232, 34, 42, 0.4);
+      box-shadow: 0 0 30px rgba(232, 34, 42, 0.25);
+      border-radius: 24px;
+      padding: 36px 32px;
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+      transform: scale(0.85);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      color: #fff;
+    }
+    .modal-overlay.active .modal-card {
+      transform: scale(1);
+    }
+    .modal-icon-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .modal-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #b81218, #e8222a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: 0 0 20px rgba(232, 34, 42, 0.5);
+      animation: scaleInCheck 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    .modal-icon svg {
+      width: 36px;
+      height: 36px;
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      animation: drawCheck 0.6s ease-in-out 0.3s forwards;
+    }
+    .modal-card h2 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+    .modal-card p {
+      font-size: 0.95rem;
+      color: #ccc;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+    .modal-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #b81218 0%, #e8222a 60%, #ff3a42 100%);
+      border: none;
+      border-radius: 50px;
+      color: #fff;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(192, 22, 26, 0.4);
+    }
+    .modal-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(232, 34, 42, 0.6);
+    }
+    .modal-btn:active {
+      transform: translateY(0);
+    }
+    @keyframes scaleInCheck {
+      from {
+        transform: scale(0);
+      }
+      to {
+        transform: scale(1);
+      }
+    }
+    @keyframes drawCheck {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Success Modal -->
+  <div id="successModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-icon-wrap">
+        <div class="modal-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+      </div>
+      <h2>Success!</h2>
+      <p id="successMessage">Your account has been created successfully.</p>
+      <button class="modal-btn" id="modalConfirmBtn">Continue</button>
+    </div>
+  </div>
+
+  <main>
+    <div class="signup-panel">
+      <h1>WELCOME</h1>
+      <p class="signin-hint">Already have an account? <a href="signin.html">Sign in</a></p>
+
+      <div class="field-group">
+        <label for="regFirst">First Name:</label>
+        <input type="text" id="regFirst" placeholder="First name" autocomplete="given-name" />
+      </div>
+
+      <div class="field-group">
+        <label for="regLast">Last Name:</label>
+        <input type="text" id="regLast" placeholder="Last name" autocomplete="family-name" />
+      </div>
+
+      <div class="field-group">
+        <label for="regEmail">Email:</label>
+        <input type="email" id="regEmail" placeholder="you@example.com" autocomplete="email" />
+      </div>
+
+      <div class="field-group">
+        <label for="regSection">Section:</label>
+        <input type="text" id="regSection" placeholder="Section/class" />
+      </div>
+
+      <div class="field-group">
+        <label for="regPassword">Password:</label>
+        <input type="password" id="regPassword" placeholder="Create a password" />
+      </div>
+
+      <div class="field-group">
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" placeholder="Repeat your password" />
+      </div>
+
+      <div class="field-options">
+        <label class="show-pwd">
+          <input type="checkbox" id="showPwd" />
+          Show Password
+        </label>
+        <a href="#" class="forgot-link">Forgot Password?</a>
+      </div>
+
+      <button class="btn-primary" id="signupBtn" onclick="registerStudent()">
+        Sign Up
+      </button>
+
+      <button class="btn-google" id="googleBtn">
+        <svg class="google-icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#EA4335"
+            d="M24 9.5c3.14 0 5.95 1.08 8.17 2.86l6.09-6.09C34.46 3.19 29.5 1 24 1 14.82 1 7.07 6.48 3.64 14.22l7.09 5.51C12.4 13.59 17.73 9.5 24 9.5z" />
+          <path fill="#4285F4"
+            d="M46.14 24.55c0-1.64-.15-3.22-.42-4.75H24v9h12.44c-.54 2.9-2.18 5.36-4.65 7.01l7.19 5.59C43.09 37.19 46.14 31.34 46.14 24.55z" />
+          <path fill="#FBBC05"
+            d="M10.73 28.27A14.6 14.6 0 0 1 9.5 24c0-1.48.26-2.91.73-4.27l-7.09-5.51A23.93 23.93 0 0 0 0 24c0 3.87.93 7.53 2.57 10.76l8.16-6.49z" />
+          <path fill="#34A853"
+            d="M24 47c5.5 0 10.12-1.82 13.49-4.95l-7.19-5.59c-1.82 1.22-4.15 1.94-6.3 1.94-6.27 0-11.6-4.09-13.27-9.73l-8.16 6.49C7.07 41.52 14.82 47 24 47z" />
+        </svg>
+        Continue with Google
+      </button>
+    </div>
+
+    <div class="logo-panel">
+      <img class="logo-img" src="images\logo.png" alt="MotoMaster Logo">
+
+      <div class="social-bar">
+        <a href="#" class="social-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
+          </svg>
+        </a>
+
+        <a href="#" class="social-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
+          </svg>
+        </a>
+
+        <a href="#" class="social-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.919-.058-1.265-.069-1.644-.069-4.849 0-3.204.013-3.583.069-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <div class="bottom-bar"></div>
+
+  <script src="script.js"></script>
+  <script>
+    async function registerStudent() {
+      const first = document.getElementById('regFirst').value.trim();
+      const last = document.getElementById('regLast').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const section = document.getElementById('regSection').value.trim();
+      const pass = document.getElementById('regPassword').value;
+      const confirm = document.getElementById('confirmPassword').value;
+
+      if (!first || !last || !email || !pass || !confirm) {
+        alert('Please fill in all fields.');
+        return;
+      }
+      if (pass !== confirm) {
+        alert('Passwords do not match.');
+        return;
+      }
+      if (pass.length < 6) {
+        alert('Password must be at least 6 characters.');
+        return;
+      }
+
+      const signupBtn = document.getElementById('signupBtn');
+      if (signupBtn) {
+        signupBtn.disabled = true;
+        signupBtn.textContent = 'Creating account...';
+      }
+
+      try {
+        const res = await fetch('register_student.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            first_name: first,
+            last_name: last,
+            email: email,
+            section: section,
+            password: pass
+          })
+        });
+        let data = {};
+        try {
+          data = await res.json();
+        } catch (parseErr) {
+          alert('Server error during signup. Please try again.');
+          return;
+        }
+        if (res.ok && data.success) {
+          if (data.student) {
+            const serialized = JSON.stringify(data.student);
+            sessionStorage.setItem('motomasterStudent', serialized);
+            localStorage.setItem('motomasterStudent', serialized);
+          }
+          showSuccessModal('Your account has been created successfully. Welcome to MotoMaster!', () => {
+            window.location.href = 'feature.html';
+          });
+        } else {
+          alert(data.message || 'Signup failed');
+        }
+      } catch (err) {
+        alert('Network or server error. Make sure XAMPP Apache and MySQL are running.');
+      } finally {
+        if (signupBtn) {
+          signupBtn.disabled = false;
+          signupBtn.textContent = 'Sign Up';
+        }
+      }
+    }
+
+    function showSuccessModal(message, onConfirm) {
+      document.getElementById('successMessage').textContent = message;
+      const modal = document.getElementById('successModal');
+      const confirmBtn = document.getElementById('modalConfirmBtn');
+      modal.classList.add('active');
+      confirmBtn.onclick = function() {
+        modal.classList.remove('active');
+        if (onConfirm) onConfirm();
+      };
+    }
+  </script>
+</body>
+
+</html>

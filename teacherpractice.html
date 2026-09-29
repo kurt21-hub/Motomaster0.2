@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotoMaster – Practice Sessions</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f3f4f6;
+            --border-color: #e5e7eb;
+            --text-primary: #1a1a2e;
+            --text-secondary: #6b7280;
+            --accent: #2563eb;
+            --accent-dark: #1d4ed8;
+            --accent-light: #eff6ff;
+            --green: #16a34a;
+            --red: #dc2626;
+            --orange: #d97706;
+            --purple: #9333ea;
+            --sidebar-w: 240px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+
+        .sidebar {
+            width: var(--sidebar-w);
+            background: #fff;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .logo-container {
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-container img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .logo-sub {
+            font-size: 0.62rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+        }
+
+        .nav-section-label {
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 14px 18px 4px;
+        }
+
+        .nav-menu {
+            list-style: none;
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+
+        .nav-menu::-webkit-scrollbar {
+            width: 0;
+        }
+
+        .nav-item {
+            padding: 9px 16px;
+            margin: 2px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            font-weight: 700;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .nav-item i {
+            width: 16px;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .nav-item:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .nav-item.active {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .sidebar-bottom {
+            padding: 12px 0 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .teacher-card {
+            margin: 12px 12px 4px;
+            padding: 12px;
+            background: var(--accent-light);
+            border-radius: 10px;
+            border: 1px solid #bfdbfe;
+        }
+
+        .teacher-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .teacher-name {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .teacher-role {
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-top: 2px;
+        }
+
+        .teacher-dept {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            background: var(--bg-color);
+        }
+
+        .topbar {
+            background: #fff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 28px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .topbar-left h1 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .topbar-left p {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-color);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            padding: 6px 12px;
+        }
+
+        .search-bar i {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.78rem;
+            color: var(--text-primary);
+            width: 160px;
+        }
+
+        .notif-btn {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--bg-color);
+            border: 1.5px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--red);
+            color: #fff;
+            font-size: 0.58rem;
+            font-weight: 800;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-pill {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 5px 12px 5px 5px;
+            border-radius: 30px;
+            border: 1.5px solid var(--border-color);
+            background: #fff;
+            cursor: pointer;
+        }
+
+        .profile-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 12px;
+        }
+
+        .profile-name {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .profile-role {
+            font-size: 0.62rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .page-container {
+            padding: 22px 28px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .kpi-card {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 16px 18px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .kpi-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .kpi-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .kpi-title {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .kpi-value {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .kpi-foot {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .action-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 4px;
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
+            padding: 4px;
+        }
+
+        .filter-tab {
+            padding: 5px 14px;
+            border-radius: 7px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-family: 'Nunito', sans-serif;
+            transition: all 0.15s;
+        }
+
+        .filter-tab:hover {
+            color: var(--accent);
+        }
+
+        .filter-tab.active {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .action-bar-right {
+            margin-left: auto;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            padding: 7px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.76rem;
+            font-weight: 800;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dark);
+        }
+
+        .btn-outline {
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 7px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-danger {
+            background: #fef2f2;
+            border: 1.5px solid #fecaca;
+            color: var(--red);
+            padding: 7px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 800;
+        }
+
+        .btn-danger:hover {
+            background: #fee2e2;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 9px;
+            border-radius: 20px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .badge-green {
+            background: #f0fdf4;
+            color: var(--green);
+            border: 1px solid #bbf7d0;
+        }
+
+        .badge-orange {
+            background: #fff7ed;
+            color: var(--orange);
+            border: 1px solid #fed7aa;
+        }
+
+        .badge-blue {
+            background: var(--accent-light);
+            color: var(--accent);
+            border: 1px solid #bfdbfe;
+        }
+
+        .badge-gray {
+            background: #f3f4f6;
+            color: #6b7280;
+            border: 1px solid #e5e7eb;
+        }
+
+        .badge-red {
+            background: #fef2f2;
+            color: var(--red);
+            border: 1px solid #fecaca;
+        }
+
+        .badge-purple {
+            background: #fdf4ff;
+            color: var(--purple);
+            border: 1px solid #e9d5ff;
+        }
+
+        .badge-teal {
+            background: #f0fdfa;
+            color: #0d9488;
+            border: 1px solid #99f6e4;
+        }
+
+        .panel {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+        }
+
+        .panel-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .panel-title {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .panel-subtitle {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 290px;
+            gap: 20px;
+            align-items: start;
+        }
+
+        /* SESSION TABLE */
+        .sess-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .sess-table thead th {
+            padding: 8px 14px;
+            text-align: left;
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: var(--bg-color);
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        .sess-table tbody tr {
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.15s;
+        }
+
+        .sess-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .sess-table tbody tr:hover {
+            background: #f8f9ff;
+        }
+
+        .sess-table td {
+            padding: 11px 14px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            vertical-align: middle;
+        }
+
+        .sess-table td.muted {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+
+        .sess-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sess-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .sess-name {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .sess-sub {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        .td-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .icon-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: 1.5px solid var(--border-color);
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 11px;
+            transition: all 0.15s;
+        }
+
+        .icon-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .icon-btn.danger:hover {
+            border-color: var(--red);
+            color: var(--red);
+            background: #fef2f2;
+        }
+
+        .prog-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .prog-track {
+            flex: 1;
+            height: 6px;
+            background: #f3f4f6;
+            border-radius: 10px;
+            overflow: hidden;
+            min-width: 60px;
+        }
+
+        .prog-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: var(--accent);
+        }
+
+        .prog-pct {
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+
+        /* SIDE */
+        .side-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .side-item:last-child {
+            border-bottom: none;
+        }
+
+        .side-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .side-label {
+            flex: 1;
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .side-val {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .top-player-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .top-player-row:last-child {
+            border-bottom: none;
+        }
+
+        .tp-rank {
+            width: 20px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+            text-align: center;
+        }
+
+        .tp-avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .tp-name {
+            flex: 1;
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .tp-pts {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 28px;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            background: #fff;
+            margin-top: auto;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        footer span {
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: flex-start;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 30px 16px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .nm-modal {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 640px;
+            overflow: hidden;
+            animation: slideUp 0.22s ease;
+            margin: auto;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(28px);
+                opacity: 0
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1
+            }
+        }
+
+        .nm-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            color: #fff;
+        }
+
+        .nm-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nm-header-icon {
+            width: 38px;
+            height: 38px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .nm-header h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .nm-header p {
+            font-size: 0.72rem;
+            opacity: 0.8;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .nm-close {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .nm-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .nm-body {
+            padding: 22px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .nm-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .nm-grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 14px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-label {
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .form-label .req {
+            color: var(--red);
+            margin-left: 2px;
+        }
+
+        .form-control {
+            padding: 8px 12px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.82rem;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.2s;
+            background: #fff;
+            font-weight: 700;
+            width: 100%;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+        }
+
+        .form-control-textarea {
+            padding: 8px 12px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.82rem;
+            color: var(--text-primary);
+            outline: none;
+            background: #fff;
+            font-weight: 600;
+            width: 100%;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .form-control-textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .nm-section-title {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: -4px;
+        }
+
+        .nm-section-title i {
+            color: var(--accent);
+        }
+
+        .nm-footer {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-color);
+        }
+
+        /* VIEW MODAL */
+        .view-modal {
+            max-width: 560px;
+        }
+
+        .vm-banner {
+            height: 72px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .vm-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .vm-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .vm-sub {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .vm-stat-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .vm-stat {
+            padding: 14px 12px;
+            text-align: center;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .vm-stat:last-child {
+            border-right: none;
+        }
+
+        .vm-stat-val {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .vm-stat-label {
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-top: 2px;
+        }
+
+        .lb-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 22px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .lb-row:last-child {
+            border-bottom: none;
+        }
+
+        .lb-rank {
+            width: 22px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+            text-align: center;
+        }
+
+        .lb-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .lb-name {
+            flex: 1;
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        .lb-pts {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .lb-badge {
+            font-size: 0.6rem;
+            font-weight: 800;
+            min-width: 46px;
+            text-align: right;
+        }
+
+        /* DEL */
+        .del-modal {
+            max-width: 420px;
+        }
+
+        .del-body {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+            text-align: center;
+        }
+
+        .del-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #fef2f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--red);
+            font-size: 20px;
+        }
+
+        .del-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .del-desc {
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .del-footer {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            padding: 14px 24px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="logo-container">
+            <img src="images/finalogo.png" alt="MotoMaster" />
+            <div><span class="logo-text">MotoMaster</span><span class="logo-sub">Teacher Portal</span></div>
+        </div>
+        <div class="teacher-card">
+            <div class="teacher-avatar"><i class="fa-solid fa-chalkboard-user"></i></div>
+            <div class="teacher-name">R. Garcia</div>
+            <div class="teacher-role">Teacher</div>
+            <div class="teacher-dept">Automotive Technology Dept.</div>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-section-label">Overview</li>
+            <li class="nav-item" onclick="location.href='teacherdash.html'"><i class="fa-solid fa-house"></i> Dashboard
+            </li>
+            <li class="nav-section-label">My Classes</li>
+            <li class="nav-item" onclick="location.href='teachermodules.html'"><i class="fa-solid fa-book-open"></i> My
+                Modules</li>
+            <li class="nav-item" onclick="location.href='teacherstudents.html'"><i class="fa-solid fa-users"></i> My
+                Students</li>
+            <li class="nav-item" onclick="location.href='teacherassess.html'"><i
+                    class="fa-solid fa-clipboard-check"></i> Assessments</li>
+            <li class="nav-item active"><i class="fa-solid fa-gamepad"></i> Practice Sessions</li>
+            <li class="nav-section-label">Insights</li>
+            <li class="nav-item" onclick="location.href='teacheranalytics.html'"><i
+                    class="fa-solid fa-chart-simple"></i> Analytics</li>
+            <li class="nav-item" onclick="location.href='teacherreports.html'"><i class="fa-solid fa-file-invoice"></i>
+                Reports</li>
+            <li class="nav-section-label">Account</li>
+            <li class="nav-item" onclick="location.href='teachernotif.html'"><i class="fa-regular fa-bell"></i>
+                Notifications <span
+                    style="margin-left:auto;background:#dc2626;color:#fff;font-size:0.55rem;font-weight:800;border-radius:10px;padding:1px 6px">3</span>
+            </li>
+            <li class="nav-item" onclick="location.href='teachersettings.html'"><i class="fa-solid fa-gear"></i>
+                Settings</li>
+        </ul>
+        <div class="sidebar-bottom">
+            <a class="nav-item" href="index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="topbar">
+            <div class="topbar-left">
+                <h1>Practice Sessions</h1>
+                <p>Manage drills, simulations, and gamified practice activities for all modules</p>
+            </div>
+            <div class="topbar-right">
+                <div class="search-bar"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="sessSearch"
+                        placeholder="Search sessions…" oninput="filterSessions()"></div>
+                <div class="notif-btn"><i class="fa-regular fa-bell"></i><span class="notif-badge">3</span></div>
+                <div class="profile-pill">
+                    <div class="profile-avatar"><i class="fa-solid fa-chalkboard-user"></i></div>
+                    <div>
+                        <div class="profile-name">R. Garcia</div>
+                        <div class="profile-role">Teacher</div>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="openCreateModal()"><i class="fa-solid fa-plus"></i> New
+                    Session</button>
+            </div>
+        </div>
+
+        <div class="page-container">
+            <!-- KPI -->
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#eff6ff;color:#2563eb"><i
+                                class="fa-solid fa-gamepad"></i></div>
+                        <div class="kpi-title">Total Sessions</div>
+                    </div>
+                    <div class="kpi-value">10</div>
+                    <div class="kpi-foot"><span>Across 4 modules</span><span style="color:var(--accent)">8 active</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#f0fdf4;color:#16a34a"><i
+                                class="fa-solid fa-trophy"></i></div>
+                        <div class="kpi-title">Total Attempts</div>
+                    </div>
+                    <div class="kpi-value">548</div>
+                    <div class="kpi-foot"><span>All sessions</span><span style="color:var(--green)">87 students</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#fff7ed;color:#d97706"><i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="kpi-title">Avg. Score</div>
+                    </div>
+                    <div class="kpi-value">76%</div>
+                    <div class="kpi-foot"><span>Practice accuracy</span><span style="color:var(--orange)">+4% this
+                            month</span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#fdf4ff;color:#9333ea"><i class="fa-solid fa-fire"></i>
+                        </div>
+                        <div class="kpi-title">Engagement Rate</div>
+                    </div>
+                    <div class="kpi-value">84%</div>
+                    <div class="kpi-foot"><span>Students active</span><span style="color:var(--purple)">73 of 87</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACTION BAR -->
+            <div class="action-bar">
+                <div class="filter-tabs">
+                    <button class="filter-tab active" onclick="setFilter('all',this)">All <span
+                            style="font-size:0.6rem;opacity:0.7">(10)</span></button>
+                    <button class="filter-tab" onclick="setFilter('active',this)">Active <span
+                            style="font-size:0.6rem;opacity:0.7">(8)</span></button>
+                    <button class="filter-tab" onclick="setFilter('draft',this)">Draft <span
+                            style="font-size:0.6rem;opacity:0.7">(2)</span></button>
+                    <button class="filter-tab" onclick="setFilter('quiz-bowl',this)">Quiz Bowl <span
+                            style="font-size:0.6rem;opacity:0.7">(4)</span></button>
+                    <button class="filter-tab" onclick="setFilter('simulation',this)">Simulation <span
+                            style="font-size:0.6rem;opacity:0.7">(3)</span></button>
+                </div>
+                <div class="action-bar-right">
+                    <select class="form-control" id="modFilter" onchange="filterSessions()"
+                        style="font-size:0.74rem;font-weight:700;padding:6px 10px;width:auto">
+                        <option value="all">All Modules</option>
+                        <option value="Engine Oil Change">Engine Oil Change</option>
+                        <option value="Brake Pad Replacement">Brake Pad Replacement</option>
+                        <option value="Air Filter Replacement">Air Filter Replacement</option>
+                        <option value="Fuel Filter Replacement">Fuel Filter Replacement</option>
+                        <option value="Battery Maintenance">Battery Maintenance</option>
+                        <option value="Spark Plug Replacement">Spark Plug Replacement</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- MAIN GRID -->
+            <div class="main-grid">
+                <div>
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div>
+                                <div class="panel-title">Session List</div>
+                                <div class="panel-subtitle" id="sessCount">Showing 10 sessions</div>
+                            </div>
+                        </div>
+                        <table class="sess-table">
+                            <thead>
+                                <tr>
+                                    <th>Session</th>
+                                    <th>Module</th>
+                                    <th>Type</th>
+                                    <th>Participants</th>
+                                    <th>Avg. Score</th>
+                                    <th>Top Score</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sessTableBody">
+                                <tr>
+                                    <td colspan="8" style="text-align:center;padding:32px;color:var(--text-secondary)">
+                                        <i class="fa-solid fa-spinner fa-spin" style="font-size:1.5rem;margin-bottom:8px;display:block"></i>
+                                        <div style="font-weight:800;font-size:0.84rem">Loading practice sessions...</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="noResults"
+                            style="display:none;padding:32px;text-align:center;color:var(--text-secondary)">
+                            <i class="fa-solid fa-magnifying-glass"
+                                style="font-size:1.5rem;margin-bottom:8px;display:block"></i>
+                            <div style="font-weight:800;font-size:0.84rem">No sessions found</div>
+                            <div style="font-size:0.72rem;margin-top:4px">Try a different search or filter.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN -->
+                <div style="display:flex;flex-direction:column;gap:16px">
+                    <!-- Avg Score by Module -->
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div>
+                                <div class="panel-title">Practice Score by Module</div>
+                                <div class="panel-subtitle">Avg. accuracy across sessions</div>
+                            </div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#2563eb"></div>
+                            <div class="side-label">Module 1</div>
+                            <div class="side-val" style="color:#16a34a">86%</div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#16a34a"></div>
+                            <div class="side-label">Module 2</div>
+                            <div class="side-val" style="color:#2563eb">76%</div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#d97706"></div>
+                            <div class="side-label">Module 3</div>
+                            <div class="side-val" style="color:#d97706">66%</div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#9333ea"></div>
+                            <div class="side-label">Module 4</div>
+                            <div class="side-val" style="color:#2563eb">72%</div>
+                        </div>
+                    </div>
+
+                    <!-- Top Players -->
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div>
+                                <div class="panel-title">Top Players</div>
+                                <div class="panel-subtitle">Highest cumulative pts</div>
+                            </div>
+                        </div>
+                        <div class="top-player-row"><span class="tp-rank">1</span>
+                            <div class="tp-avatar" style="background:#f59e0b">🥇</div>
+                            <div class="tp-name">Anna Reyes</div><span class="tp-pts">2,840 pts</span>
+                        </div>
+                        <div class="top-player-row"><span class="tp-rank">2</span>
+                            <div class="tp-avatar" style="background:#2563eb">IV</div>
+                            <div class="tp-name">Iris Villanueva</div><span class="tp-pts">2,610 pts</span>
+                        </div>
+                        <div class="top-player-row"><span class="tp-rank">3</span>
+                            <div class="tp-avatar" style="background:#16a34a">CM</div>
+                            <div class="tp-name">Carlo Mendoza</div><span class="tp-pts">2,490 pts</span>
+                        </div>
+                        <div class="top-player-row"><span class="tp-rank">4</span>
+                            <div class="tp-avatar" style="background:#9333ea">BS</div>
+                            <div class="tp-name">Beatriz Santos</div><span class="tp-pts">2,320 pts</span>
+                        </div>
+                        <div class="top-player-row"><span class="tp-rank">5</span>
+                            <div class="tp-avatar" style="background:#d97706">DL</div>
+                            <div class="tp-name">David Lim</div><span class="tp-pts">2,210 pts</span>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div class="panel-title">Quick Actions</div>
+                        </div>
+                        <div style="padding:12px 16px;display:flex;flex-direction:column;gap:8px">
+                            <button class="btn-primary" style="width:100%;justify-content:center"
+                                onclick="openCreateModal()"><i class="fa-solid fa-plus"></i> New Practice
+                                Session</button>
+                            <button class="btn-outline" style="width:100%;justify-content:center"
+                                onclick="location.href='teacherassess.html'"><i class="fa-solid fa-clipboard-check"></i>
+                                View Assessments</button>
+                            <button class="btn-outline" style="width:100%;justify-content:center"
+                                onclick="location.href='teacherstudents.html'"><i class="fa-solid fa-users"></i> View My
+                                Students</button>
+                            <button class="btn-outline" style="width:100%;justify-content:center"
+                                onclick="location.href='teacherdash.html'"><i class="fa-solid fa-house"></i> Back to
+                                Dashboard</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer><span>MotoMaster</span> Teacher Portal &mdash; Practice Sessions &copy; 2025 <span>v2.1.0</span>
+        </footer>
+    </main>
+
+    <!-- CREATE / EDIT SESSION MODAL -->
+    <div class="modal-overlay" id="createModal">
+        <div class="nm-modal">
+            <div class="nm-header">
+                <div class="nm-header-left">
+                    <div class="nm-header-icon"><i class="fa-solid fa-gamepad"></i></div>
+                    <div>
+                        <h3 id="createModalTitle">New Practice Session</h3>
+                        <p id="createModalSub">Configure a quiz bowl, drill, or simulation</p>
+                    </div>
+                </div>
+                <button class="nm-close" onclick="closeCreateModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="nm-body">
+                <div class="nm-section-title"><i class="fa-solid fa-tag"></i> Session Identity</div>
+                <div class="nm-grid-2">
+                    <div class="form-group"><label class="form-label">Session Title <span
+                                class="req">*</span></label><input type="text" class="form-control" id="sTitle"
+                            placeholder="e.g. Brake System Rapid Fire"></div>
+                    <div class="form-group"><label class="form-label">Linked Module <span
+                                class="req">*</span></label><select class="form-control" id="sMod">
+                            <option value="" disabled selected>Select module…</option>
+                            <option>Module 1: Introduction to Motorcycles</option>
+                            <option>Module 2: Engine Systems</option>
+                            <option>Module 3: Electrical Systems</option>
+                            <option>Module 4: Transmission Systems</option>
+                        </select></div>
+                </div>
+                <div class="nm-grid-3">
+                    <div class="form-group"><label class="form-label">Session Type</label><select class="form-control">
+                            <option selected>Quiz Bowl</option>
+                            <option>Simulation</option>
+                            <option>Drill</option>
+                            <option>Flashcard</option>
+                            <option>Mixed</option>
+                        </select></div>
+                    <div class="form-group"><label class="form-label">Difficulty</label><select class="form-control">
+                            <option selected>Standard</option>
+                            <option>Easy</option>
+                            <option>Hard</option>
+                            <option>Adaptive</option>
+                        </select></div>
+                    <div class="form-group"><label class="form-label">Time Limit (min)</label><input type="number"
+                            class="form-control" value="15" min="1"></div>
+                </div>
+                <div class="nm-section-title"><i class="fa-solid fa-sliders"></i> Gamification Options</div>
+                <div class="nm-grid-2">
+                    <div class="form-group"><label class="form-label">Points per Correct Answer</label><input
+                            type="number" class="form-control" value="10" min="1"></div>
+                    <div class="form-group"><label class="form-label">Bonus Streak (every N correct)</label><input
+                            type="number" class="form-control" value="5" min="1"></div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                    <label
+                        style="display:flex;align-items:center;gap:8px;font-size:0.76rem;font-weight:700;cursor:pointer"><input
+                            type="checkbox" checked> Show live leaderboard during session</label>
+                    <label
+                        style="display:flex;align-items:center;gap:8px;font-size:0.76rem;font-weight:700;cursor:pointer"><input
+                            type="checkbox" checked> Allow unlimited attempts</label>
+                    <label
+                        style="display:flex;align-items:center;gap:8px;font-size:0.76rem;font-weight:700;cursor:pointer"><input
+                            type="checkbox"> Enable team / group mode</label>
+                    <label
+                        style="display:flex;align-items:center;gap:8px;font-size:0.76rem;font-weight:700;cursor:pointer"><input
+                            type="checkbox"> Randomize question order</label>
+                </div>
+                <div class="form-group"><label class="form-label">Instructions for Students</label><textarea
+                        class="form-control-textarea" rows="3"
+                        placeholder="Shown to students before the session begins…"></textarea></div>
+            </div>
+            <div class="nm-footer">
+                <button class="btn-outline" onclick="closeCreateModal()">Cancel</button>
+                <button class="btn-outline" onclick="saveSession(false)"
+                    style="background:#6b7280;color:#fff;border-color:#6b7280"><i class="fa-solid fa-floppy-disk"></i>
+                    Save Draft</button>
+                <button class="btn-primary" onclick="saveSession(true)"><i class="fa-solid fa-rocket"></i> Publish
+                    Session</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW / LEADERBOARD MODAL -->
+    <div class="modal-overlay" id="viewModal">
+        <div class="nm-modal view-modal">
+            <div class="nm-header">
+                <div class="nm-header-left">
+                    <div class="nm-header-icon"><i class="fa-solid fa-trophy"></i></div>
+                    <div>
+                        <h3>Session Details</h3>
+                        <p id="vmSub">Leaderboard &amp; stats</p>
+                        </p>
+                    </div>
+                </div>
+                <button class="nm-close" onclick="closeViewModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="vm-banner" id="vmBanner"></div>
+            <div class="vm-stat-row" id="vmStats"></div>
+            <div
+                style="padding:10px 22px 6px;font-size:0.68rem;font-weight:800;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.4px">
+                Leaderboard</div>
+            <div id="vmLeaderboard" style="max-height:300px;overflow-y:auto"></div>
+            <div
+                style="padding:14px 22px;border-top:1px solid var(--border-color);display:flex;justify-content:flex-end;gap:8px">
+                <button class="btn-outline" onclick="closeViewModal()">Close</button>
+                <button class="btn-primary" id="vmEditBtn"><i class="fa-solid fa-pen"></i> Edit Session</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DELETE MODAL -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="nm-modal del-modal">
+            <div class="nm-header" style="background:#fff;color:var(--text-primary)">
+                <div class="nm-header-left">
+                    <div class="nm-header-icon" style="background:#fef2f2"><i class="fa-solid fa-trash"
+                            style="color:#dc2626"></i></div>
+                    <div>
+                        <h3 style="font-family:'Rajdhani',sans-serif;color:var(--text-primary)">Delete Session</h3>
+                        <p style="color:var(--text-secondary)">This action cannot be undone</p>
+                    </div>
+                </div>
+                <button class="nm-close" style="background:#f3f4f6;color:var(--text-secondary)"
+                    onclick="closeDeleteModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="del-body">
+                <div class="del-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <div class="del-title">Are you sure?</div>
+                <div class="del-desc">You are about to permanently delete <strong id="delSessName"></strong>. All
+                    student attempts and scores will be removed.</div>
+            </div>
+            <div class="del-footer">
+                <button class="btn-outline" onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn-danger" onclick="confirmDelete()"><i class="fa-solid fa-trash"></i> Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="teacher-profile.js"></script>
+    <script>
+        let sessions = [];
+        let studentsList = [];
+        let currentFilter = 'all', deleteTargetId = null;
+
+        const icons = {
+            'Engine Oil Change Simulation': 'fa-gears',
+            'Brake Pad Replacement Simulation': 'fa-screwdriver-wrench',
+            'Air Filter Replacement Simulation': 'fa-wind',
+            'Fuel Filter Replacement Simulation': 'fa-sliders',
+            'Battery Maintenance Simulation': 'fa-car-battery',
+            'Spark Plug Replacement Simulation': 'fa-bolt'
+        };
+
+        const colors = {
+            'Engine Oil Change Simulation': '#2563eb',
+            'Brake Pad Replacement Simulation': '#16a34a',
+            'Air Filter Replacement Simulation': '#d97706',
+            'Fuel Filter Replacement Simulation': '#9333ea',
+            'Battery Maintenance Simulation': '#06b6d4',
+            'Spark Plug Replacement Simulation': '#ec4899'
+        };
+
+        const colorsBg = {
+            'Engine Oil Change Simulation': '#eff6ff',
+            'Brake Pad Replacement Simulation': '#f0fdf4',
+            'Air Filter Replacement Simulation': '#fff7ed',
+            'Fuel Filter Replacement Simulation': '#fdf4ff',
+            'Battery Maintenance Simulation': '#ecfeff',
+            'Spark Plug Replacement Simulation': '#fdf2f8'
+        };
+
+        const moduleNames = {
+            'Engine Oil Change Simulation': 'Engine Oil Change',
+            'Brake Pad Replacement Simulation': 'Brake Pad Replacement',
+            'Air Filter Replacement Simulation': 'Air Filter Replacement',
+            'Fuel Filter Replacement Simulation': 'Fuel Filter Replacement',
+            'Battery Maintenance Simulation': 'Battery Maintenance',
+            'Spark Plug Replacement Simulation': 'Spark Plug Replacement'
+        };
+
+        async function fetchSessionsData() {
+            try {
+                const studResponse = await fetch('teacher_data_api.php?action=get_students_data');
+                if (studResponse.status === 403) {
+                    window.location.href = 'teacherlogin.html';
+                    return;
+                }
+                const studData = await studResponse.json();
+                if (!studData.success) {
+                    console.error('Failed to load students:', studData.message);
+                    return;
+                }
+                studentsList = studData.students;
+                
+                const studentMap = {};
+                studentsList.forEach(s => {
+                    studentMap[s.id] = { initials: s.initials, color: s.color, name: s.name };
+                });
+
+                const logsResponse = await fetch('teacher_data_api.php?action=get_logs');
+                const logsData = await logsResponse.json();
+                if (!logsData.success) {
+                    console.error('Failed to load logs:', logsData.message);
+                    return;
+                }
+                const dbAttempts = logsData.practice_sessions || [];
+
+                const standardTitles = [
+                    'Engine Oil Change Simulation',
+                    'Brake Pad Replacement Simulation',
+                    'Air Filter Replacement Simulation',
+                    'Fuel Filter Replacement Simulation',
+                    'Battery Maintenance Simulation',
+                    'Spark Plug Replacement Simulation'
+                ];
+
+                sessions = standardTitles.map((title, index) => {
+                    const attempts = dbAttempts.filter(att => att.title === title);
+                    
+                    const participants = attempts.length;
+                    
+                    let scoreSum = 0;
+                    let topScore = 0;
+                    
+                    const leaderboard = attempts
+                        .map(att => {
+                            scoreSum += att.score;
+                            if (att.score > topScore) topScore = att.score;
+                            const sInfo = studentMap[att.student_id] || { initials: 'ST', color: '#6b7280', name: att.student_name };
+                            return {
+                                n: sInfo.name,
+                                i: sInfo.initials,
+                                c: sInfo.color,
+                                pts: att.score * 10,
+                                badge: att.score === 100 ? 'Perfect' : att.score >= 90 ? 'Top' : ''
+                            };
+                        })
+                        .sort((a, b) => b.pts - a.pts);
+
+                    const avgScore = participants > 0 ? Math.round(scoreSum / participants) : 0;
+
+                    return {
+                        id: index + 1,
+                        title: title,
+                        module: moduleNames[title] || 'General',
+                        mod: moduleNames[title] || 'General',
+                        type: 'Simulation',
+                        participants: participants,
+                        avgScore: avgScore,
+                        topScore: topScore,
+                        status: 'active',
+                        icon: icons[title] || 'fa-gamepad',
+                        iconBg: colorsBg[title] || '#f3f4f6',
+                        iconColor: colors[title] || '#6b7280',
+                        lb: leaderboard
+                    };
+                });
+
+                renderSessionsTable();
+                updateKPIs();
+                updateTopPlayers(dbAttempts, studentMap);
+            } catch (error) {
+                console.error('Error loading sessions:', error);
+            }
+        }
+
+        function renderSessionsTable() {
+            const tableBody = document.getElementById('sessTableBody');
+            if (!tableBody) return;
+            tableBody.innerHTML = '';
+
+            const q = document.getElementById('sessSearch').value.toLowerCase();
+            const mf = document.getElementById('modFilter').value;
+            let vis = 0;
+
+            sessions.forEach(s => {
+                const matchStatus = currentFilter === 'all' || s.status === currentFilter || s.type.toLowerCase() === currentFilter;
+                const matchMod = mf === 'all' || s.module === mf;
+                const matchSearch = s.title.toLowerCase().includes(q);
+                
+                const show = matchStatus && matchMod && matchSearch;
+                if (show) {
+                    vis++;
+                    const avgScoreColor = s.avgScore >= 80 ? '#16a34a' : s.avgScore >= 65 ? '#2563eb' : '#d97706';
+                    const topScoreColor = s.topScore >= 80 ? '#9333ea' : s.topScore >= 65 ? '#2563eb' : '#d97706';
+
+                    const tr = document.createElement('tr');
+                    tr.dataset.status = s.status;
+                    tr.dataset.type = s.type.toLowerCase();
+                    tr.dataset.mod = s.module;
+                    tr.dataset.title = s.title.toLowerCase();
+
+                    tr.innerHTML = `
+                        <td>
+                            <div class="sess-cell">
+                                <div class="sess-icon" style="background:${s.iconBg};color:${s.iconColor}"><i class="fa-solid ${s.icon}"></i></div>
+                                <div>
+                                    <div class="sess-name">${s.title}</div>
+                                    <div class="sess-sub">3D Practice Sandbox &bull; Unlocked</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="muted">${s.module}</td>
+                        <td><span class="badge badge-teal">${s.type}</span></td>
+                        <td class="muted">${s.participants}</td>
+                        <td class="muted" style="color:${avgScoreColor};font-weight:800">${s.participants > 0 ? s.avgScore + '%' : '—'}</td>
+                        <td class="muted" style="color:${topScoreColor};font-weight:800">${s.participants > 0 ? s.topScore + '%' : '—'}</td>
+                        <td><span class="badge badge-green">Active</span></td>
+                        <td>
+                            <div class="td-actions">
+                                <button class="icon-btn" onclick="openViewModal(${s.id})" title="View Results"><i class="fa-solid fa-chart-bar"></i></button>
+                                <button class="icon-btn" onclick="openEditModal(${s.id})" title="View Details"><i class="fa-solid fa-info-circle"></i></button>
+                            </div>
+                        </td>
+                    `;
+                    tableBody.appendChild(tr);
+                }
+            });
+
+            document.getElementById('noResults').style.display = vis === 0 ? 'block' : 'none';
+            document.getElementById('sessCount').textContent = 'Showing ' + vis + ' session' + (vis !== 1 ? 's' : '');
+        }
+
+        function updateKPIs() {
+            const totalSessions = sessions.length;
+            
+            let totalAttempts = 0;
+            let scoreSum = 0;
+            const uniqueStudents = new Set();
+            
+            sessions.forEach(s => {
+                totalAttempts += s.participants;
+                s.lb.forEach(p => {
+                    scoreSum += p.pts / 10;
+                });
+            });
+            
+            sessions.forEach(s => {
+                s.lb.forEach(p => {
+                    uniqueStudents.add(p.n);
+                });
+            });
+            
+            const avgScore = totalAttempts > 0 ? Math.round(scoreSum / totalAttempts) : 0;
+            const totalStudentsCount = studentsList.length;
+            const engagementRate = totalStudentsCount > 0 ? Math.round((uniqueStudents.size / totalStudentsCount) * 100) : 0;
+            
+            const cards = document.querySelectorAll('.kpi-card');
+            if (cards.length >= 4) {
+                cards[0].querySelector('.kpi-value').textContent = totalSessions;
+                cards[1].querySelector('.kpi-value').textContent = totalAttempts;
+                cards[2].querySelector('.kpi-value').textContent = avgScore + '%';
+                cards[3].querySelector('.kpi-value').textContent = engagementRate + '%';
+                
+                cards[3].querySelector('.kpi-foot').innerHTML = `<span>Students active</span><span style="color:var(--purple)">${uniqueStudents.size} of ${totalStudentsCount}</span>`;
+            }
+
+            const activeCount = sessions.filter(s => s.status === 'active').length;
+            const draftCount = sessions.filter(s => s.status === 'draft').length;
+            const simulationCount = sessions.filter(s => s.type === 'Simulation').length;
+
+            const tabs = document.querySelectorAll('.filter-tab');
+            if (tabs.length >= 5) {
+                tabs[0].innerHTML = `All <span style="font-size:0.6rem;opacity:0.7">(${totalSessions})</span>`;
+                tabs[1].innerHTML = `Active <span style="font-size:0.6rem;opacity:0.7">(${activeCount})</span>`;
+                tabs[2].innerHTML = `Draft <span style="font-size:0.6rem;opacity:0.7">(${draftCount})</span>`;
+                tabs[3].innerHTML = `Quiz Bowl <span style="font-size:0.6rem;opacity:0.7">(0)</span>`;
+                tabs[4].innerHTML = `Simulation <span style="font-size:0.6rem;opacity:0.7">(${simulationCount})</span>`;
+            }
+        }
+
+        function updateTopPlayers(dbAttempts, studentMap) {
+            const topPlayersPanel = Array.from(document.querySelectorAll('.panel')).find(p => {
+                const title = p.querySelector('.panel-title');
+                return title && title.textContent.trim() === 'Top Players';
+            });
+            
+            if (topPlayersPanel) {
+                const header = topPlayersPanel.querySelector('.panel-top');
+                topPlayersPanel.innerHTML = '';
+                topPlayersPanel.appendChild(header);
+
+                const studentScores = {};
+                
+                studentsList.forEach(s => {
+                    studentScores[s.id] = { name: s.name, initials: s.initials, color: s.color, pts: 0 };
+                });
+                
+                dbAttempts.forEach(att => {
+                    if (studentScores[att.student_id]) {
+                        studentScores[att.student_id].pts += att.score * 10;
+                    }
+                });
+
+                const sortedPlayers = Object.values(studentScores)
+                    .sort((a, b) => b.pts - a.pts)
+                    .slice(0, 5);
+
+                sortedPlayers.forEach((player, i) => {
+                    const avatarStyle = i === 0 ? 'background:#f59e0b' : `background:${player.color}`;
+                    
+                    const row = document.createElement('div');
+                    row.className = 'top-player-row';
+                    row.innerHTML = `
+                        <span class="tp-rank">${i + 1}</span>
+                        <div class="tp-avatar" style="${avatarStyle}">${i === 0 ? '🥇' : player.initials}</div>
+                        <div class="tp-name">${player.name}</div><span class="tp-pts">${player.pts.toLocaleString()} pts</span>
+                    `;
+                    topPlayersPanel.appendChild(row);
+                });
+            }
+        }
+
+        function setFilter(f, el) {
+            currentFilter = f;
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            filterSessions();
+        }
+        function filterSessions() {
+            renderSessionsTable();
+        }
+
+        function openViewModal(id) {
+            const s = sessions.find(s => s.id === id); if (!s) return;
+            document.getElementById('vmSub').textContent = s.title;
+            document.getElementById('vmBanner').innerHTML = `<div class="vm-icon" style="background:${s.iconBg};color:${s.iconColor}"><i class="fa-solid ${s.icon}"></i></div><div><div class="vm-title">${s.title}</div><div class="vm-sub">${s.module} &bull; ${s.type}</div></div>`;
+            const sc = s.avgScore >= 80 ? '#16a34a' : s.avgScore >= 65 ? '#2563eb' : '#d97706';
+            document.getElementById('vmStats').innerHTML = `
+        <div class="vm-stat"><div class="vm-stat-val" style="color:#2563eb">${s.participants}</div><div class="vm-stat-label">Players</div></div>
+        <div class="vm-stat"><div class="vm-stat-val" style="color:${sc}">${s.avgScore || '—'}${s.avgScore ? '%' : ''}</div><div class="vm-stat-label">Avg. Score</div></div>
+        <div class="vm-stat"><div class="vm-stat-val" style="color:#9333ea">${s.topScore || '—'}${s.topScore ? '%' : ''}</div><div class="vm-stat-label">Top Score</div></div>
+        <div class="vm-stat"><div class="vm-stat-val" style="color:${s.status === 'active' ? '#16a34a' : '#6b7280'}">${s.status === 'active' ? 'Active' : 'Draft'}</div><div class="vm-stat-label">Status</div></div>`;
+            document.getElementById('vmLeaderboard').innerHTML = s.lb.length ? s.lb.map((p, i) => `
+        <div class="lb-row">
+            <span class="lb-rank">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : i + 1}</span>
+            <div class="lb-avatar" style="background:${p.c}">${p.i}</div>
+            <div class="lb-name">${p.n}</div>
+            <span class="lb-pts">${p.pts} pts</span>
+            ${p.badge ? `<span class="badge badge-purple">${p.badge}</span>` : ''}
+        </div>`).join('') : '<div style="padding:24px;text-align:center;color:var(--text-secondary);font-size:0.76rem;font-weight:700">No attempts yet.</div>';
+            document.getElementById('vmEditBtn').onclick = () => { closeViewModal(); openEditModal(id); };
+            document.getElementById('viewModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeViewModal() { document.getElementById('viewModal').classList.remove('open'); document.body.style.overflow = ''; }
+
+        function openCreateModal() {
+            document.getElementById('createModalTitle').textContent = 'Simulator Practice Info';
+            document.getElementById('createModalSub').textContent = 'Configuration overview';
+            document.getElementById('sTitle').value = 'Engine Oil Change Simulation';
+            document.getElementById('sMod').selectedIndex = 0;
+            document.getElementById('createModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function openEditModal(id) {
+            const s = sessions.find(s => s.id === id);
+            openCreateModal();
+            document.getElementById('createModalTitle').textContent = 'Simulator Practice Info';
+            document.getElementById('createModalSub').textContent = s ? s.title : '';
+            if (s) document.getElementById('sTitle').value = s.title;
+        }
+        function closeCreateModal() { document.getElementById('createModal').classList.remove('open'); document.body.style.overflow = ''; }
+        function saveSession(publish) {
+            alert('Practice configurations are managed by the simulator modules.');
+            closeCreateModal();
+        }
+
+        function openDeleteModal(id) {
+            deleteTargetId = id;
+            const s = sessions.find(s => s.id === id);
+            document.getElementById('delSessName').textContent = s ? s.title : 'this session';
+            document.getElementById('deleteModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeDeleteModal() { document.getElementById('deleteModal').classList.remove('open'); document.body.style.overflow = ''; }
+        function confirmDelete() { closeDeleteModal(); alert('Practice configurations are managed by the simulator modules.'); }
+        function publishSession(id) { alert('Practice configurations are managed by the simulator modules.'); }
+
+        ['createModal', 'viewModal', 'deleteModal'].forEach(id => {
+            document.getElementById(id).addEventListener('click', function (e) { if (e.target === this) { this.classList.remove('open'); document.body.style.overflow = ''; } });
+        });
+
+        document.addEventListener('DOMContentLoaded', fetchSessionsData);
+    </script>
+</body>
+
+</html>

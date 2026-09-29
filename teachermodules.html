@@ -1,0 +1,2784 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotoMaster – My Modules</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f3f4f6;
+            --border-color: #e5e7eb;
+            --text-primary: #1a1a2e;
+            --text-secondary: #6b7280;
+            --accent: #2563eb;
+            --accent-dark: #1d4ed8;
+            --accent-light: #eff6ff;
+            --green: #16a34a;
+            --red: #dc2626;
+            --orange: #d97706;
+            --purple: #9333ea;
+            --sidebar-w: 240px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+
+        .sidebar {
+            width: var(--sidebar-w);
+            background: #fff;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .logo-container {
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-container img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .logo-sub {
+            font-size: 0.62rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+        }
+
+        .nav-section-label {
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 14px 18px 4px;
+        }
+
+        .nav-menu {
+            list-style: none;
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+
+        .nav-menu::-webkit-scrollbar {
+            width: 0;
+        }
+
+        .nav-item {
+            padding: 9px 16px;
+            margin: 2px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            font-weight: 700;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .nav-item i {
+            width: 16px;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .nav-item:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .nav-item.active {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .sidebar-bottom {
+            padding: 12px 0 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .teacher-card {
+            margin: 12px 12px 4px;
+            padding: 12px;
+            background: var(--accent-light);
+            border-radius: 10px;
+            border: 1px solid #bfdbfe;
+        }
+
+        .teacher-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .teacher-name {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .teacher-role {
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-top: 2px;
+        }
+
+        .teacher-dept {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            background: var(--bg-color);
+        }
+
+        .topbar {
+            background: #fff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 28px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .topbar-left h1 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .topbar-left p {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-color);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            padding: 6px 12px;
+        }
+
+        .search-bar i {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.78rem;
+            color: var(--text-primary);
+            width: 180px;
+        }
+
+        .notif-btn {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--bg-color);
+            border: 1.5px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--red);
+            color: #fff;
+            font-size: 0.58rem;
+            font-weight: 800;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-pill {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 5px 12px 5px 5px;
+            border-radius: 30px;
+            border: 1.5px solid var(--border-color);
+            background: #fff;
+            cursor: pointer;
+        }
+
+        .profile-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 12px;
+        }
+
+        .profile-name {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .profile-role {
+            font-size: 0.62rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .page-container {
+            padding: 22px 28px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .kpi-card {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 16px 18px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .kpi-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .kpi-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .kpi-title {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .kpi-value {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .kpi-foot {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .action-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 4px;
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
+            padding: 4px;
+        }
+
+        .filter-tab {
+            padding: 5px 14px;
+            border-radius: 7px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-family: 'Nunito', sans-serif;
+            transition: all 0.15s;
+        }
+
+        .filter-tab:hover {
+            color: var(--accent);
+        }
+
+        .filter-tab.active {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .action-bar-right {
+            margin-left: auto;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .view-toggle {
+            display: flex;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .view-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 12px;
+            background: #fff;
+            border: none;
+            transition: all 0.15s;
+        }
+
+        .view-btn.active {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            padding: 7px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.76rem;
+            font-weight: 800;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dark);
+        }
+
+        .btn-outline {
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 7px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-danger {
+            background: #fef2f2;
+            border: 1.5px solid #fecaca;
+            color: var(--red);
+            padding: 7px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 800;
+        }
+
+        .btn-danger:hover {
+            background: #fee2e2;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 9px;
+            border-radius: 20px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .badge-green {
+            background: #f0fdf4;
+            color: var(--green);
+            border: 1px solid #bbf7d0;
+        }
+
+        .badge-orange {
+            background: #fff7ed;
+            color: var(--orange);
+            border: 1px solid #fed7aa;
+        }
+
+        .badge-blue {
+            background: var(--accent-light);
+            color: var(--accent);
+            border: 1px solid #bfdbfe;
+        }
+
+        .badge-gray {
+            background: #f3f4f6;
+            color: #6b7280;
+            border: 1px solid #e5e7eb;
+        }
+
+        .badge-red {
+            background: #fef2f2;
+            color: var(--red);
+            border: 1px solid #fecaca;
+        }
+
+        .badge-purple {
+            background: #fdf4ff;
+            color: var(--purple);
+            border: 1px solid #e9d5ff;
+        }
+
+        .panel {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+        }
+
+        .panel-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .panel-title {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .panel-subtitle {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 290px;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .mod-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .mod-table thead th {
+            padding: 8px 14px;
+            text-align: left;
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: var(--bg-color);
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        .mod-table tbody tr {
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.15s;
+        }
+
+        .mod-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .mod-table tbody tr:hover {
+            background: #f8f9ff;
+        }
+
+        .mod-table td {
+            padding: 11px 14px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            vertical-align: middle;
+        }
+
+        .mod-table td.muted {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+
+        .mod-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mod-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .mod-name {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .mod-sub {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        .td-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .prog-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .prog-track {
+            flex: 1;
+            height: 6px;
+            background: #f3f4f6;
+            border-radius: 10px;
+            overflow: hidden;
+            min-width: 60px;
+        }
+
+        .prog-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: var(--accent);
+        }
+
+        .prog-pct {
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+
+        .mod-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 16px;
+            padding: 18px;
+        }
+
+        .mod-card {
+            border: 1.5px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: box-shadow 0.2s, transform 0.2s;
+            background: #fff;
+        }
+
+        .mod-card:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .mod-card-banner {
+            height: 5px;
+        }
+
+        .mod-card-body {
+            padding: 14px 16px;
+        }
+
+        .mod-card-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .mod-card-title {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .mod-card-desc {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .mod-card-meta {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .mod-card-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .mod-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .mod-card-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .card-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 8px;
+            border: 1.5px solid var(--border-color);
+            background: #fff;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            transition: all 0.15s;
+        }
+
+        .card-action-btn:hover {
+            background: var(--accent-light);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .card-action-btn.edit:hover {
+            background: #ecfeff;
+            border-color: #0891b2;
+            color: #0891b2;
+        }
+
+        .card-action-btn.delete:hover {
+            background: #fef2f2;
+            border-color: var(--red);
+            color: var(--red);
+        }
+
+        .icon-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: 1.5px solid var(--border-color);
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 11px;
+            transition: all 0.15s;
+        }
+
+        .icon-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .icon-btn.danger:hover {
+            border-color: var(--red);
+            color: var(--red);
+            background: #fef2f2;
+        }
+
+        .side-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .side-item:last-child {
+            border-bottom: none;
+        }
+
+        .side-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .side-label {
+            flex: 1;
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .side-val {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 28px;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            background: #fff;
+            margin-top: auto;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        footer span {
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: flex-start;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 30px 16px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .nm-modal {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 720px;
+            overflow: hidden;
+            animation: slideUp 0.22s ease;
+            margin: auto;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(28px);
+                opacity: 0
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1
+            }
+        }
+
+        .nm-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            color: #fff;
+        }
+
+        .nm-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nm-header-icon {
+            width: 38px;
+            height: 38px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .nm-header h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .nm-header p {
+            font-size: 0.72rem;
+            opacity: 0.8;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .nm-close {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .nm-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .nm-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-color);
+        }
+
+        .nm-tab {
+            padding: 10px 18px;
+            font-size: 0.74rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nm-tab:hover {
+            color: var(--accent);
+        }
+
+        .nm-tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+            background: #fff;
+        }
+
+        .nm-body {
+            padding: 22px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .nm-body.hidden {
+            display: none;
+        }
+
+        .nm-section-title {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: -6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nm-section-title i {
+            color: var(--accent);
+        }
+
+        .nm-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .nm-grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 14px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-label {
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .form-label .req {
+            color: var(--red);
+            margin-left: 2px;
+        }
+
+        .form-control {
+            padding: 8px 12px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.82rem;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.2s;
+            background: #fff;
+            font-weight: 700;
+            width: 100%;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+        }
+
+        .form-control-textarea {
+            padding: 8px 12px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.82rem;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.2s;
+            background: #fff;
+            font-weight: 600;
+            width: 100%;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .form-control-textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .form-hint {
+            font-size: 0.62rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .char-count {
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-align: right;
+            margin-top: 2px;
+        }
+
+        .tag-input-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 7px 10px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            background: #fff;
+            cursor: text;
+            min-height: 38px;
+            align-items: center;
+        }
+
+        .tag-input-wrap:focus-within {
+            border-color: var(--accent);
+        }
+
+        .tag-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--accent-light);
+            color: var(--accent);
+            border: 1px solid #bfdbfe;
+            border-radius: 20px;
+            padding: 2px 10px;
+            font-size: 0.68rem;
+            font-weight: 800;
+        }
+
+        .tag-pill button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--accent);
+            font-size: 10px;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .tag-input {
+            border: none;
+            outline: none;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            min-width: 80px;
+            flex: 1;
+        }
+
+        .upload-zone {
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .upload-zone i {
+            font-size: 1.5rem;
+            color: #d1d5db;
+            margin-bottom: 6px;
+        }
+
+        .upload-zone p {
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .upload-zone span {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: #9ca3af;
+        }
+
+        .resource-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--bg-color);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .resource-row i {
+            color: var(--accent);
+            font-size: 13px;
+        }
+
+        .resource-row span {
+            flex: 1;
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .resource-row .rm {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--red);
+            font-size: 11px;
+            padding: 2px 4px;
+        }
+
+        .objective-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .objective-row input {
+            flex: 1;
+        }
+
+        .objective-row .rm-obj {
+            width: 30px;
+            height: 32px;
+            border-radius: 6px;
+            border: 1.5px solid #fecaca;
+            background: #fef2f2;
+            color: var(--red);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            flex-shrink: 0;
+        }
+
+        .add-row-btn {
+            background: none;
+            border: 1.5px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 7px;
+            width: 100%;
+            color: var(--text-secondary);
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.15s;
+        }
+
+        .add-row-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .student-search-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .student-search-bar i {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .student-search-bar input {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.78rem;
+            color: var(--text-primary);
+            background: transparent;
+        }
+
+        .student-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .student-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .student-item-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .student-chip {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .student-meta {
+            min-width: 0;
+        }
+
+        .student-name {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .student-email,
+        .student-section {
+            font-size: 0.66rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .student-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .small-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            border-radius: 8px;
+            border: 1.5px solid var(--border-color);
+            background: #fff;
+            padding: 6px 10px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .small-action-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .small-action-btn.is-added {
+            border-color: #bbf7d0;
+            color: var(--green);
+            background: #f0fdf4;
+            cursor: default;
+        }
+
+        .enrollment-box {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .enrollment-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .enrollment-summary {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .nm-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-color);
+        }
+
+        .nm-footer-left {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .nm-footer-right {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-save-draft {
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            transition: all 0.15s;
+        }
+
+        .btn-save-draft:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-publish {
+            background: var(--green);
+            border: none;
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+
+        .btn-publish:hover {
+            background: #15803d;
+        }
+
+        .btn-save-nm {
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+
+        .btn-save-nm:hover {
+            background: var(--accent-dark);
+        }
+
+
+
+        .del-modal {
+            max-width: 420px;
+        }
+
+        .del-body {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+            text-align: center;
+        }
+
+        .del-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #fef2f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--red);
+            font-size: 20px;
+        }
+
+        .del-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .del-desc {
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .del-footer {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            padding: 14px 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .view-modal {
+            max-width: 560px;
+        }
+
+        .vm-section {
+            padding: 16px 22px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .vm-section:last-child {
+            border-bottom: none;
+        }
+
+        .vm-label {
+            font-size: 0.62rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 4px;
+        }
+
+        .vm-value {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .vm-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="logo-container">
+            <img src="images/finalogo.png" alt="MotoMaster" />
+            <div><span class="logo-text">MotoMaster</span><span class="logo-sub">Teacher Portal</span></div>
+        </div>
+        <div class="teacher-card">
+            <div class="teacher-avatar"><i class="fa-solid fa-chalkboard-user"></i></div>
+            <div class="teacher-name">R. Garcia</div>
+            <div class="teacher-role">Teacher</div>
+            <div class="teacher-dept">Automotive Technology Dept.</div>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-section-label">Overview</li>
+            <li class="nav-item" onclick="location.href='teacherdash.html'"><i class="fa-solid fa-house"></i> Dashboard
+            </li>
+            <li class="nav-section-label">My Classes</li>
+            <li class="nav-item active"><i class="fa-solid fa-book-open"></i> My Modules</li>
+            <li class="nav-item" onclick="location.href='teacherstudents.html'"><i class="fa-solid fa-users"></i> My
+                Students</li>
+            <li class="nav-item" onclick="location.href='teacherassess.html'"><i
+                    class="fa-solid fa-clipboard-check"></i> Assessments</li>
+            <li class="nav-item" onclick="location.href='teacherpractice.html'"><i class="fa-solid fa-gamepad"></i>
+                Practice Sessions</li>
+            <li class="nav-section-label">Insights</li>
+            <li class="nav-item" onclick="location.href='teacheranalytics.html'"><i
+                    class="fa-solid fa-chart-simple"></i> Analytics</li>
+            <li class="nav-item" onclick="location.href='teacherreports.html'"><i class="fa-solid fa-file-invoice"></i>
+                Reports</li>
+            <li class="nav-section-label">Account</li>
+            <li class="nav-item" onclick="location.href='teachernotif.html'"><i class="fa-regular fa-bell"></i>
+                Notifications <span
+                    style="margin-left:auto;background:#dc2626;color:#fff;font-size:0.55rem;font-weight:800;border-radius:10px;padding:1px 6px">3</span>
+            </li>
+            <li class="nav-item" onclick="location.href='teachersettings.html'"><i class="fa-solid fa-gear"></i>
+                Settings</li>
+        </ul>
+        <div class="sidebar-bottom">
+            <a class="nav-item" href="index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="topbar">
+            <div class="topbar-left">
+                <h1>My Modules</h1>
+                <p>Manage, edit, and track all your teaching modules</p>
+            </div>
+            <div class="topbar-right">
+                <div class="search-bar"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="moduleSearch"
+                        placeholder="Search modules…" oninput="filterModules()"></div>
+                <div class="notif-btn"><i class="fa-regular fa-bell"></i><span class="notif-badge">3</span></div>
+                <div class="profile-pill">
+                    <div class="profile-avatar"><i class="fa-solid fa-chalkboard-user"></i></div>
+                    <div>
+                        <div class="profile-name">R. Garcia</div>
+                        <div class="profile-role">Teacher</div>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="openNewModuleModal()"><i class="fa-solid fa-plus"></i> New
+                    Module</button>
+            </div>
+        </div>
+
+        <div class="page-container">
+            <!-- KPI -->
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#eff6ff;color:#2563eb"><i
+                                class="fa-solid fa-book-open"></i></div>
+                        <div class="kpi-title">Total Modules</div>
+                    </div>
+                    <div class="kpi-value">5</div>
+                    <div class="kpi-foot"><span>All modules</span><span style="color:var(--accent)">4 published</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#f0fdf4;color:#16a34a"><i
+                                class="fa-solid fa-chart-line"></i></div>
+                        <div class="kpi-title">Avg. Completion</div>
+                    </div>
+                    <div class="kpi-value">69%</div>
+                    <div class="kpi-foot"><span>Across 4 published</span><span style="color:var(--green)">+6% vs last
+                            month</span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#fff7ed;color:#d97706"><i class="fa-solid fa-users"></i>
+                        </div>
+                        <div class="kpi-title">Total Enrollees</div>
+                    </div>
+                    <div class="kpi-value">87</div>
+                    <div class="kpi-foot"><span>Enrolled students</span><span style="color:var(--orange)">Across 4
+                            modules</span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#fdf4ff;color:#9333ea"><i
+                                class="fa-solid fa-star-half-stroke"></i></div>
+                        <div class="kpi-title">Avg. Score</div>
+                    </div>
+                    <div class="kpi-value">73.5%</div>
+                    <div class="kpi-foot"><span>All assessments</span><span style="color:var(--purple)">+3% vs last
+                            month</span></div>
+                </div>
+            </div>
+
+            <!-- ACTION BAR -->
+            <div class="action-bar">
+                <div class="filter-tabs">
+                    <button class="filter-tab active" onclick="setFilter('all',this)">All <span
+                            style="font-size:0.6rem;opacity:0.7">(5)</span></button>
+                    <button class="filter-tab" onclick="setFilter('published',this)">Published <span
+                            style="font-size:0.6rem;opacity:0.7">(4)</span></button>
+                    <button class="filter-tab" onclick="setFilter('draft',this)">Draft <span
+                            style="font-size:0.6rem;opacity:0.7">(1)</span></button>
+                </div>
+                <div class="action-bar-right">
+                    <div class="view-toggle">
+                        <button class="view-btn active" id="listViewBtn" onclick="setView('list')" title="List view"><i
+                                class="fa-solid fa-list"></i></button>
+                        <button class="view-btn" id="gridViewBtn" onclick="setView('grid')" title="Grid view"><i
+                                class="fa-solid fa-grip"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MAIN GRID -->
+            <div class="main-grid">
+                <div>
+                    <!-- LIST VIEW -->
+                    <div class="panel" id="listView">
+                        <div class="panel-top">
+                            <div>
+                                <div class="panel-title">Module List</div>
+                                <div class="panel-subtitle" id="moduleCount">Showing 6 modules</div>
+                            </div>
+                        </div>
+                        <table class="mod-table">
+                            <thead>
+                                <tr>
+                                    <th>Module</th>
+                                    <th>Students</th>
+                                    <th>Completion</th>
+                                    <th>Avg. Score</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="moduleTableBody">
+                                <tr data-status="published" data-title="engine oil change">
+                                    <td>
+                                        <div class="mod-cell">
+                                            <div class="mod-icon" style="background:#eff6ff;color:#2563eb"><i
+                                                    class="fa-solid fa-oil-can"></i></div>
+                                            <div>
+                                                <div class="mod-name">Module 1: Engine Oil Change</div>
+                                                <div class="mod-sub">Updated May 20, 2025 &bull; 3 lessons &bull; 2 hrs
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="muted">87</td>
+                                    <td>
+                                        <div class="prog-wrap">
+                                            <div class="prog-track">
+                                                <div class="prog-fill" style="width:100%;background:#16a34a"></div>
+                                            </div><span class="prog-pct">100%</span>
+                                        </div>
+                                    </td>
+                                    <td class="muted">82%</td>
+                                    <td><span class="badge badge-green">Completed</span></td>
+                                    <td>
+                                        <div class="td-actions"><button class="card-action-btn"
+                                                onclick="openViewModal(1)" title="Preview"><i
+                                                    class="fa-solid fa-eye"></i> Preview</button><button
+                                                class="card-action-btn edit" onclick="openEditModal(1)" title="Edit"><i
+                                                    class="fa-solid fa-pen"></i> Edit</button><button
+                                                class="card-action-btn delete" onclick="openDeleteModal(1)"
+                                                title="Delete"><i class="fa-solid fa-trash"></i> Delete</button></div>
+                                    </td>
+                                </tr>
+                                <tr data-status="published" data-title="brake pad replacement">
+                                    <td>
+                                        <div class="mod-cell">
+                                            <div class="mod-icon" style="background:#f0fdf4;color:#16a34a"><i
+                                                    class="fa-solid fa-circle-dot"></i></div>
+                                            <div>
+                                                <div class="mod-name">Module 2: Brake Pad Replacement</div>
+                                                <div class="mod-sub">Updated May 22, 2025 &bull; 4 lessons &bull; 3 hrs
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="muted">87</td>
+                                    <td>
+                                        <div class="prog-wrap">
+                                            <div class="prog-track">
+                                                <div class="prog-fill" style="width:100%"></div>
+                                            </div><span class="prog-pct">100%</span>
+                                        </div>
+                                    </td>
+                                    <td class="muted">74%</td>
+                                    <td><span class="badge badge-green">Completed</span></td>
+                                    <td>
+                                        <div class="td-actions"><button class="card-action-btn"
+                                                onclick="openViewModal(2)" title="Preview"><i
+                                                    class="fa-solid fa-eye"></i> Preview</button><button
+                                                class="card-action-btn edit" onclick="openEditModal(2)" title="Edit"><i
+                                                    class="fa-solid fa-pen"></i> Edit</button><button
+                                                class="card-action-btn delete" onclick="openDeleteModal(2)"
+                                                title="Delete"><i class="fa-solid fa-trash"></i> Delete</button></div>
+                                    </td>
+                                </tr>
+                                <tr data-status="published" data-title="air filter replacement">
+                                    <td>
+                                        <div class="mod-cell">
+                                            <div class="mod-icon" style="background:#fff7ed;color:#d97706"><i
+                                                    class="fa-solid fa-wind"></i></div>
+                                            <div>
+                                                <div class="mod-name">Module 3: Air Filter Replacement</div>
+                                                <div class="mod-sub">Published May 27, 2025 &bull; 4 lessons &bull; 3
+                                                    hrs</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="muted">87</td>
+                                    <td>
+                                        <div class="prog-wrap">
+                                            <div class="prog-track">
+                                                <div class="prog-fill" style="width:67%;background:#d97706"></div>
+                                            </div><span class="prog-pct">67%</span>
+                                        </div>
+                                    </td>
+                                    <td class="muted">68%</td>
+                                    <td><span class="badge badge-orange">In Progress</span></td>
+                                    <td>
+                                        <div class="td-actions"><button class="card-action-btn"
+                                                onclick="openViewModal(3)" title="Preview"><i
+                                                    class="fa-solid fa-eye"></i> Preview</button><button
+                                                class="card-action-btn edit" onclick="openEditModal(3)" title="Edit"><i
+                                                    class="fa-solid fa-pen"></i> Edit</button><button
+                                                class="card-action-btn delete" onclick="openDeleteModal(3)"
+                                                title="Delete"><i class="fa-solid fa-trash"></i> Delete</button></div>
+                                    </td>
+                                </tr>
+                                <tr data-status="published" data-title="fuel filter replacement">
+                                    <td>
+                                        <div class="mod-cell">
+                                            <div class="mod-icon" style="background:#fdf4ff;color:#9333ea"><i
+                                                    class="fa-solid fa-filter"></i></div>
+                                            <div>
+                                                <div class="mod-name">Module 4: Fuel Filter Replacement</div>
+                                                <div class="mod-sub">Updated May 24, 2025 &bull; 3 lessons &bull; 2.5
+                                                    hrs</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="muted">72</td>
+                                    <td>
+                                        <div class="prog-wrap">
+                                            <div class="prog-track">
+                                                <div class="prog-fill" style="width:100%"></div>
+                                            </div><span class="prog-pct">100%</span>
+                                        </div>
+                                    </td>
+                                    <td class="muted">70%</td>
+                                    <td><span class="badge badge-green">Completed</span></td>
+                                    <td>
+                                        <div class="td-actions"><button class="card-action-btn"
+                                                onclick="openViewModal(4)" title="Preview"><i
+                                                    class="fa-solid fa-eye"></i> Preview</button><button
+                                                class="card-action-btn edit" onclick="openEditModal(4)" title="Edit"><i
+                                                    class="fa-solid fa-pen"></i> Edit</button><button
+                                                class="card-action-btn delete" onclick="openDeleteModal(4)"
+                                                title="Delete"><i class="fa-solid fa-trash"></i> Delete</button></div>
+                                    </td>
+                                </tr>
+                                <tr data-status="published" data-title="battery maintenance">
+                                    <td>
+                                        <div class="mod-cell">
+                                            <div class="mod-icon" style="background:#f3f4f6;color:#6b7280"><i
+                                                    class="fa-solid fa-car-battery"></i></div>
+                                            <div>
+                                                <div class="mod-name">Module 5: Battery Maintenance</div>
+                                                <div class="mod-sub">Updated May 28, 2025 &bull; 3 lessons &bull; 2 hrs
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="muted">72</td>
+                                    <td>
+                                        <div class="prog-wrap">
+                                            <div class="prog-track">
+                                                <div class="prog-fill" style="width:100%"></div>
+                                            </div><span class="prog-pct">100%</span>
+                                        </div>
+                                    </td>
+                                    <td class="muted">72%</td>
+                                    <td><span class="badge badge-green">Completed</span></td>
+                                    <td>
+                                        <div class="td-actions"><button class="card-action-btn"
+                                                onclick="openViewModal(5)" title="Preview"><i
+                                                    class="fa-solid fa-eye"></i> Preview</button><button
+                                                class="card-action-btn edit" onclick="openEditModal(5)" title="Edit"><i
+                                                    class="fa-solid fa-pen"></i> Edit</button><button
+                                                class="card-action-btn delete" onclick="openDeleteModal(5)"
+                                                title="Delete"><i class="fa-solid fa-trash"></i> Delete</button></div>
+                                    </td>
+                                </tr>
+                                <tr data-status="published" data-title="spark plug replacement">
+                                    <td>
+                                        <div class="mod-cell">
+                                            <div class="mod-icon" style="background:#eff6ff;color:#2563eb"><i
+                                                    class="fa-solid fa-bolt"></i></div>
+                                            <div>
+                                                <div class="mod-name">Module 6: Spark Plug Replacement</div>
+                                                <div class="mod-sub">Updated May 29, 2025 &bull; 3 lessons &bull; 2 hrs
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="muted">68</td>
+                                    <td>
+                                        <div class="prog-wrap">
+                                            <div class="prog-track">
+                                                <div class="prog-fill" style="width:100%;background:#16a34a"></div>
+                                            </div><span class="prog-pct">100%</span>
+                                        </div>
+                                    </td>
+                                    <td class="muted">79%</td>
+                                    <td><span class="badge badge-green">Completed</span></td>
+                                    <td>
+                                        <div class="td-actions"><button class="card-action-btn"
+                                                onclick="openViewModal(6)" title="Preview"><i
+                                                    class="fa-solid fa-eye"></i> Preview</button><button
+                                                class="card-action-btn edit" onclick="openEditModal(6)" title="Edit"><i
+                                                    class="fa-solid fa-pen"></i> Edit</button><button
+                                                class="card-action-btn delete" onclick="openDeleteModal(6)"
+                                                title="Delete"><i class="fa-solid fa-trash"></i> Delete</button></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="noResults"
+                            style="display:none;padding:32px;text-align:center;color:var(--text-secondary)">
+                            <i class="fa-solid fa-magnifying-glass"
+                                style="font-size:1.5rem;margin-bottom:8px;display:block"></i>
+                            <div style="font-weight:800;font-size:0.84rem">No modules found</div>
+                            <div style="font-size:0.72rem;margin-top:4px">Try a different search or filter.</div>
+                        </div>
+                    </div>
+
+                    <!-- GRID VIEW -->
+                    <div id="gridView" style="display:none">
+                        <div class="mod-cards">
+                            <div class="mod-card" data-status="published" data-title="engine oil change">
+                                <div class="mod-card-banner" style="background:#2563eb"></div>
+                                <div class="mod-card-body">
+                                    <div class="mod-card-icon" style="background:#eff6ff;color:#2563eb"><i
+                                            class="fa-solid fa-oil-can"></i></div>
+                                    <div class="mod-card-title">Engine Oil Change</div>
+                                    <div class="mod-card-desc">Track and manage engine oil change services.</div>
+                                    <div class="mod-card-meta">
+                                        <div class="mod-card-meta-item"><i class="fa-solid fa-users"></i> 87</div>
+                                        <div class="mod-card-meta-item"><i class="fa-solid fa-clock"></i> 2 hrs</div>
+                                        <div class="mod-card-meta-item"><i class="fa-solid fa-list"></i> 3 lessons</div>
+                                    </div>
+                                    <div class="prog-wrap" style="margin-bottom:10px">
+                                        <div class="prog-track">
+                                            <div class="prog-fill" style="width:100%;background:#2563eb"></div>
+                                        </div><span class="prog-pct">100% complete</span>
+                                    </div>
+                                    <div class="mod-card-footer"><span class="badge badge-green">Completed</span>
+                                        <div class="mod-card-actions"><button class="card-action-btn"
+                                                onclick="openViewModal(1)"><i class="fa-solid fa-eye"></i>
+                                                Preview</button><button class="card-action-btn edit"
+                                                onclick="openEditModal(1)"><i class="fa-solid fa-pen"></i>
+                                                Edit</button><button class="card-action-btn delete"
+                                                onclick="openDeleteModal(1)"><i class="fa-solid fa-trash"></i>
+                                                Delete</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mod-card" data-status="published" data-title="brake pad replacement">
+                                <div class="mod-card-banner" style="background:#16a34a"></div>
+                                <div class="mod-card-body">
+                                    <div class="mod-card-icon" style="background:#f0fdf4;color:#16a34a"><i
+                                            class="fa-solid fa-circle-dot"></i></div>
+                                    <div class="mod-card-title">Brake Pad Replacement</div>
+                                    <div class="mod-card-desc">Monitor brake pad replacement operations.</div>
+                                    <div class="mod-card-meta">
+                                        <div class="mod-card-meta-item"><i class="fa-solid fa-users"></i> 87</div>
+                                        <div class="mod-card-meta-item"><i class="fa-solid fa-clock"></i> 3 hrs</div>
+                                        <div class="mod-card-meta-item"><i class="fa-solid fa-list"></i> 4 lessons</div>
+                                    </div>
+                                    <div class="prog-wrap" style="margin-bottom:10px">
+                                        <div class="prog-track">
+                                            <div class="prog-fill" style="width:100%;background:#16a34a"></div>
+                                        </div><span class="prog-pct">100% complete</span>
+                                    </div>
+                                    <div class="mod-card-footer"><span class="badge badge-green">Completed</span>
+                                        <div class="mod-card-actions"><button class="card-action-btn"
+                                                onclick="openViewModal(2)"><i class="fa-solid fa-eye"></i>
+                                                Preview</button><button class="card-action-btn edit"
+                                                onclick="openEditModal(2)"><i class="fa-solid fa-pen"></i>
+                                                Edit</button><button class="card-action-btn delete"
+                                                onclick="openDeleteModal(2)"><i class="fa-solid fa-trash"></i>
+                                                Delete</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mod-card" data-status="published" data-title="air filter replacement">
+                                <div class="mod-card-banner" style="background:#d97706"></div>
+                                <div class="mod-card-body">
+                                    <div class="mod-card-icon" style="background:#fff7ed;color:#d97706"><i
+                                            class="fa-solid fa-wind"></i></div>
+                                    <div class="mod-card-title">Air Filter Replacement</div>
+                                    <div class="mod-card-desc">Oversee air filter replacement tasks.</div>
+                                    <div class="mod-card-meta">
+                                        <div class="mod-card-meta-item"><i class="fa-solid fa-users"></i> 87</div>
+                                        <div class="mod-card-meta-item"><i class="fa-solid fa-clock"></i> 3 hrs</div>
+                                        <div class="mod-card-meta-item"><i class="fa-solid fa-list"></i> 4 lessons</div>
+                                    </div>
+                                    <div class="prog-wrap" style="margin-bottom:10px">
+                                        <div class="prog-track">
+                                            <div class="prog-fill" style="width:67%;background:#2563eb"></div>
+                                        </div><span class="prog-pct">67% complete</span>
+                                    </div>
+                                    <div class="mod-card-footer"><span class="badge badge-orange">In Progress</span>
+                                        <div class="mod-card-actions"><button class="card-action-btn"
+                                                onclick="openViewModal(3)"><i class="fa-solid fa-eye"></i>
+                                                Preview</button><button class="card-action-btn edit"
+                                                onclick="openEditModal(3)"><i class="fa-solid fa-pen"></i>
+                                                Edit</button><button class="card-action-btn delete"
+                                                onclick="openDeleteModal(3)"><i class="fa-solid fa-trash"></i>
+                                                Delete</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mod-card" data-status="published" data-title="fuel filter replacement">
+                                <div class="mod-card-banner" style="background:#9333ea"></div>
+                                <div class="mod-card-body">
+                                    <div class="mod-card-icon" style="background:#fdf4ff;color:#9333ea"><i
+                                            class="fa-solid fa-filter"></i></div>
+                                    <div class="mod-card-title">Fuel Filter Replacement</div>
+                                    <div class="mod-card-desc">Manage fuel filter replacement services.</div>
+                                    <div class="mod-card-meta">
+                                        <div class="mod-card-meta-item"><i class="fa-solid fa-users"></i> 72</div>
+                                        <div class="mod-card-meta-item"><i class="fa-solid fa-clock"></i> 2.5 hrs</div>
+                                        <div class="mod-card-meta-item"><i class="fa-solid fa-list"></i> 3 lessons</div>
+                                    </div>
+                                    <div class="prog-wrap" style="margin-bottom:10px">
+                                        <div class="prog-track">
+                                            <div class="prog-fill" style="width:100%;background:#9333ea"></div>
+                                        </div><span class="prog-pct">100% complete</span>
+                                    </div>
+                                    <div class="mod-card-footer"><span class="badge badge-green">Completed</span>
+                                        <div class="mod-card-actions"><button class="card-action-btn"
+                                                onclick="openViewModal(4)"><i class="fa-solid fa-eye"></i>
+                                                Preview</button><button class="card-action-btn edit"
+                                                onclick="openEditModal(4)"><i class="fa-solid fa-pen"></i>
+                                                Edit</button><button class="card-action-btn delete"
+                                                onclick="openDeleteModal(4)"><i class="fa-solid fa-trash"></i>
+                                                Delete</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mod-card" data-status="published" data-title="battery maintenance">
+                                <div class="mod-card-banner" style="background:#9ca3af"></div>
+                                <div class="mod-card-body">
+                                    <div class="mod-card-icon" style="background:#f3f4f6;color:#6b7280"><i
+                                            class="fa-solid fa-car-battery"></i></div>
+                                    <div class="mod-card-title">Battery Maintenance</div>
+                                    <div class="mod-card-desc">Track and manage battery maintenance.</div>
+                                    <div class="mod-card-meta">
+                                        <div class="mod-card-meta-item"><i class="fa-solid fa-users"></i> 72</div>
+                                        <div class="mod-card-meta-item"><i class="fa-solid fa-clock"></i> 2 hrs</div>
+                                        <div class="mod-card-meta-item"><i class="fa-solid fa-list"></i> 3 lessons</div>
+                                    </div>
+                                    <div class="prog-wrap" style="margin-bottom:10px">
+                                        <div class="prog-track">
+                                            <div class="prog-fill" style="width:100%;background:#16a34a"></div>
+                                        </div><span class="prog-pct">100% complete</span>
+                                    </div>
+                                    <div class="mod-card-footer"><span class="badge badge-green">Completed</span>
+                                        <div class="mod-card-actions"><button class="card-action-btn"
+                                                onclick="openViewModal(5)"><i class="fa-solid fa-eye"></i>
+                                                Preview</button><button class="card-action-btn edit"
+                                                onclick="openEditModal(5)"><i class="fa-solid fa-pen"></i>
+                                                Edit</button><button class="card-action-btn delete"
+                                                onclick="openDeleteModal(5)"><i class="fa-solid fa-trash"></i>
+                                                Delete</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mod-card" data-status="published" data-title="spark plug replacement">
+                                <div class="mod-card-banner" style="background:#2563eb"></div>
+                                <div class="mod-card-body">
+                                    <div class="mod-card-icon" style="background:#eff6ff;color:#2563eb"><i
+                                            class="fa-solid fa-bolt"></i></div>
+                                    <div class="mod-card-title">Spark Plug Replacement</div>
+                                    <div class="mod-card-desc">Monitor spark plug replacement services.</div>
+                                    <div class="mod-card-meta">
+                                        <div class="mod-card-meta-item"><i class="fa-solid fa-users"></i> 68</div>
+                                        <div class="mod-card-meta-item"><i class="fa-solid fa-clock"></i> 2 hrs</div>
+                                        <div class="mod-card-meta-item"><i class="fa-solid fa-list"></i> 3 lessons</div>
+                                    </div>
+                                    <div class="prog-wrap" style="margin-bottom:10px">
+                                        <div class="prog-track">
+                                            <div class="prog-fill" style="width:100%;background:#2563eb"></div>
+                                        </div><span class="prog-pct">100% complete</span>
+                                    </div>
+                                    <div class="mod-card-footer"><span class="badge badge-green">Completed</span>
+                                        <div class="mod-card-actions"><button class="card-action-btn"
+                                                onclick="openViewModal(6)"><i class="fa-solid fa-eye"></i>
+                                                Preview</button><button class="card-action-btn edit"
+                                                onclick="openEditModal(6)"><i class="fa-solid fa-pen"></i>
+                                                Edit</button><button class="card-action-btn delete"
+                                                onclick="openDeleteModal(6)"><i class="fa-solid fa-trash"></i>
+                                                Delete</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN -->
+                <div style="display:flex;flex-direction:column;gap:16px">
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div>
+                                <div class="panel-title">Completion Snapshot</div>
+                                <div class="panel-subtitle">% of students completed</div>
+                            </div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#2563eb"></div>
+                            <div class="side-label">Module 1 — Intro</div>
+                            <div class="side-val" style="color:#16a34a">91%</div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#16a34a"></div>
+                            <div class="side-label">Module 2 — Engine</div>
+                            <div class="side-val">76%</div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#d97706"></div>
+                            <div class="side-label">Module 3 — Electrical</div>
+                            <div class="side-val" style="color:#d97706">48%</div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#9333ea"></div>
+                            <div class="side-label">Module 4 — Transmission</div>
+                            <div class="side-val">61%</div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#9ca3af"></div>
+                            <div class="side-label">Module 5 — Brake</div>
+                            <div class="side-val" style="color:var(--text-secondary)">Draft</div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div class="panel-title">Avg. Assessment Score</div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#2563eb"></div>
+                            <div class="side-label">Module 1</div>
+                            <div class="side-val" style="color:#16a34a">82%</div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#16a34a"></div>
+                            <div class="side-label">Module 2</div>
+                            <div class="side-val">74%</div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#d97706"></div>
+                            <div class="side-label">Module 3</div>
+                            <div class="side-val" style="color:#d97706">68%</div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#9333ea"></div>
+                            <div class="side-label">Module 4</div>
+                            <div class="side-val">70%</div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#9ca3af"></div>
+                            <div class="side-label">Module 5</div>
+                            <div class="side-val" style="color:var(--text-secondary)">—</div>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div class="panel-title">Quick Actions</div>
+                        </div>
+                        <div style="padding:12px 16px;display:flex;flex-direction:column;gap:8px">
+                            <button class="btn-primary" style="width:100%;justify-content:center"
+                                onclick="openNewModuleModal()"><i class="fa-solid fa-plus"></i> Create New
+                                Module</button>
+                            <button class="btn-outline" style="width:100%;justify-content:center"
+                                onclick="location.href='teacherassess.html'"><i class="fa-solid fa-clipboard-check"></i>
+                                Go to Assessments</button>
+                            <button class="btn-outline" style="width:100%;justify-content:center"
+                                onclick="location.href='teacherstudents.html'"><i class="fa-solid fa-users"></i> View My
+                                Students</button>
+                            <button class="btn-outline" style="width:100%;justify-content:center"
+                                onclick="location.href='teacherdash.html'"><i class="fa-solid fa-house"></i> Back to
+                                Dashboard</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer><span>MotoMaster</span> Teacher Portal &mdash; My Modules &copy; 2025 <span>v2.1.0</span></footer>
+    </main>
+
+    <!-- NEW MODULE MODAL -->
+    <div class="modal-overlay" id="newModuleModal">
+        <div class="nm-modal">
+            <div class="nm-header">
+                <div class="nm-header-left">
+                    <div class="nm-header-icon"><i class="fa-solid fa-book-open"></i></div>
+                    <div>
+                        <h3 id="nmModalTitle">Create New Module</h3>
+                        <p id="nmModalSub">Fill in all sections to publish or save as draft</p>
+                    </div>
+                </div>
+                <button class="nm-close" onclick="closeNewModuleModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="nm-tabs">
+                <div class="nm-tab active" onclick="switchNMTab(0,this)"><i class="fa-solid fa-circle-info"></i> Basic
+                    Info</div>
+                <div class="nm-tab" onclick="switchNMTab(1,this)"><i class="fa-solid fa-list-check"></i> Objectives
+                </div>
+                <div class="nm-tab" onclick="switchNMTab(2,this)"><i class="fa-solid fa-puzzle-piece"></i> Content</div>
+                <div class="nm-tab" onclick="switchNMTab(3,this)"><i class="fa-solid fa-clipboard-list"></i> Assessment
+                </div>
+                <div class="nm-tab" onclick="switchNMTab(4,this)"><i class="fa-solid fa-gear"></i> Settings</div>
+                <div class="nm-tab" onclick="switchNMTab(5,this)"><i class="fa-solid fa-user-plus"></i> Students</div>
+            </div>
+            <!-- TAB 0: BASIC INFO -->
+            <div class="nm-body" id="nmTab0">
+                <div class="nm-section-title"><i class="fa-solid fa-tag"></i> Module Identity</div>
+                <div class="nm-grid-2">
+                    <div class="form-group"><label class="form-label">Module Title <span
+                                class="req">*</span></label><input type="text" class="form-control" id="nmTitle"
+                            placeholder="e.g. Module 6: Suspension Systems"
+                            oninput="updateCharCount(this,'nmTitleCount',80)">
+                        <div class="char-count"><span id="nmTitleCount">0</span>/80</div>
+                    </div>
+                    <div class="form-group"><label class="form-label">Module Number <span
+                                class="req">*</span></label><input type="number" class="form-control" id="nmNumber"
+                            placeholder="e.g. 6" min="1"></div>
+                </div>
+                <div class="form-group"><label class="form-label">Short Description <span
+                            class="req">*</span></label><textarea class="form-control-textarea" id="nmShortDesc"
+                        rows="2" placeholder="A brief one-to-two sentence summary…"
+                        oninput="updateCharCount(this,'nmShortDescCount',200)"></textarea>
+                    <div class="char-count"><span id="nmShortDescCount">0</span>/200</div>
+                </div>
+                <div class="form-group"><label class="form-label">Full Description</label><textarea
+                        class="form-control-textarea" rows="4"
+                        placeholder="Detailed overview of what this module covers…"></textarea></div>
+                <div class="nm-section-title" style="margin-top:4px"><i class="fa-solid fa-layer-group"></i>
+                    Classification</div>
+                <div class="nm-grid-3">
+                    <div class="form-group"><label class="form-label">Subject Area <span
+                                class="req">*</span></label><select class="form-control">
+                            <option value="" disabled selected>Select…</option>
+                            <option>Maintenance Services</option>
+                            <option>Engine Oil Change</option>
+                            <option>Brake Pad Replacement</option>
+                            <option>Air Filter Replacement</option>
+                            <option>Fuel Filter Replacement</option>
+                            <option>Battery Maintenance</option>
+                            <option>Spark Plug Replacement</option>
+                            <option>Other</option>
+                        </select></div>
+                    <div class="form-group"><label class="form-label">Grade / Year Level</label><select
+                            class="form-control">
+                            <option value="" disabled selected>Select…</option>
+                            <option>Grade 11</option>
+                            <option>Grade 12</option>
+                            <option>Year 1</option>
+                            <option>Year 2</option>
+                            <option>All Levels</option>
+                        </select></div>
+                    <div class="form-group"><label class="form-label">Estimated Duration <span
+                                class="req">*</span></label><input type="text" class="form-control"
+                            placeholder="e.g. 3 hours"></div>
+                </div>
+
+                <div class="form-group"><label class="form-label">Tags / Keywords</label>
+                    <div class="tag-input-wrap" id="tagWrap" onclick="document.getElementById('tagInput').focus()">
+                        <input class="tag-input" id="tagInput" placeholder="Type and press Enter…"
+                            onkeydown="addTag(event)">
+                    </div>
+                    <span class="form-hint">Press Enter or comma to add a tag.</span>
+                </div>
+                <div class="nm-grid-2">
+                    <div class="form-group"><label class="form-label">Prerequisites</label><input type="text"
+                            class="form-control" placeholder="e.g. Module 1, Module 2"><span
+                            class="form-hint">Comma-separated.</span></div>
+                    <div class="form-group"><label class="form-label">Cover Image URL</label><input type="text"
+                            class="form-control" placeholder="https://… or leave blank"></div>
+                </div>
+
+            </div>
+            <!-- TAB 1: OBJECTIVES -->
+            <div class="nm-body hidden" id="nmTab1">
+                <div class="nm-section-title"><i class="fa-solid fa-bullseye"></i> Learning Objectives</div>
+                <p style="font-size:0.74rem;font-weight:600;color:var(--text-secondary)">Use action verbs (e.g.
+                    Identify, Explain, Demonstrate).</p>
+                <div id="objectiveList" style="display:flex;flex-direction:column;gap:8px">
+                    <div class="objective-row"><input type="text" class="form-control"
+                            placeholder="e.g. Identify the main components…"><button class="rm-obj"
+                            onclick="removeObjective(this)"><i class="fa-solid fa-trash"></i></button></div>
+                    <div class="objective-row"><input type="text" class="form-control"
+                            placeholder="e.g. Explain how the system functions…"><button class="rm-obj"
+                            onclick="removeObjective(this)"><i class="fa-solid fa-trash"></i></button></div>
+                </div>
+                <button class="add-row-btn" onclick="addObjective()"><i class="fa-solid fa-plus"></i> Add
+                    Objective</button>
+                <div class="nm-section-title" style="margin-top:4px"><i class="fa-solid fa-award"></i> Competency
+                    Standards</div>
+                <div class="form-group"><label class="form-label">TESDA / Curriculum Standard Reference</label><input
+                        type="text" class="form-control" placeholder="e.g. NC II — Motorcycle/Small Engine Servicing">
+                </div>
+                <div class="nm-grid-2">
+                    <div class="form-group"><label class="form-label">Knowledge Component</label><textarea
+                            class="form-control-textarea" rows="3" placeholder="What students must know…"></textarea>
+                    </div>
+                    <div class="form-group"><label class="form-label">Skills Component</label><textarea
+                            class="form-control-textarea" rows="3"
+                            placeholder="What students must be able to do…"></textarea></div>
+                </div>
+                <div class="form-group"><label class="form-label">Attitude / Values Component</label><textarea
+                        class="form-control-textarea" rows="2"
+                        placeholder="Expected professional attitudes or safety behaviors…"></textarea></div>
+            </div>
+            <!-- TAB 2: CONTENT -->
+            <div class="nm-body hidden" id="nmTab2">
+                <div class="nm-section-title"><i class="fa-solid fa-file-lines"></i> Lesson Outline</div>
+                <div id="lessonList" style="display:flex;flex-direction:column;gap:8px">
+                    <div class="objective-row"><input type="text" class="form-control"
+                            placeholder="Lesson 1 title"><button class="rm-obj" onclick="removeObjective(this)"><i
+                                class="fa-solid fa-trash"></i></button></div>
+                    <div class="objective-row"><input type="text" class="form-control"
+                            placeholder="Lesson 2 title"><button class="rm-obj" onclick="removeObjective(this)"><i
+                                class="fa-solid fa-trash"></i></button></div>
+                </div>
+                <button class="add-row-btn" onclick="addLesson()"><i class="fa-solid fa-plus"></i> Add Lesson</button>
+                <div class="nm-section-title" style="margin-top:4px"><i class="fa-solid fa-paperclip"></i> Attachments
+                    &amp; Resources</div>
+                <div class="upload-zone" onclick="document.getElementById('nmFileInput').click()">
+                    <input type="file" id="nmFileInput" multiple style="display:none" onchange="handleFileUpload(this)">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <p>Click to upload or drag &amp; drop files here</p><span>PDF, DOCX, PPTX, MP4 — Max 50 MB
+                        each</span>
+                </div>
+                <div id="uploadedFiles" style="display:flex;flex-direction:column;gap:6px;margin-top:6px"></div>
+                <div class="nm-section-title" style="margin-top:4px"><i class="fa-solid fa-link"></i> External Links
+                </div>
+                <div id="linkList" style="display:flex;flex-direction:column;gap:8px">
+                    <div class="nm-grid-2"><input type="text" class="form-control" placeholder="Label"><input type="url"
+                            class="form-control" placeholder="https://…"></div>
+                </div>
+                <button class="add-row-btn" onclick="addLink()"><i class="fa-solid fa-plus"></i> Add Link</button>
+                <div class="form-group" style="margin-top:4px"><label class="form-label">Notes for
+                        Students</label><textarea class="form-control-textarea" rows="3"
+                        placeholder="Supplementary instructions, safety reminders…"></textarea></div>
+            </div>
+            <!-- TAB 3: ASSESSMENT -->
+            <div class="nm-body hidden" id="nmTab3">
+                <div class="nm-section-title"><i class="fa-solid fa-clipboard-question"></i> Assessment Configuration
+                </div>
+                <div class="nm-grid-2">
+                    <div class="form-group"><label class="form-label">Assessment Type</label><select
+                            class="form-control">
+                            <option selected>Quiz (Multiple Choice)</option>
+                            <option>Written Exam</option>
+                            <option>Practical / Performance</option>
+                            <option>Mixed</option>
+                            <option>No Assessment</option>
+                        </select></div>
+                    <div class="form-group"><label class="form-label">Number of Questions</label><input type="number"
+                            class="form-control" value="20" min="1" max="100"></div>
+                </div>
+                <div class="nm-grid-3">
+                    <div class="form-group"><label class="form-label">Passing Score (%)</label><input type="number"
+                            class="form-control" value="75" min="1" max="100"></div>
+                    <div class="form-group"><label class="form-label">Time Limit (min)</label><input type="number"
+                            class="form-control" value="60" min="1"></div>
+                    <div class="form-group"><label class="form-label">Max Attempts</label><input type="number"
+                            class="form-control" value="3" min="1"></div>
+                </div>
+                <div class="nm-grid-2">
+                    <div class="form-group"><label class="form-label">Show Answers After</label><select
+                            class="form-control">
+                            <option selected>Immediately</option>
+                            <option>After deadline</option>
+                            <option>Never</option>
+                        </select></div>
+                    <div class="form-group"><label class="form-label">Grading Weight</label><select
+                            class="form-control">
+                            <option>Not graded</option>
+                            <option selected>10% of final grade</option>
+                            <option>20% of final grade</option>
+                            <option>30% of final grade</option>
+                        </select></div>
+                </div>
+                <div class="nm-section-title" style="margin-top:4px"><i class="fa-solid fa-star"></i> Scoring Rubric
+                </div>
+                <table style="width:100%;border-collapse:collapse;font-size:0.76rem">
+                    <thead>
+                        <tr style="background:var(--bg-color)">
+                            <th
+                                style="padding:7px 12px;text-align:left;border:1px solid var(--border-color);font-size:0.62rem;font-weight:800;color:var(--text-secondary);text-transform:uppercase">
+                                Score Range</th>
+                            <th
+                                style="padding:7px 12px;text-align:left;border:1px solid var(--border-color);font-size:0.62rem;font-weight:800;color:var(--text-secondary);text-transform:uppercase">
+                                Grade</th>
+                            <th
+                                style="padding:7px 12px;text-align:left;border:1px solid var(--border-color);font-size:0.62rem;font-weight:800;color:var(--text-secondary);text-transform:uppercase">
+                                Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding:6px 12px;border:1px solid var(--border-color)">90–100%</td>
+                            <td style="padding:6px 12px;border:1px solid var(--border-color)">Excellent</td>
+                            <td style="padding:6px 12px;border:1px solid var(--border-color)"><input type="text"
+                                    class="form-control" value="Outstanding performance" style="padding:4px 8px"></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:6px 12px;border:1px solid var(--border-color)">75–89%</td>
+                            <td style="padding:6px 12px;border:1px solid var(--border-color)">Passed</td>
+                            <td style="padding:6px 12px;border:1px solid var(--border-color)"><input type="text"
+                                    class="form-control" value="Satisfactory" style="padding:4px 8px"></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:6px 12px;border:1px solid var(--border-color)">Below 75%</td>
+                            <td style="padding:6px 12px;border:1px solid var(--border-color)">Failed</td>
+                            <td style="padding:6px 12px;border:1px solid var(--border-color)"><input type="text"
+                                    class="form-control" value="Needs remediation" style="padding:4px 8px"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="form-group" style="margin-top:4px"><label class="form-label">Assessment
+                        Instructions</label><textarea class="form-control-textarea" rows="3"
+                        placeholder="Instructions shown before the assessment…"></textarea></div>
+            </div>
+            <!-- TAB 4: SETTINGS -->
+            <div class="nm-body hidden" id="nmTab4">
+                <div class="nm-section-title"><i class="fa-solid fa-calendar"></i> Availability &amp; Scheduling</div>
+                <div class="nm-grid-2">
+                    <div class="form-group"><label class="form-label">Available From</label><input type="datetime-local"
+                            class="form-control"></div>
+                    <div class="form-group"><label class="form-label">Available Until</label><input
+                            type="datetime-local" class="form-control"><span class="form-hint">Leave blank for no end
+                            date.</span></div>
+                </div>
+                <div class="nm-grid-2">
+                    <div class="form-group"><label class="form-label">Visibility</label><select class="form-control">
+                            <option selected>All enrolled students</option>
+                            <option>Specific sections only</option>
+                            <option>Hidden (draft)</option>
+                        </select></div>
+                    <div class="form-group"><label class="form-label">Enrollment Requirement</label><select
+                            class="form-control">
+                            <option selected>Auto-enrolled (all students)</option>
+                            <option>Manual enrollment</option>
+                            <option>Prerequisites must be completed</option>
+                        </select></div>
+                </div>
+                <div class="nm-section-title" style="margin-top:4px"><i class="fa-solid fa-sliders"></i> Completion
+                    &amp; Navigation</div>
+                <div class="nm-grid-2">
+                    <div class="form-group"><label class="form-label">Completion Criteria</label><select
+                            class="form-control">
+                            <option selected>Read all lessons + pass assessment</option>
+                            <option>Pass assessment only</option>
+                            <option>Read all lessons only</option>
+                            <option>Manual mark by teacher</option>
+                        </select></div>
+                    <div class="form-group"><label class="form-label">Lesson Navigation</label><select
+                            class="form-control">
+                            <option selected>Sequential (must complete in order)</option>
+                            <option>Free navigation</option>
+                        </select></div>
+                </div>
+                <div class="nm-section-title" style="margin-top:4px"><i class="fa-solid fa-bell"></i> Notifications
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                    <label
+                        style="display:flex;align-items:center;gap:8px;font-size:0.76rem;font-weight:700;cursor:pointer"><input
+                            type="checkbox" checked> Notify students when module is published</label>
+                    <label
+                        style="display:flex;align-items:center;gap:8px;font-size:0.76rem;font-weight:700;cursor:pointer"><input
+                            type="checkbox" checked> Send reminder 24 hours before assessment deadline</label>
+                    <label
+                        style="display:flex;align-items:center;gap:8px;font-size:0.76rem;font-weight:700;cursor:pointer"><input
+                            type="checkbox"> Notify me when a student submits the assessment</label>
+                    <label
+                        style="display:flex;align-items:center;gap:8px;font-size:0.76rem;font-weight:700;cursor:pointer"><input
+                            type="checkbox"> Notify me when a student fails (below passing score)</label>
+                </div>
+                <div class="nm-section-title" style="margin-top:4px"><i class="fa-solid fa-certificate"></i> Completion
+                    Certificate</div>
+                <div class="nm-grid-2">
+                    <div class="form-group"><label class="form-label">Issue Certificate</label><select
+                            class="form-control" id="nmCertSelect" onchange="toggleCertOptions()">
+                            <option value="no" selected>No</option>
+                            <option value="yes">Yes — upon module completion</option>
+                        </select></div>
+                    <div class="form-group" id="certTemplateGroup" style="display:none"><label
+                            class="form-label">Certificate Template</label><select class="form-control">
+                            <option>MotoMaster Standard</option>
+                            <option>TESDA Aligned</option>
+                            <option>Custom Upload</option>
+                        </select></div>
+                </div>
+            </div>
+            <div class="nm-footer">
+                <div class="nm-footer-left" id="nmTabIndicator">Step 1 of 5 — Basic Info</div>
+                <div class="nm-footer-right">
+                    <button class="btn-save-draft" onclick="saveAsDraft()"><i class="fa-solid fa-floppy-disk"></i> Save
+                        Draft</button>
+                    <button class="btn-save-nm" id="nmPrevBtn" style="display:none;background:#6b7280"
+                        onclick="prevNMTab()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                    <button class="btn-save-nm" id="nmNextBtn" onclick="nextNMTab()">Next <i
+                            class="fa-solid fa-arrow-right"></i></button>
+                    <button class="btn-publish" id="nmPublishBtn" style="display:none" onclick="publishModuleNew()"><i
+                            class="fa-solid fa-rocket"></i> Publish Module</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DELETE MODAL -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="nm-modal del-modal">
+            <div class="nm-header" style="background:#fff;color:var(--text-primary)">
+                <div class="nm-header-left">
+                    <div class="nm-header-icon" style="background:#fef2f2"><i class="fa-solid fa-trash"
+                            style="color:#dc2626"></i></div>
+                    <div>
+                        <h3 style="font-family:'Rajdhani',sans-serif;color:var(--text-primary)">Delete Module</h3>
+                        <!-- TAB 5: STUDENTS -->
+                        <div class="nm-body hidden" id="nmTab5">
+                            <div class="nm-section-title"><i class="fa-solid fa-user-plus"></i> Enroll Students</div>
+                            <div class="enrollment-box">
+                                <div class="enrollment-row">
+                                    <div class="enrollment-summary">Search all registered student accounts in MotoMaster
+                                        DB and add them to this module.</div>
+                                    <span class="badge badge-blue" id="studentEnrollCount">0 enrolled</span>
+                                </div>
+                                <div class="student-search-bar">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                    <input type="text" id="studentSearchInput"
+                                        placeholder="Search student name, email, or section"
+                                        oninput="renderStudentRoster()">
+                                </div>
+                                <div id="enrolledStudentChips" class="tag-input-wrap" style="min-height:44px"></div>
+                                <div class="student-list" id="studentRosterList">
+                                    <div
+                                        style="padding:14px;text-align:center;color:var(--text-secondary);font-size:0.74rem">
+                                        Loading students…</div>
+                                </div>
+                            </div>
+                        </div>
+                        <p style="color:var(--text-secondary)">This action cannot be undone</p>
+                        <div class="nm-body hidden" id="nmTab3">
+                        </div>
+                        <button class="nm-close" style="background:#f3f4f6;color:var(--text-secondary)"
+                            onclick="closeDeleteModal()"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div class="del-body">
+                        <div class="del-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <div class="del-title">Are you sure?</div>
+                        <div class="del-desc">You are about to permanently delete <strong
+                                id="deleteModuleName"></strong>. All
+                            associated lessons, assessments, and student progress data will be removed.</div>
+                    </div>
+                    <div class="del-footer">
+                        <button class="btn-outline" onclick="closeDeleteModal()">Cancel</button>
+                        <button class="btn-danger" onclick="confirmDelete()"><i class="fa-solid fa-trash"></i> Delete
+                            Module</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW MODAL -->
+            <div class="modal-overlay" id="viewModal">
+                <div class="nm-modal view-modal">
+                    <div class="nm-header">
+                        <div class="nm-header-left">
+                            <div class="nm-header-icon"><i class="fa-solid fa-eye"></i></div>
+                            <div>
+                                <h3>Module Details</h3>
+                                <p id="vmSubtitle">Overview &amp; statistics</p>
+                            </div>
+                        </div>
+                        <button class="nm-close" onclick="closeViewModal()"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div id="viewModalContent"></div>
+                    <div
+                        style="padding:14px 22px;border-top:1px solid var(--border-color);display:flex;justify-content:flex-end;gap:8px">
+                        <button class="btn-outline" onclick="closeViewModal()">Close</button>
+                        <button class="btn-primary" id="vmEditBtn"><i class="fa-solid fa-pen"></i> Edit Module</button>
+                    </div>
+                </div>
+            </div>
+
+            <script src="teacher-profile.js"></script>
+            <script>
+                const modules = [
+                    { id: 1, num: 1, title: 'Module 1: Engine Oil Change', subject: 'Maintenance Services', duration: '2 hours', difficulty: 'Beginner', students: 87, completion: 100, score: 82, lessons: 3, status: 'published', updated: 'May 20, 2025', desc: 'Track and manage engine oil change services.' },
+                    { id: 2, num: 2, title: 'Module 2: Brake Pad Replacement', subject: 'Maintenance Services', duration: '3 hours', difficulty: 'Intermediate', students: 87, completion: 100, score: 74, lessons: 4, status: 'published', updated: 'May 22, 2025', desc: 'Monitor brake pad replacement operations.' },
+                    { id: 3, num: 3, title: 'Module 3: Air Filter Replacement', subject: 'Maintenance Services', duration: '3 hours', difficulty: 'Intermediate', students: 87, completion: 67, score: 68, lessons: 4, status: 'published', updated: 'May 27, 2025', desc: 'Oversee air filter replacement tasks.' },
+                    { id: 4, num: 4, title: 'Module 4: Fuel Filter Replacement', subject: 'Maintenance Services', duration: '2.5 hours', difficulty: 'Advanced', students: 72, completion: 100, score: 70, lessons: 3, status: 'published', updated: 'May 24, 2025', desc: 'Manage fuel filter replacement services.' },
+                    { id: 5, num: 5, title: 'Module 5: Battery Maintenance', subject: 'Maintenance Services', duration: '2 hours', difficulty: 'Beginner', students: 72, completion: 100, score: 72, lessons: 3, status: 'published', updated: 'May 28, 2025', desc: 'Track and manage battery maintenance.' },
+                    { id: 6, num: 6, title: 'Module 6: Spark Plug Replacement', subject: 'Maintenance Services', duration: '2 hours', difficulty: 'Beginner', students: 68, completion: 100, score: 79, lessons: 3, status: 'published', updated: 'May 29, 2025', desc: 'Monitor spark plug replacement services.' }
+                ];
+
+                let currentFilter = 'all', deleteTargetId = null;
+
+                function setFilter(f, el) {
+                    currentFilter = f;
+                    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                    el.classList.add('active');
+                    filterModules();
+                }
+                function filterModules() {
+                    const q = document.getElementById('moduleSearch').value.toLowerCase();
+                    let vis = 0;
+                    document.querySelectorAll('#moduleTableBody tr').forEach(row => {
+                        const show = (currentFilter === 'all' || row.dataset.status === currentFilter) && row.dataset.title.includes(q);
+                        row.style.display = show ? '' : 'none';
+                        if (show) vis++;
+                    });
+                    document.querySelectorAll('#gridView .mod-card').forEach(card => {
+                        card.style.display = (currentFilter === 'all' || card.dataset.status === currentFilter) && card.dataset.title.includes(q) ? '' : 'none';
+                    });
+                    document.getElementById('noResults').style.display = (vis === 0 && document.getElementById('listView').style.display !== 'none') ? 'block' : 'none';
+                    document.getElementById('moduleCount').textContent = 'Showing ' + vis + ' module' + (vis !== 1 ? 's' : '');
+                }
+                function setView(v) {
+                    document.getElementById('listView').style.display = v === 'list' ? '' : 'none';
+                    document.getElementById('gridView').style.display = v === 'grid' ? '' : 'none';
+                    document.getElementById('listViewBtn').classList.toggle('active', v === 'list');
+                    document.getElementById('gridViewBtn').classList.toggle('active', v === 'grid');
+                }
+                function openDeleteModal(id) {
+                    deleteTargetId = id;
+                    const m = modules.find(m => m.id === id);
+                    document.getElementById('deleteModuleName').textContent = m ? m.title : 'this module';
+                    document.getElementById('deleteModal').classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                }
+                function closeDeleteModal() { document.getElementById('deleteModal').classList.remove('open'); document.body.style.overflow = ''; }
+                function confirmDelete() { closeDeleteModal(); alert('Module deleted. (UI demo)'); }
+                function openViewModal(id) {
+                    const m = modules.find(m => m.id === id); if (!m) return;
+                    document.getElementById('vmSubtitle').textContent = m.title;
+                    document.getElementById('vmEditBtn').onclick = () => { closeViewModal(); openEditModal(id); };
+                    const sc = m.score >= 80 ? '#16a34a' : m.score >= 65 ? '#2563eb' : '#d97706';
+                    document.getElementById('viewModalContent').innerHTML = `
+    <div class="vm-section"><div class="vm-grid">
+        <div><div class="vm-label">Module No.</div><div class="vm-value">#${m.num}</div></div>
+        <div><div class="vm-label">Status</div><div class="vm-value"><span class="badge ${m.status === 'published' ? 'badge-green' : 'badge-gray'}">${m.status === 'published' ? 'Published' : 'Draft'}</span></div></div>
+        <div><div class="vm-label">Last Updated</div><div class="vm-value">${m.updated}</div></div>
+    </div></div>
+    <div class="vm-section"><div class="vm-label">Description</div><div class="vm-value" style="line-height:1.6;font-weight:600;color:var(--text-secondary)">${m.desc}</div></div>
+    <div class="vm-section"><div class="vm-grid" style="grid-template-columns: 1fr 1fr">
+        <div><div class="vm-label">Subject Area</div><div class="vm-value">${m.subject}</div></div>
+        <div><div class="vm-label">Duration</div><div class="vm-value">${m.duration}</div></div>
+    </div></div>
+    <div class="vm-section"><div class="vm-grid">
+        <div><div class="vm-label">Enrolled Students</div><div class="vm-value" style="font-family:'Rajdhani',sans-serif;font-size:1.3rem">${m.students || '—'}</div></div>
+        <div><div class="vm-label">Avg. Completion</div><div class="vm-value" style="font-family:'Rajdhani',sans-serif;font-size:1.3rem;color:#2563eb">${m.completion ? m.completion + '%' : '—'}</div></div>
+        <div><div class="vm-label">Avg. Score</div><div class="vm-value" style="font-family:'Rajdhani',sans-serif;font-size:1.3rem;color:${sc}">${m.score ? m.score + '%' : '—'}</div></div>
+    </div></div>
+    <div class="vm-section"><div class="vm-label">Lessons</div><div class="vm-value">${m.lessons} lesson${m.lessons !== 1 ? 's' : ''} defined</div></div>`;
+                    document.getElementById('viewModal').classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                }
+                function closeViewModal() { document.getElementById('viewModal').classList.remove('open'); document.body.style.overflow = ''; }
+                function openEditModal(id) {
+                    const m = modules.find(m => m.id === id);
+                    openNewModuleModal();
+                    document.getElementById('nmModalTitle').textContent = 'Edit Module';
+                    document.getElementById('nmModalSub').textContent = m ? m.title : '';
+                    document.getElementById('moduleEnrollmentPanel').style.display = '';
+                    if (m) { document.getElementById('nmTitle').value = m.title; document.getElementById('nmNumber').value = m.num; document.getElementById('nmShortDesc').value = m.desc; document.getElementById('nmTitleCount').textContent = m.title.length; document.getElementById('nmShortDescCount').textContent = m.desc.length; }
+                }
+                function quickPublish(id) { const m = modules.find(m => m.id === id); if (confirm('Publish "' + m?.title + '"? Students will be notified.')) alert('Module published. (UI demo)'); }
+
+                // Modal controls
+                let nmCurrentTab = 0;
+                const nmTabLabels = ['Basic Info', 'Objectives', 'Content', 'Assessment', 'Settings'];
+                function openNewModuleModal() {
+                    document.getElementById('newModuleModal').classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                    document.getElementById('nmModalTitle').textContent = 'Create New Module';
+                    document.getElementById('nmModalSub').textContent = 'Fill in all sections to publish or save as draft';
+                    document.getElementById('moduleEnrollmentPanel').style.display = 'none';
+                }
+                function closeNewModuleModal() { document.getElementById('newModuleModal').classList.remove('open'); document.body.style.overflow = ''; }
+                ['newModuleModal', 'deleteModal', 'viewModal'].forEach(id => { document.getElementById(id).addEventListener('click', function (e) { if (e.target === this) this.classList.remove('open') && (document.body.style.overflow = ''); }); });
+                function switchNMTab(idx, tabEl) {
+                    document.querySelectorAll('.nm-tab').forEach(t => t.classList.remove('active')); tabEl.classList.add('active');
+                    for (let i = 0; i < 5; i++)document.getElementById('nmTab' + i).classList.toggle('hidden', i !== idx);
+                    nmCurrentTab = idx; updateNMNav();
+                }
+                function updateNMNav() {
+                    document.getElementById('nmPrevBtn').style.display = nmCurrentTab > 0 ? 'flex' : 'none';
+                    document.getElementById('nmNextBtn').style.display = nmCurrentTab < 4 ? 'flex' : 'none';
+                    document.getElementById('nmPublishBtn').style.display = nmCurrentTab === 4 ? 'flex' : 'none';
+                    document.getElementById('nmTabIndicator').textContent = 'Step ' + (nmCurrentTab + 1) + ' of 5 — ' + nmTabLabels[nmCurrentTab];
+                }
+                function nextNMTab() { if (nmCurrentTab < 4) { const t = document.querySelectorAll('.nm-tab'); switchNMTab(nmCurrentTab + 1, t[nmCurrentTab + 1]); } }
+                function prevNMTab() { if (nmCurrentTab > 0) { const t = document.querySelectorAll('.nm-tab'); switchNMTab(nmCurrentTab - 1, t[nmCurrentTab - 1]); } }
+                function updateCharCount(el, cId, max) { const l = el.value.length; const e = document.getElementById(cId); e.textContent = l; e.style.color = l > max * 0.9 ? '#dc2626' : ''; }
+
+                function addTag(e) { if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); const inp = document.getElementById('tagInput'); const v = inp.value.trim().replace(/,$/, ''); if (!v) return; const p = document.createElement('span'); p.className = 'tag-pill'; p.innerHTML = v + ' <button onclick="this.parentElement.remove()">×</button>'; document.getElementById('tagWrap').insertBefore(p, inp); inp.value = ''; } }
+                function addModuleStudent() {
+                    const studentName = prompt('Enter the student name or email to enroll in this module:');
+                    if (!studentName) return;
+                    const wrap = document.getElementById('moduleStudentWrap');
+                    const placeholder = document.getElementById('moduleStudentPlaceholder');
+                    if (placeholder) placeholder.remove();
+                    const pill = document.createElement('span');
+                    pill.className = 'tag-pill';
+                    pill.innerHTML = studentName.trim() + ' <button onclick="this.parentElement.remove();syncModuleStudentPlaceholder()">×</button>';
+                    wrap.appendChild(pill);
+                }
+                function syncModuleStudentPlaceholder() {
+                    const wrap = document.getElementById('moduleStudentWrap');
+                    if (wrap && !wrap.querySelector('.tag-pill')) {
+                        const placeholder = document.createElement('span');
+                        placeholder.className = 'tag-pill';
+                        placeholder.id = 'moduleStudentPlaceholder';
+                        placeholder.textContent = 'No students enrolled yet';
+                        wrap.appendChild(placeholder);
+                    }
+                }
+                function addObjective() { const r = document.createElement('div'); r.className = 'objective-row'; r.innerHTML = '<input type="text" class="form-control" placeholder="e.g. Demonstrate proper procedure"><button class="rm-obj" onclick="removeObjective(this)"><i class="fa-solid fa-trash"></i></button>'; document.getElementById('objectiveList').appendChild(r); }
+                function removeObjective(btn) { btn.closest('.objective-row').remove(); }
+                function addLesson() { const n = document.querySelectorAll('#lessonList .objective-row').length + 1; const r = document.createElement('div'); r.className = 'objective-row'; r.innerHTML = '<input type="text" class="form-control" placeholder="Lesson ' + n + ' title"><button class="rm-obj" onclick="removeObjective(this)"><i class="fa-solid fa-trash"></i></button>'; document.getElementById('lessonList').appendChild(r); }
+                function addLink() { const r = document.createElement('div'); r.className = 'nm-grid-2'; r.innerHTML = '<input type="text" class="form-control" placeholder="Label"><input type="url" class="form-control" placeholder="https://…">'; document.getElementById('linkList').appendChild(r); }
+                function handleFileUpload(input) { const c = document.getElementById('uploadedFiles'); Array.from(input.files).forEach(f => { const r = document.createElement('div'); r.className = 'resource-row'; const ext = f.name.split('.').pop().toLowerCase(); const ic = ['pdf'].includes(ext) ? 'fa-file-pdf' : ['mp4', 'mov'].includes(ext) ? 'fa-file-video' : ['pptx', 'ppt'].includes(ext) ? 'fa-file-powerpoint' : ['docx', 'doc'].includes(ext) ? 'fa-file-word' : 'fa-file'; r.innerHTML = '<i class="fa-solid ' + ic + '"></i><span>' + f.name + ' <small>(' + (f.size / 1024 / 1024).toFixed(2) + ' MB)</small></span><button class="rm" onclick="this.closest(\'.resource-row\').remove()"><i class="fa-solid fa-xmark"></i></button>'; c.appendChild(r); }); }
+                function toggleCertOptions() { document.getElementById('certTemplateGroup').style.display = document.getElementById('nmCertSelect').value === 'yes' ? '' : 'none'; }
+                function saveAsDraft() { closeNewModuleModal(); const b = document.querySelector('.topbar-right .btn-primary'); const o = b.innerHTML; b.innerHTML = '<i class="fa-solid fa-check"></i> Draft Saved!'; b.style.background = '#6b7280'; setTimeout(() => { b.innerHTML = o; b.style.background = ''; }, 2000); }
+                function publishModuleNew() { const t = document.getElementById('nmTitle').value.trim(); if (!t) { alert('Please fill in the Module Title first.'); switchNMTab(0, document.querySelectorAll('.nm-tab')[0]); document.getElementById('nmTitle').focus(); return; } closeNewModuleModal(); const b = document.querySelector('.topbar-right .btn-primary'); const o = b.innerHTML; b.innerHTML = '<i class="fa-solid fa-check"></i> Published!'; b.style.background = '#16a34a'; setTimeout(() => { b.innerHTML = o; b.style.background = ''; }, 2500); }
+            </script>
+</body>
+
+</html>

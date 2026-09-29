@@ -1,0 +1,2570 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Simulation</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap"
+        rel="stylesheet" />
+</head>
+<style>
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Nunito', sans-serif;
+        background: #eef1f8;
+        color: #1a1a2e;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    /* NAVBAR */
+    .navbar {
+        background: #fff;
+        display: flex;
+        align-items: center;
+        padding: 0 24px;
+        height: 60px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+        flex-shrink: 0;
+        z-index: 100;
+    }
+
+    .nav-back {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1.5px solid #e5e7eb;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        text-decoration: none;
+        color: #374151;
+        margin-right: 14px;
+        transition: border-color 0.2s;
+    }
+
+    .nav-back:hover {
+        border-color: #2563eb;
+        color: #2563eb;
+    }
+
+    .nav-back svg {
+        width: 15px;
+        height: 15px;
+    }
+
+    .nav-title-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .nav-title {
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        line-height: 1.1;
+    }
+
+    .nav-breadcrumb {
+        font-size: 0.72rem;
+        color: #9ca3af;
+    }
+
+    .nav-breadcrumb span {
+        color: #6b7280;
+    }
+
+    .nav-breadcrumb a {
+        color: inherit;
+        text-decoration: none;
+        transition: color 0.15s;
+    }
+
+    .nav-breadcrumb a:hover {
+        color: #2563eb;
+        text-decoration: underline;
+    }
+
+    .card-nav-links {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+        padding-top: 12px;
+        border-top: 1px solid #f3f4f6;
+        font-size: 0.76rem;
+        font-weight: 700;
+    }
+
+    .card-nav-links a {
+        color: #4b5563;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: color 0.15s;
+    }
+
+    .card-nav-links a:hover {
+        color: #2563eb;
+    }
+
+    .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-left: auto;
+    }
+
+    .nav-bell {
+        width: 34px;
+        height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #f3f4f6;
+        color: #6b7280;
+        cursor: pointer;
+        border: none;
+    }
+
+    .nav-bell svg {
+        width: 17px;
+        height: 17px;
+    }
+
+    .nav-user-wrap {
+        position: relative;
+    }
+
+    .nav-user {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 10px;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 10px;
+        cursor: pointer;
+        text-decoration: none;
+        background: none;
+        transition: border-color 0.2s;
+    }
+
+    .nav-user-wrap:hover .nav-user {
+        border-color: #2563eb;
+    }
+
+    .nav-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #2563eb;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+
+    .nav-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .nav-user-name {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        line-height: 1.2;
+    }
+
+    .nav-user-role {
+        font-size: 0.68rem;
+        color: #6b7280;
+    }
+
+    .nav-chevron svg {
+        width: 12px;
+        height: 12px;
+        color: #9ca3af;
+    }
+
+    .nav-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+        min-width: 170px;
+        padding: 6px;
+        padding-top: 14px;
+        margin-top: 2px;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-4px);
+        transition: opacity 0.18s, transform 0.18s;
+        z-index: 200;
+    }
+
+    .nav-user-wrap:hover .nav-dropdown {
+        opacity: 1;
+        pointer-events: all;
+        transform: translateY(0);
+    }
+
+    .nav-dropdown a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 12px;
+        border-radius: 8px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        text-decoration: none;
+        transition: background 0.15s;
+    }
+
+    .nav-dropdown a:hover {
+        background: #f3f4f6;
+    }
+
+    .nav-dropdown a svg {
+        width: 15px;
+        height: 15px;
+        color: #6b7280;
+        flex-shrink: 0;
+    }
+
+    .nav-dropdown .logout-link {
+        color: #dc2626;
+    }
+
+    .nav-dropdown .logout-link svg {
+        color: #dc2626;
+    }
+
+    .nav-dropdown .logout-link:hover {
+        background: #fef2f2;
+    }
+
+    .nav-dropdown-sep {
+        height: 1px;
+        background: #f0f0f5;
+        margin: 4px 0;
+    }
+
+    /* MAIN LAYOUT */
+    .main-layout {
+        display: flex;
+        gap: 16px;
+        padding: 18px 22px;
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .content-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        min-width: 0;
+        overflow-y: auto;
+        scrollbar-width: none;
+    }
+
+    .content-col::-webkit-scrollbar {
+        display: none;
+    }
+
+    .sidebar-col {
+        width: 260px;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        overflow-y: auto;
+        scrollbar-width: none;
+    }
+
+    .sidebar-col::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* HERO BANNER */
+    .hero-banner {
+        background: url('images/practicee.png') no-repeat center center / cover;
+        border-radius: 16px;
+        padding: 28px 36px;
+        position: relative;
+        overflow: hidden;
+        min-height: 180px;
+        display: flex;
+        align-items: flex-end;
+        flex-shrink: 0;
+    }
+
+    .hero-banner::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(10, 20, 60, 0.82) 0%, rgba(10, 20, 60, 0.55) 55%, rgba(10, 20, 60, 0.15) 100%);
+        border-radius: 16px;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-badge {
+        display: inline-block;
+        background: #2563eb;
+        color: #fff;
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 4px 10px;
+        border-radius: 20px;
+        margin-bottom: 10px;
+    }
+
+    .hero-title {
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #fff;
+        line-height: 1.1;
+        margin-bottom: 6px;
+    }
+
+    .hero-desc {
+        font-size: 0.82rem;
+        color: rgba(255, 255, 255, 0.78);
+        margin-bottom: 14px;
+        line-height: 1.5;
+        max-width: 400px;
+    }
+
+    .hero-stats {
+        display: flex;
+        gap: 24px;
+    }
+
+    .hero-stat {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .hero-stat-icon {
+        width: 32px;
+        height: 32px;
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+    }
+
+    .hero-stat-icon svg {
+        width: 15px;
+        height: 15px;
+    }
+
+    .hero-stat-num {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: #fff;
+        line-height: 1;
+    }
+
+    .hero-stat-label {
+        font-size: 0.65rem;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* TABS */
+    .tabs-row {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        background: #fff;
+        border-radius: 12px;
+        padding: 6px 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        flex-shrink: 0;
+    }
+
+    .tab {
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #6b7280;
+        cursor: pointer;
+        border: none;
+        background: none;
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .tab.active {
+        background: #2563eb;
+        color: #fff;
+    }
+
+    .tab-right {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.78rem;
+        color: #6b7280;
+        font-weight: 700;
+        cursor: pointer;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 5px 12px;
+        background: #fff;
+    }
+
+    .tab-right svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    /* SIMULATION CARDS */
+    .sim-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+
+    .sim-card {
+        background: #fff;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        position: relative;
+    }
+
+    .sim-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.13);
+    }
+
+    .sim-card.locked-card {
+        cursor: default;
+    }
+
+    .sim-card.locked-card:hover {
+        transform: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .sim-card-img-wrap {
+        position: relative;
+    }
+
+    .sim-card-img {
+        width: 100%;
+        height: 130px;
+        object-fit: cover;
+        display: block;
+        border-radius: 14px 14px 0 0;
+    }
+
+    .sim-card.locked-card .sim-card-img {
+        filter: brightness(0.45) saturate(0.4);
+    }
+
+    .lock-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .lock-overlay svg {
+        width: 32px;
+        height: 32px;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .sim-card-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        z-index: 2;
+    }
+
+    .sim-card-badge.unlocked {
+        background: rgba(16, 185, 129, 0.92);
+        color: #fff;
+    }
+
+    .sim-card-badge.locked {
+        background: rgba(107, 114, 128, 0.85);
+        color: #fff;
+    }
+
+    .sim-card-badge svg {
+        width: 11px;
+        height: 11px;
+    }
+
+    .sim-card-body {
+        padding: 14px;
+    }
+
+    .sim-card-title {
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 4px;
+    }
+
+    .sim-card-desc {
+        font-size: 0.75rem;
+        color: #6b7280;
+        line-height: 1.4;
+        margin-bottom: 10px;
+    }
+
+    .sim-card-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.72rem;
+        color: #6b7280;
+        margin-bottom: 8px;
+        font-weight: 700;
+    }
+
+    .sim-card-score {
+        font-weight: 800;
+        color: #2563eb;
+    }
+
+    .sim-progress-wrap {
+        margin-bottom: 10px;
+    }
+
+    .sim-progress-bar {
+        height: 5px;
+        background: #e5e7eb;
+        border-radius: 3px;
+        overflow: hidden;
+        margin-bottom: 3px;
+    }
+
+    .sim-progress-fill {
+        height: 100%;
+        background: #2563eb;
+        border-radius: 3px;
+    }
+
+    .sim-progress-pct {
+        font-size: 0.7rem;
+        color: #6b7280;
+        font-weight: 700;
+    }
+
+    .sim-btn {
+        width: 100%;
+        padding: 9px;
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-family: 'Nunito', sans-serif;
+        font-size: 0.78rem;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: background 0.2s;
+    }
+
+    .sim-btn:hover {
+        background: #1d4ed8;
+    }
+
+    .sim-btn.outline {
+        background: #fff;
+        color: #2563eb;
+        border: 1.5px solid #2563eb;
+    }
+
+    .sim-btn.outline:hover {
+        background: #eff6ff;
+    }
+
+    .sim-btn svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    /* SIDEBAR */
+    .widget {
+        background: #fff;
+        border-radius: 14px;
+        padding: 14px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .widget-label {
+        font-size: 0.68rem;
+        font-weight: 800;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 10px;
+    }
+
+    .progress-ring-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .progress-ring {
+        position: relative;
+        width: 90px;
+        height: 90px;
+        margin-bottom: 6px;
+    }
+
+    .progress-ring svg {
+        transform: rotate(-90deg);
+    }
+
+    .progress-ring-bg {
+        fill: none;
+        stroke: #e5e7eb;
+        stroke-width: 8;
+    }
+
+    .progress-ring-fill {
+        fill: none;
+        stroke: #2563eb;
+        stroke-width: 8;
+        stroke-linecap: round;
+        stroke-dasharray: 245;
+        stroke-dashoffset: 59;
+    }
+
+    .progress-ring-text {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .progress-ring-pct {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: #1a1a2e;
+        line-height: 1;
+    }
+
+    .progress-ring-sub {
+        font-size: 0.6rem;
+        color: #6b7280;
+    }
+
+    .progress-caption {
+        font-size: 0.72rem;
+        color: #6b7280;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .progress-caption strong {
+        color: #1a1a2e;
+    }
+
+    .view-btn {
+        width: 100%;
+        padding: 9px;
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-family: 'Nunito', sans-serif;
+        font-size: 0.78rem;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .view-btn svg {
+        width: 13px;
+        height: 13px;
+    }
+
+    .req-list {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .req-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.78rem;
+        color: #374151;
+    }
+
+    .req-icon {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+    }
+
+    .req-check {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #dcfce7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-left: auto;
+    }
+
+    .req-check svg {
+        width: 10px;
+        height: 10px;
+        color: #16a34a;
+    }
+
+    .req-arrow {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #eff6ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-left: auto;
+    }
+
+    .req-arrow svg {
+        width: 10px;
+        height: 10px;
+        color: #2563eb;
+    }
+
+    .req-note {
+        font-size: 0.72rem;
+        color: #6b7280;
+        margin-bottom: 10px;
+        line-height: 1.4;
+    }
+
+    .activity-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .activity-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .activity-dot {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .activity-dot.green {
+        background: #dcfce7;
+        color: #16a34a;
+    }
+
+    .activity-dot.blue {
+        background: #eff6ff;
+        color: #2563eb;
+    }
+
+    .activity-dot svg {
+        width: 12px;
+        height: 12px;
+    }
+
+    .activity-info {
+        flex: 1;
+    }
+
+    .activity-name {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: #1a1a2e;
+    }
+
+    .activity-sub {
+        font-size: 0.68rem;
+        color: #6b7280;
+    }
+
+    .activity-time {
+        font-size: 0.65rem;
+        color: #9ca3af;
+        white-space: nowrap;
+    }
+
+    .view-all-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 8px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #2563eb;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .view-all-link svg {
+        width: 13px;
+        height: 13px;
+    }
+
+    .tip-bar {
+        background: #fff;
+        border-top: 1px solid #f3f4f6;
+        padding: 10px 22px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.75rem;
+        color: #6b7280;
+        flex-shrink: 0;
+    }
+
+    .tip-bar svg {
+        width: 16px;
+        height: 16px;
+        color: #2563eb;
+        flex-shrink: 0;
+    }
+
+    /* RESULTS MODAL */
+    .results-modal {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: rgba(14, 18, 35, 0.72);
+        backdrop-filter: blur(8px);
+        z-index: 1000;
+    }
+
+    .results-modal.open {
+        display: flex;
+    }
+
+    .results-panel {
+        width: min(760px, 100%);
+        max-height: calc(100vh - 48px);
+        overflow: auto;
+        background: #fff;
+        border-radius: 22px;
+        box-shadow: 0 30px 80px rgba(15, 23, 42, 0.35);
+        padding: 24px;
+    }
+
+    .results-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        margin-bottom: 18px;
+    }
+
+    .results-icon {
+        width: 54px;
+        height: 54px;
+        border-radius: 16px;
+        background: #eff6ff;
+        color: #2563eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .results-icon svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    .results-title {
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #0f172a;
+        line-height: 1;
+        margin-bottom: 4px;
+    }
+
+    .results-subtitle {
+        font-size: 0.9rem;
+        color: #64748b;
+    }
+
+    .results-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
+    .results-stat {
+        background: #f8fafc;
+        border: 1px solid #dbeafe;
+        border-radius: 16px;
+        padding: 16px 14px;
+        text-align: center;
+    }
+
+    .results-stat-label {
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #64748b;
+        margin-bottom: 8px;
+    }
+
+    .results-stat-value {
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2563eb;
+        line-height: 1;
+    }
+
+    .results-message {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 14px;
+        padding: 14px 16px;
+        color: #334155;
+        font-size: 0.92rem;
+        margin-bottom: 14px;
+    }
+
+    .results-section {
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        overflow: hidden;
+        margin-bottom: 12px;
+        background: #fff;
+    }
+
+    .results-section-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 16px 18px;
+    }
+
+    .results-section-title {
+        font-size: 1rem;
+        font-weight: 800;
+        color: #0f172a;
+    }
+
+    .results-section-hint {
+        font-size: 0.78rem;
+        color: #64748b;
+        margin-top: 4px;
+    }
+
+    .results-action-btn,
+    .results-close-btn {
+        border: none;
+        border-radius: 999px;
+        font-family: 'Nunito', sans-serif;
+        font-weight: 800;
+        cursor: pointer;
+        transition: transform 0.15s, background 0.15s, color 0.15s;
+    }
+
+    .results-action-btn {
+        background: #2563eb;
+        color: #fff;
+        padding: 10px 18px;
+    }
+
+    .results-action-btn:hover,
+    .results-close-btn:hover {
+        transform: translateY(-1px);
+    }
+
+    .results-close-btn {
+        background: #f1f5f9;
+        color: #334155;
+        padding: 10px 16px;
+    }
+
+    .results-steps {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        padding: 0 18px 18px;
+    }
+
+    .results-column {
+        background: #f8fafc;
+        border-radius: 14px;
+        padding: 14px;
+        min-width: 0;
+    }
+
+    .results-column.correct {
+        border: 1px solid #bbf7d0;
+    }
+
+    .results-column.mistakes {
+        border: 1px solid #fecaca;
+    }
+
+    .results-column-label {
+        font-size: 0.76rem;
+        font-weight: 900;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    .results-column.correct .results-column-label {
+        color: #16a34a;
+    }
+
+    .results-column.mistakes .results-column-label {
+        color: #dc2626;
+    }
+
+    .results-item-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+    }
+
+    .results-item-list li {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        font-size: 0.86rem;
+        color: #334155;
+        line-height: 1.45;
+    }
+
+    .results-item-icon {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    .results-item-list .ok .results-item-icon {
+        color: #16a34a;
+    }
+
+    .results-item-list .bad .results-item-icon {
+        color: #ef4444;
+    }
+
+    .review-step-card {
+        border: 1px solid #e2e8f0;
+        border-radius: 18px;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+        overflow: hidden;
+        margin-bottom: 12px;
+        animation: reviewFlash 2.8s ease-in-out infinite;
+    }
+
+    .review-step-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 16px 18px 12px;
+    }
+
+    .review-step-name {
+        font-size: 1rem;
+        font-weight: 900;
+        color: #0f172a;
+    }
+
+    .review-step-score {
+        padding: 5px 10px;
+        border-radius: 999px;
+        background: #eff6ff;
+        color: #2563eb;
+        font-size: 0.75rem;
+        font-weight: 900;
+        white-space: nowrap;
+    }
+
+    .review-step-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        padding: 0 18px 18px;
+    }
+
+    .review-flash {
+        animation: reviewPulse 1.8s ease-in-out infinite alternate;
+    }
+
+    @keyframes reviewFlash {
+        0% {
+            box-shadow: 0 0 0 rgba(37, 99, 235, 0);
+            transform: translateY(0);
+        }
+
+        100% {
+            box-shadow: 0 10px 24px rgba(37, 99, 235, 0.08);
+            transform: translateY(-1px);
+        }
+    }
+
+    @keyframes reviewPulse {
+        0% {
+            background-color: #f8fbff;
+        }
+
+        100% {
+            background-color: #eef6ff;
+        }
+    }
+
+    @media (max-width: 720px) {
+
+        .results-grid,
+        .results-steps {
+            grid-template-columns: 1fr;
+        }
+
+        .results-panel {
+            padding: 18px;
+        }
+    }
+</style>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="feature.html" class="nav-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="15 18 9 12 15 6" />
+            </svg>
+        </a>
+        <div class="nav-title-group">
+            <div class="nav-title">Practice Simulation</div>
+            <div class="nav-breadcrumb"><a href="feature.html">Home</a> <span>›</span> <a href="modules.html">Learning
+                    Modules</a> <span>›</span> Practice Hub</div>
+        </div>
+        <div class="nav-right">
+            <button class="nav-bell">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                </svg>
+            </button>
+            <div class="nav-user-wrap">
+                <div class="nav-user">
+                    <div class="nav-avatar"><img src="images/bluehumanbg.png" alt="User"></div>
+                    <div>
+                        <div class="nav-user-name" id="studentFullName"></div>
+                        <div class="nav-user-role">Student</div>
+                    </div>
+                    <span class="nav-chevron">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                    </span>
+                </div>
+                <div class="nav-dropdown">
+                    <a href="editprofile.html">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                        Edit Profile
+                    </a>
+                    <div class="nav-dropdown-sep"></div>
+                    <a href="index.html" class="logout-link">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            <polyline points="16 17 21 12 16 7" />
+                            <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
+                        Log Out
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN LAYOUT -->
+    <div class="main-layout">
+
+        <!-- CONTENT COLUMN -->
+        <div class="content-col">
+
+            <!-- HERO BANNER -->
+            <div class="hero-banner">
+                <div class="hero-content">
+                    <div class="hero-badge">Engine System</div>
+                    <div class="hero-title">Practice Simulation</div>
+                    <div class="hero-desc">Apply your knowledge in a safe virtual environment.<br>Complete simulations
+                        to master real-world tasks.</div>
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <div class="hero-stat-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" />
+                                    <line x1="16" y1="2" x2="16" y2="6" />
+                                    <line x1="8" y1="2" x2="8" y2="6" />
+                                    <line x1="3" y1="10" x2="21" y2="10" />
+                                </svg>
+                            </div>
+                            <div>
+
+                                <div class="hero-stat-num">6</div>
+                                <div class="hero-stat-label">Total Simulations</div>
+                            </div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" />
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                </svg>
+                            </div>
+                            <div>
+
+                                <script>
+                                    function applyStudentProfile() {
+                                        const stored = localStorage.getItem('motomasterStudent') || sessionStorage.getItem('motomasterStudent');
+                                        if (!stored) return;
+                                        try {
+                                            const student = JSON.parse(stored);
+                                            const fullName = [student.first_name, student.last_name].filter(Boolean).join(' ').trim();
+                                            const nameEl = document.getElementById('studentFullName');
+                                            if (nameEl && fullName) nameEl.textContent = fullName;
+                                        } catch (err) {
+                                            // Ignore malformed stored data.
+                                        }
+                                    }
+
+                                    document.addEventListener('DOMContentLoaded', applyStudentProfile);
+                                    window.addEventListener('pageshow', applyStudentProfile);
+                                </script>
+                                <div class="hero-stat-num">2</div>
+                                <div class="hero-stat-label">Locked Simulations</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABS -->
+            <div class="tabs-row">
+                <button class="tab active">All Simulations (6)</button>
+                <button class="tab">Unlocked (4)</button>
+                <button class="tab">Locked (2)</button>
+                <div class="tab-right">All Modules <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg></div>
+            </div>
+
+            <!-- SIMULATION CARDS GRID -->
+            <div class="sim-grid">
+
+                <!-- Engine Oil Change — Completed -->
+                <div class="sim-card" data-title="Engine Oil Change" data-practice-completed="true">
+                    <div class="sim-card-img-wrap">
+                        <img class="sim-card-img" src="images/enginee.png" alt="Engine Oil Change">
+                        <div class="sim-card-badge unlocked">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Unlocked
+                        </div>
+                    </div>
+                    <div class="sim-card-body">
+                        <div class="sim-card-title">Engine Oil Change</div>
+                        <div class="sim-card-desc">Learn the proper procedure for changing engine oil.</div>
+                        <div class="sim-card-meta">
+                            <span class="sim-card-score">Score: 92%</span>
+                            <span>Completed</span>
+                        </div>
+                        <div class="sim-progress-wrap">
+                            <div class="sim-progress-bar">
+                                <div class="sim-progress-fill" style="width:100%"></div>
+                            </div>
+                            <div class="sim-progress-pct">100%</div>
+                        </div>
+                        <button type="button" class="sim-btn outline" id="engineOilReviewBtn">Review Practice <svg
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg></button>
+
+                    </div>
+                </div>
+
+                <!-- Brake Pad Replacement — Unlocked -->
+                <div class="sim-card" data-title="Brake Pad Replacement">
+                    <div class="sim-card-img-wrap">
+                        <img class="sim-card-img" src="images/brake.png" alt="Brake Pad Replacement">
+                        <div class="sim-card-badge unlocked">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Unlocked
+                        </div>
+                    </div>
+                    <div class="sim-card-body">
+                        <div class="sim-card-title">Brake Pad Replacement</div>
+                        <div class="sim-card-desc">Practice replacing brake pads safely and effectively.</div>
+                        <div class="sim-progress-wrap">
+                            <div class="sim-progress-bar">
+                                <div class="sim-progress-fill" style="width:75%"></div>
+                            </div>
+                            <div class="sim-progress-pct">75%</div>
+                        </div>
+                        <button class="sim-btn">Continue Simulation <svg viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg></button>
+
+                    </div>
+                </div>
+
+                <!-- Air Filter Replacement — Unlocked -->
+                <div class="sim-card" data-title="Air Filter Replacement">
+                    <div class="sim-card-img-wrap">
+                        <img class="sim-card-img" src="images/air.png" alt="Air Filter Replacement">
+                        <div class="sim-card-badge unlocked">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Unlocked
+                        </div>
+                    </div>
+                    <div class="sim-card-body">
+                        <div class="sim-card-title">Air Filter Replacement</div>
+                        <div class="sim-card-desc">Practice air filter inspection, removal, and installation procedures.
+                        </div>
+                        <div class="sim-progress-wrap">
+                            <div class="sim-progress-bar">
+                                <div class="sim-progress-fill" style="width:60%"></div>
+                            </div>
+                            <div class="sim-progress-pct">60%</div>
+                        </div>
+                        <button type="button" class="sim-btn outline" id="airFilterReviewBtn">Review Practice <svg
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg></button>
+
+                    </div>
+                </div>
+
+                <!-- Fuel Filter Replacement — Locked -->
+                <div class="sim-card locked-card" data-title="Fuel Filter Replacement">
+                    <div class="sim-card-img-wrap">
+                        <img class="sim-card-img" src="images/fuel.png" alt="Fuel Filter Replacement">
+                        <div class="lock-overlay">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="11" width="18" height="11" rx="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                            </svg>
+                        </div>
+                        <div class="sim-card-badge locked">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                            </svg>
+                            Locked
+                        </div>
+                    </div>
+                    <div class="sim-card-body">
+                        <div class="sim-card-title">Fuel Filter Replacement</div>
+                        <div class="sim-card-desc">Complete the "Fuel Filter Replacement" module to unlock this
+                            simulation.</div>
+                        <a href="fuelmodule.html" class="sim-btn outline">Go to Module <svg viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg></a>
+
+                    </div>
+                </div>
+
+                <!-- Battery Maintenance — Unlocked -->
+                <div class="sim-card" data-title="Battery Maintenance">
+                    <div class="sim-card-img-wrap">
+                        <img class="sim-card-img" src="images/batteryy.png" alt="Battery Maintenance">
+                        <div class="sim-card-badge unlocked">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            Unlocked
+                        </div>
+                    </div>
+                    <div class="sim-card-body">
+                        <div class="sim-card-title">Battery Maintenance</div>
+                        <div class="sim-card-desc">Learn proper battery inspection, cleaning, and maintenance
+                            procedures.</div>
+                        <div class="sim-progress-wrap">
+                            <div class="sim-progress-bar">
+                                <div class="sim-progress-fill" style="width:0%"></div>
+                            </div>
+                            <div class="sim-progress-pct">0%</div>
+                        </div>
+                        <button class="sim-btn">Start Simulation <svg viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2.5">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg></button>
+
+                    </div>
+                </div>
+
+                <!-- Spark Plug Replacement — Locked -->
+                <div class="sim-card locked-card" data-title="Spark Plug Replacement">
+                    <div class="sim-card-img-wrap">
+                        <img class="sim-card-img" src="images/spark.png" alt="Spark Plug Replacement">
+                        <div class="lock-overlay">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="11" width="18" height="11" rx="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                            </svg>
+                        </div>
+                        <div class="sim-card-badge locked">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                            </svg>
+                            Locked
+                        </div>
+                    </div>
+                    <div class="sim-card-body">
+                        <div class="sim-card-title">Spark Plug Replacement</div>
+                        <div class="sim-card-desc">Complete the "Spark Plug Replacement" module to unlock this
+                            simulation.</div>
+                        <a href="sparkmodule.html" class="sim-btn outline">Go to Module <svg viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div class="sidebar-col">
+
+            <!-- Overall Progress -->
+            <div class="widget">
+                <div class="widget-label">Overall Progress</div>
+                <div class="progress-ring-wrap">
+                    <div class="progress-ring">
+                        <svg width="90" height="90" viewBox="0 0 90 90">
+                            <circle class="progress-ring-bg" cx="45" cy="45" r="39" />
+                            <circle class="progress-ring-fill" cx="45" cy="45" r="39" />
+                        </svg>
+                        <div class="progress-ring-text">
+                            <span class="progress-ring-pct">76%</span>
+                            <span class="progress-ring-sub">Completed</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="progress-caption"><strong>24 of 32</strong> modules completed</div>
+                <button class="view-btn">View Progress <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                    </svg></button>
+            </div>
+
+            <!-- Unlock Requirements -->
+            <div class="widget">
+                <div class="widget-label">Unlock Requirements</div>
+                <div class="req-note">Complete the required learning modules to unlock more practice simulations.</div>
+                <div class="req-list">
+                    <div class="req-item">
+                        <svg class="req-icon" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <path d="M9 9h6M9 12h6M9 15h4" />
+                        </svg>
+                        Read All Lessons
+                        <div class="req-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg></div>
+                    </div>
+                    <div class="req-item">
+                        <svg class="req-icon" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        </svg>
+                        Pass Module Quiz
+                        <div class="req-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg></div>
+                    </div>
+                    <div class="req-item">
+                        <svg class="req-icon" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Complete Module
+                        <div class="req-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="3">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg></div>
+                    </div>
+                    <div class="req-item">
+                        <svg class="req-icon" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                        Unlock Simulation
+                        <div class="req-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="widget">
+                <div class="widget-label">Recent Activity</div>
+                <div class="activity-list" id="activityList">
+                    <div class="activity-item">
+                        <div class="activity-dot green">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </div>
+                        <div class="activity-info">
+                            <div class="activity-name">Engine Oil Change</div>
+                            <div class="activity-sub">Simulation Completed</div>
+                        </div>
+                        <div class="activity-time">4h ago</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-dot blue">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="9" />
+                                <polyline points="12 7 12 12 15 15" />
+                            </svg>
+                        </div>
+                        <div class="activity-info">
+                            <div class="activity-name">Brake Pad Replacement</div>
+                            <div class="activity-sub">Simulation in Progress</div>
+                        </div>
+                        <div class="activity-time">1d ago</div>
+                    </div>
+                </div>
+                <a class="view-all-link" href="#">View All Activity <svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                    </svg></a>
+            </div>
+
+            <!-- Need Help -->
+            <div class="widget">
+                <div
+                    style="width:32px;height:32px;border-radius:50%;background:#eff6ff;display:flex;align-items:center;justify-content:center;color:#2563eb;margin-bottom:8px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                        <line x1="12" y1="17" x2="12.01" y2="17" />
+                    </svg>
+                </div>
+                <div style="font-size:0.78rem;font-weight:800;color:#1a1a2e;margin-bottom:3px;">Need Help?</div>
+                <div style="font-size:0.7rem;color:#6b7280;margin-bottom:8px;line-height:1.4;">Check the guide or watch
+                    a tutorial before starting.</div>
+                <a class="view-all-link" href="#">View Guide <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                    </svg></a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TIP BAR -->
+    <div class="tip-bar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        <span><strong>Tip:</strong> Complete modules in order to unlock all simulations and improve your skills.</span>
+    </div>
+
+    <!-- RESULTS MODAL -->
+    <div class="results-modal" id="resultsModal" aria-hidden="true">
+        <div class="results-panel" role="dialog" aria-modal="true" aria-labelledby="resultsTitle">
+            <div class="results-header">
+                <div class="results-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <polyline points="4 12 9 17 20 6" />
+                        <path d="M4 4h16v16H4z" opacity="0.15" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="results-title" id="resultsTitle">Simulation Complete</div>
+                    <div class="results-subtitle">Review your score, feedback, and performance by step.</div>
+                </div>
+            </div>
+
+            <div class="results-grid">
+                <div class="results-stat">
+                    <div class="results-stat-label">Overall Score</div>
+                    <div class="results-stat-value" id="resultsScore">60%</div>
+                </div>
+                <div class="results-stat">
+                    <div class="results-stat-label">Steps Completed</div>
+                    <div class="results-stat-value" id="resultsSteps">5/5</div>
+                </div>
+                <div class="results-stat">
+                    <div class="results-stat-label">Performance</div>
+                    <div class="results-stat-value" id="resultsPerformance"
+                        style="font-size:1.55rem; line-height:1.15;">Needs Work</div>
+                </div>
+            </div>
+
+            <div class="results-message" id="resultsMessage">
+                You finished the simulation, but every step needs review before repeating the procedure.
+            </div>
+
+            <div class="results-section">
+                <div class="results-section-head">
+                    <div>
+                        <div class="results-section-title">Full step review</div>
+                        <div class="results-section-hint">All steps are expanded so you can review every correct and
+                            incorrect action</div>
+                    </div>
+                    <button type="button" class="results-action-btn" id="doItAgainBtn">Attempt Again</button>
+                </div>
+                <div id="resultsStepsContainer">
+                    <div class="review-step-card review-flash">
+                        <div class="review-step-head">
+                            <div class="review-step-name">Step 1: Prepare the Air Filter Area</div>
+                            <div class="review-step-score">60%</div>
+                        </div>
+                        <div class="review-step-grid">
+                            <div class="results-column correct">
+                                <div class="results-column-label">Correct</div>
+                                <ul class="results-item-list">
+                                    <li class="ok"><svg class="results-item-icon" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg><span>Gathered the filter and tools before starting</span></li>
+                                    <li class="ok"><svg class="results-item-icon" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg><span>Confirmed the engine was off and safe to inspect</span></li>
+                                </ul>
+                            </div>
+                            <div class="results-column mistakes">
+                                <div class="results-column-label">Mistakes</div>
+                                <ul class="results-item-list">
+                                    <li class="bad"><svg class="results-item-icon" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <line x1="6" y1="6" x2="18" y2="18" />
+                                            <line x1="18" y1="6" x2="6" y2="18" />
+                                        </svg><span>Skipped a final check of the work area</span></li>
+                                    <li class="bad"><svg class="results-item-icon" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <line x1="6" y1="6" x2="18" y2="18" />
+                                            <line x1="18" y1="6" x2="6" y2="18" />
+                                        </svg><span>Started without verifying the housing cover</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="review-step-card review-flash" style="animation-delay: 0.15s;">
+                        <div class="review-step-head">
+                            <div class="review-step-name">Step 2: Open the Housing</div>
+                            <div class="review-step-score">60%</div>
+                        </div>
+                        <div class="review-step-grid">
+                            <div class="results-column correct">
+                                <div class="results-column-label">Correct</div>
+                                <ul class="results-item-list">
+                                    <li class="ok"><svg class="results-item-icon" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg><span>Released the latches carefully</span></li>
+                                    <li class="ok"><svg class="results-item-icon" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg><span>Kept fasteners organized while opening the cover</span></li>
+                                </ul>
+                            </div>
+                            <div class="results-column mistakes">
+                                <div class="results-column-label">Mistakes</div>
+                                <ul class="results-item-list">
+                                    <li class="bad"><svg class="results-item-icon" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <line x1="6" y1="6" x2="18" y2="18" />
+                                            <line x1="18" y1="6" x2="6" y2="18" />
+                                        </svg><span>Forced the cover instead of unclipping it</span></li>
+                                    <li class="bad"><svg class="results-item-icon" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <line x1="6" y1="6" x2="18" y2="18" />
+                                            <line x1="18" y1="6" x2="6" y2="18" />
+                                        </svg><span>Misplaced one of the housing screws</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="review-step-card review-flash" style="animation-delay: 0.3s;">
+                        <div class="review-step-head">
+                            <div class="review-step-name">Step 3: Remove the Old Filter</div>
+                            <div class="review-step-score">60%</div>
+                        </div>
+                        <div class="review-step-grid">
+                            <div class="results-column correct">
+                                <div class="results-column-label">Correct</div>
+                                <ul class="results-item-list">
+                                    <li class="ok"><svg class="results-item-icon" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg><span>Removed the old filter without damaging the seal</span></li>
+                                    <li class="ok"><svg class="results-item-icon" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg><span>Checked the housing for dust and debris</span></li>
+                                </ul>
+                            </div>
+                            <div class="results-column mistakes">
+                                <div class="results-column-label">Mistakes</div>
+                                <ul class="results-item-list">
+                                    <li class="bad"><svg class="results-item-icon" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <line x1="6" y1="6" x2="18" y2="18" />
+                                            <line x1="18" y1="6" x2="6" y2="18" />
+                                        </svg><span>Let debris fall back into the intake area</span></li>
+                                    <li class="bad"><svg class="results-item-icon" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <line x1="6" y1="6" x2="18" y2="18" />
+                                            <line x1="18" y1="6" x2="6" y2="18" />
+                                        </svg><span>Handled the old filter too roughly</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="review-step-card review-flash" style="animation-delay: 0.45s;">
+                        <div class="review-step-head">
+                            <div class="review-step-name">Step 4: Install the New Filter</div>
+                            <div class="review-step-score">60%</div>
+                        </div>
+                        <div class="review-step-grid">
+                            <div class="results-column correct">
+                                <div class="results-column-label">Correct</div>
+                                <ul class="results-item-list">
+                                    <li class="ok"><svg class="results-item-icon" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg><span>Aligned the new filter in the proper direction</span></li>
+                                    <li class="ok"><svg class="results-item-icon" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg><span>Seated the filter fully inside the housing</span></li>
+                                </ul>
+                            </div>
+                            <div class="results-column mistakes">
+                                <div class="results-column-label">Mistakes</div>
+                                <ul class="results-item-list">
+                                    <li class="bad"><svg class="results-item-icon" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <line x1="6" y1="6" x2="18" y2="18" />
+                                            <line x1="18" y1="6" x2="6" y2="18" />
+                                        </svg><span>Installed the filter backward</span></li>
+                                    <li class="bad"><svg class="results-item-icon" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <line x1="6" y1="6" x2="18" y2="18" />
+                                            <line x1="18" y1="6" x2="6" y2="18" />
+                                        </svg><span>Failed to seat the edges evenly</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="review-step-card review-flash" style="animation-delay: 0.6s; margin-bottom: 0;">
+                        <div class="review-step-head">
+                            <div class="review-step-name">Step 5: Reassemble and Final Check</div>
+                            <div class="review-step-score">60%</div>
+                        </div>
+                        <div class="review-step-grid">
+                            <div class="results-column correct">
+                                <div class="results-column-label">Correct</div>
+                                <ul class="results-item-list">
+                                    <li class="ok"><svg class="results-item-icon" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg><span>Closed the housing securely after replacement</span></li>
+                                    <li class="ok"><svg class="results-item-icon" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg><span>Performed a final visual inspection</span></li>
+                                </ul>
+                            </div>
+                            <div class="results-column mistakes">
+                                <div class="results-column-label">Mistakes</div>
+                                <ul class="results-item-list">
+                                    <li class="bad"><svg class="results-item-icon" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <line x1="6" y1="6" x2="18" y2="18" />
+                                            <line x1="18" y1="6" x2="6" y2="18" />
+                                        </svg><span>Left a latch partially open</span></li>
+                                    <li class="bad"><svg class="results-item-icon" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <line x1="6" y1="6" x2="18" y2="18" />
+                                            <line x1="18" y1="6" x2="6" y2="18" />
+                                        </svg><span>Skipped the final cleanup check</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;">
+                <button type="button" class="results-close-btn" id="closeResultsBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const resultsModal = document.getElementById('resultsModal');
+        const resultsTitle = document.getElementById('resultsTitle');
+        const resultsScore = document.getElementById('resultsScore');
+        const resultsSteps = document.getElementById('resultsSteps');
+        const resultsPerformance = document.getElementById('resultsPerformance');
+        const resultsMessage = document.getElementById('resultsMessage');
+        const resultsStepsContainer = document.getElementById('resultsStepsContainer');
+        const closeResultsBtn = document.getElementById('closeResultsBtn');
+        const doItAgainBtn = document.getElementById('doItAgainBtn');
+
+        // Save original Air Filter step cards HTML for fallback
+        const defaultStepsHTML = resultsStepsContainer ? resultsStepsContainer.innerHTML : '';
+
+        function openResultsModal() {
+            resultsModal.classList.add('open');
+            resultsModal.setAttribute('aria-hidden', 'false');
+        }
+
+        function closeResultsModal() {
+            resultsModal.classList.remove('open');
+            resultsModal.setAttribute('aria-hidden', 'true');
+        }
+
+        if (closeResultsBtn) closeResultsBtn.addEventListener('click', closeResultsModal);
+        async function resetPracticeProgressAndRedirect(title) {
+            const student = getStudentInfo();
+            if (!student) {
+                window.location.href = getPracticeAreaHref(title);
+                return;
+            }
+            try {
+                const res = await fetch('reset_practice.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        title: title
+                    })
+                });
+                const data = await res.json();
+                if (!res.ok || !data.success) {
+                    console.error('Failed to reset simulation progress:', data.message);
+                }
+            } catch (err) {
+                console.error('Error resetting simulation progress:', err);
+            }
+            window.location.href = getPracticeAreaHref(title);
+        }
+
+        if (doItAgainBtn) {
+            doItAgainBtn.addEventListener('click', async () => {
+                const title = resultsTitle ? resultsTitle.textContent.trim() : 'Battery Maintenance';
+                await resetPracticeProgressAndRedirect(title);
+            });
+        }
+
+        resultsModal.addEventListener('click', (event) => {
+            if (event.target === resultsModal) {
+                closeResultsModal();
+            }
+        });
+
+        function getPerformanceLabel(score) {
+            if (score >= 90) return 'Excellent';
+            if (score >= 75) return 'Good';
+            if (score >= 60) return 'Needs Work';
+            return 'Review Again';
+        }
+
+        function getFeedbackText(score) {
+            if (score >= 90) return 'Strong work. You completed the procedure accurately and followed the sequence well.';
+            if (score >= 75) return 'Good job. Your sequence is mostly correct, with a few details to tighten up.';
+            if (score >= 60) return 'You finished the simulation, but several steps need review before repeating the procedure.';
+            return 'You completed the simulation, but the procedure needs more practice. Review the mistakes below and try again.';
+        }
+
+        function openDynamicReviewModal(record) {
+            if (!record) {
+                // Fallback to Air Filter Replacement (default hardcoded items)
+                if (resultsTitle) resultsTitle.textContent = 'Air Filter Replacement';
+                if (resultsScore) resultsScore.textContent = '60%';
+                if (resultsSteps) resultsSteps.textContent = '5/5';
+                if (resultsPerformance) resultsPerformance.textContent = 'Needs Work';
+                if (resultsMessage) resultsMessage.textContent = 'You finished the simulation, but every step needs review before repeating the procedure.';
+                if (resultsStepsContainer) resultsStepsContainer.innerHTML = defaultStepsHTML;
+            } else {
+                if (resultsTitle) resultsTitle.textContent = record.title;
+                if (resultsScore) resultsScore.textContent = `${record.score}%`;
+                if (resultsSteps) resultsSteps.textContent = `${record.steps.length}/${record.steps.length}`;
+                if (resultsPerformance) resultsPerformance.textContent = getPerformanceLabel(record.score);
+                if (resultsMessage) resultsMessage.textContent = getFeedbackText(record.score);
+
+                // Build step cards dynamically
+                if (resultsStepsContainer) {
+                    resultsStepsContainer.innerHTML = (record.steps || []).map((step, idx) => {
+                        const stepScore = typeof step.score === 'number' ? step.score : 0;
+                        const corrects = step.correct_actions || step.correct || [];
+                        const mistakes = step.mistake_actions || step.mistakes || [];
+
+                        return `
+                            <div class="review-step-card review-flash" style="animation-delay: ${idx * 0.15}s; margin-bottom: ${idx === record.steps.length - 1 ? '0' : '12px'};">
+                                <div class="review-step-head">
+                                    <div class="review-step-name">${step.title}</div>
+                                    <div class="review-step-score">${stepScore}%</div>
+                                </div>
+                                <div class="review-step-grid">
+                                    <div class="results-column correct">
+                                        <div class="results-column-label">Correct</div>
+                                        <ul class="results-item-list">
+                                            ${corrects.length === 0 ? `<li><span>None</span></li>` : corrects.map(item => `
+                                                <li class="ok">
+                                                    <svg class="results-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                                        <polyline points="20 6 9 17 4 12" />
+                                                    </svg>
+                                                    <span>${item}</span>
+                                                </li>
+                                            `).join('')}
+                                        </ul>
+                                    </div>
+                                    <div class="results-column mistakes">
+                                        <div class="results-column-label">Mistakes</div>
+                                        <ul class="results-item-list">
+                                            ${mistakes.length === 0 ? `<li><span>None</span></li>` : mistakes.map(item => `
+                                                <li class="bad">
+                                                    <svg class="results-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                                        <line x1="6" y1="6" x2="18" y2="18" />
+                                                        <line x1="18" y1="6" x2="6" y2="18" />
+                                                    </svg>
+                                                    <span>${item}</span>
+                                                </li>
+                                            `).join('')}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+            openResultsModal();
+        }
+
+        function applyCompletedPracticeCard(card, record) {
+            const fill = card.querySelector('.sim-progress-fill');
+            if (fill) fill.style.width = '100%';
+            const pctText = card.querySelector('.sim-progress-pct');
+            if (pctText) pctText.textContent = '100%';
+
+            let metaEl = card.querySelector('.sim-card-meta');
+            if (!metaEl) {
+                metaEl = document.createElement('div');
+                metaEl.className = 'sim-card-meta';
+                const descEl = card.querySelector('.sim-card-desc');
+                if (descEl) descEl.parentNode.insertBefore(metaEl, descEl.nextSibling);
+            }
+            metaEl.innerHTML = `
+                <span class="sim-card-score">Score: ${record.score}%</span>
+                <span>Completed</span>
+            `;
+
+            const btn = card.querySelector('.sim-btn');
+            if (btn) {
+                btn.type = 'button';
+                btn.className = 'sim-btn outline';
+                btn.innerHTML = 'Review Practice <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px;margin-left:8px"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    openDynamicReviewModal(record);
+                };
+            }
+
+            card.style.cursor = 'pointer';
+            card.onclick = () => openDynamicReviewModal(record);
+        }
+
+        function getPracticeAreaHref(title) {
+            switch (title) {
+                case 'Engine Oil Change':
+                    return 'practicearea_engine.html';
+                case 'Brake Pad Replacement':
+                    return 'practicearea_brake.html';
+                case 'Air Filter Replacement':
+                    return 'practicearea_air.html';
+                case 'Fuel Filter Replacement':
+                    return 'practicearea_fuel.html';
+                case 'Battery Maintenance':
+                    return 'practicearea_battery.html';
+                case 'Spark Plug Replacement':
+                    return 'practicearea_spark.html';
+                default:
+                    return 'practicearea.html';
+            }
+        }
+
+        function applyInProgressPracticeCard(card, pct) {
+            card.removeAttribute('data-practice-completed');
+            const title = card.dataset.title || '';
+            const href = getPracticeAreaHref(title);
+            const fill = card.querySelector('.sim-progress-fill');
+            if (fill) fill.style.width = `${pct}%`;
+            const pctText = card.querySelector('.sim-progress-pct');
+            if (pctText) pctText.textContent = `${pct}%`;
+
+            const metaEl = card.querySelector('.sim-card-meta');
+            if (metaEl) {
+                metaEl.remove();
+            }
+
+            const btn = card.querySelector('.sim-btn');
+            if (btn) {
+                btn.type = 'button';
+                btn.className = 'sim-btn';
+                const btnText = pct > 0 ? 'Continue Simulation' : 'Start Simulation';
+                btn.innerHTML = `${btnText} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px;margin-left:8px"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    window.location.href = href;
+                };
+            }
+
+            card.style.cursor = 'pointer';
+            card.onclick = () => {
+                window.location.href = href;
+            };
+        }
+
+        function initCompletedPracticeCards() {
+            document.querySelectorAll('.sim-card[data-practice-completed="true"]').forEach((card) => {
+                const demoRecord = {
+                    title: card.dataset.title || 'Engine Oil Change',
+                    score: 92,
+                    completion_status: 'Completed',
+                    steps: []
+                };
+                applyCompletedPracticeCard(card, demoRecord);
+            });
+        }
+
+        initCompletedPracticeCards();
+
+        // Dynamic Database Progress and UI updating
+        function getStudentInfo() {
+            try {
+                const raw = localStorage.getItem('motomasterStudent') || sessionStorage.getItem('motomasterStudent');
+                return raw ? JSON.parse(raw) : null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function formatTimeAgo(dateString) {
+            if (!dateString) return '';
+            // Parse date from MySQL format (YYYY-MM-DD HH:MM:SS)
+            const date = new Date(dateString.replace(' ', 'T'));
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMins / 60);
+            const diffDays = Math.floor(diffHours / 24);
+
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffHours < 24) return `${diffHours}h ago`;
+            return `${diffDays}d ago`;
+        }
+
+        async function loadAndRenderSimulationProgress() {
+            // Setup default click redirect for unlocked cards (not already completed)
+            document.querySelectorAll('.sim-card:not(.locked-card):not([data-practice-completed])').forEach(card => {
+                const title = card.dataset.title || '';
+                const href = getPracticeAreaHref(title);
+                card.style.cursor = 'pointer';
+                card.onclick = () => {
+                    window.location.href = href;
+                };
+            });
+
+            const student = getStudentInfo();
+            if (!student) return;
+
+            const studentId = student.student_id;
+            const email = student.email;
+            const params = new URLSearchParams({
+                title: 'all',
+                ...(studentId && { student_id: studentId }),
+                ...(email && { email: email })
+            });
+
+            try {
+                // Fetch learning module progress first
+                let moduleProgress = {};
+                try {
+                    const modRes = await fetch('student_progress.php');
+                    const modData = await modRes.json();
+                    if (modData.success && modData.progress) {
+                        moduleProgress = modData.progress;
+                    }
+                } catch (e) {
+                    console.error('Error fetching module progress:', e);
+                }
+
+                const res = await fetch(`get_practice_progress.php?${params}`);
+                const data = await res.json();
+                if (!data.success || !data.progress) return;
+
+                // Group by title
+                const progressMap = {};
+                data.progress.forEach(record => {
+                    progressMap[record.title] = record;
+                });
+
+                // Update simulation cards locking status dynamically based on module progress
+                const titleToModuleKey = {
+                    'Engine Oil Change': 'mod_progress_enginemodule',
+                    'Brake Pad Replacement': 'mod_progress_brakemodule',
+                    'Air Filter Replacement': 'mod_progress_airmodule',
+                    'Fuel Filter Replacement': 'mod_progress_fuelmodule',
+                    'Battery Maintenance': 'mod_progress_batterymodule',
+                    'Spark Plug Replacement': 'mod_progress_sparkmodule'
+                };
+
+                const cards = document.querySelectorAll('.sim-card');
+                cards.forEach(card => {
+                    const title = card.dataset.title;
+                    const mKey = titleToModuleKey[title];
+                    if (mKey) {
+                        const progress = moduleProgress[mKey] || 0;
+                        if (progress >= 100) {
+                            // Unlock card
+                            if (card.classList.contains('locked-card')) {
+                                card.classList.remove('locked-card');
+                                const overlay = card.querySelector('.lock-overlay');
+                                if (overlay) overlay.remove();
+                                const badge = card.querySelector('.sim-card-badge');
+                                if (badge) {
+                                    badge.className = 'sim-card-badge unlocked';
+                                    badge.innerHTML = `
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg>
+                                        Unlocked
+                                    `;
+                                }
+                                const cardBody = card.querySelector('.sim-card-body');
+                                if (cardBody) {
+                                    // Update description
+                                    const descEl = cardBody.querySelector('.sim-card-desc');
+                                    if (descEl) {
+                                        if (title === 'Fuel Filter Replacement') {
+                                            descEl.textContent = 'Practice fuel filter inspection, removal, and replacement procedures.';
+                                        } else if (title === 'Spark Plug Replacement') {
+                                            descEl.textContent = 'Practice spark plug inspection and replacement procedures.';
+                                        }
+                                    }
+
+                                    // Add progress bar if not already present
+                                    if (!cardBody.querySelector('.sim-progress-wrap')) {
+                                        const progressWrap = document.createElement('div');
+                                        progressWrap.className = 'sim-progress-wrap';
+                                        progressWrap.innerHTML = `
+                                            <div class="sim-progress-bar">
+                                                <div class="sim-progress-fill" style="width:0%"></div>
+                                            </div>
+                                            <div class="sim-progress-pct">0%</div>
+                                        `;
+                                        // Insert before the button
+                                        const btn = cardBody.querySelector('.sim-btn') || cardBody.querySelector('a');
+                                        if (btn) {
+                                            cardBody.insertBefore(progressWrap, btn);
+                                        } else {
+                                            cardBody.appendChild(progressWrap);
+                                        }
+                                    }
+
+                                    const linkBtn = cardBody.querySelector('a.sim-btn');
+                                    if (linkBtn) {
+                                        linkBtn.outerHTML = `
+                                            <button class="sim-btn">Start Simulation <svg viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2.5">
+                                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                                    <polyline points="12 5 19 12 12 19" />
+                                                </svg></button>
+                                        `;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Update simulation cards progress states
+                cards.forEach(card => {
+                    const title = card.dataset.title;
+                    const record = progressMap[title];
+
+                    if (record) {
+                        if (record.completion_status === 'Completed') {
+                            applyCompletedPracticeCard(card, record);
+                        } else if (record.completion_status === 'In Progress') {
+                            // Calculate percentage of steps completed
+                            const steps = record.steps || [];
+                            const completedSteps = steps.filter(s => (s.correct_actions || s.correct || []).length > 0).length;
+                            const pct = steps.length > 0 ? Math.round((completedSteps / steps.length) * 100) : 0;
+
+                            applyInProgressPracticeCard(card, pct);
+                        }
+                    } else {
+                        // No record in the database - reset unlocked card to 0% and Start Simulation
+                        if (!card.classList.contains('locked-card')) {
+                            applyInProgressPracticeCard(card, 0);
+                        }
+                    }
+                });
+
+                // Setup default click redirect for unlocked cards (not already completed) again to register dynamically unlocked cards
+                document.querySelectorAll('.sim-card:not(.locked-card):not([data-practice-completed])').forEach(card => {
+                    const title = card.dataset.title || '';
+                    const href = getPracticeAreaHref(title);
+                    card.style.cursor = 'pointer';
+                    card.onclick = (e) => {
+                        if (e.target.closest('a') && !e.target.closest('.sim-btn')) return;
+                        window.location.href = href;
+                    };
+                });
+
+                // Update recent activity list in the sidebar
+                const activityList = document.getElementById('activityList');
+                if (activityList && data.progress.length > 0) {
+                    activityList.innerHTML = data.progress.slice(0, 3).map(record => {
+                        const timeAgo = formatTimeAgo(record.date_attempted);
+                        const isCompleted = record.completion_status === 'Completed';
+
+                        return `
+                            <div class="activity-item">
+                                <div class="activity-dot ${isCompleted ? 'green' : 'blue'}">
+                                    ${isCompleted ? `
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg>
+                                    ` : `
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="9" />
+                                            <polyline points="12 7 12 12 15 15" />
+                                        </svg>
+                                    `}
+                                </div>
+                                <div class="activity-info">
+                                    <div class="activity-name">${record.title}</div>
+                                    <div class="activity-sub">Simulation ${isCompleted ? 'Completed' : 'In Progress'}</div>
+                                </div>
+                                <div class="activity-time">${timeAgo}</div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                // Update dynamic overall progress ring and caption
+                updatePracticeProgressRing(progressMap);
+                wireViewProgressButton();
+
+                // Update stats and tabs dynamically based on real card states
+                updatePracticeStatsAndTabs();
+                wireTabFiltering();
+
+            } catch (err) {
+                console.error('Error fetching/rendering practice progress:', err);
+            }
+        }
+
+        function updatePracticeProgressRing(progressMap) {
+            const cards = document.querySelectorAll('.sim-card');
+            const totalCount = cards.length;
+            
+            let completedCount = 0;
+            
+            cards.forEach(card => {
+                const title = card.dataset.title;
+                const record = progressMap[title];
+                
+                if (record) {
+                    if (record.completion_status === 'Completed') {
+                        completedCount++;
+                    }
+                }
+            });
+            
+            const avgPct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+            
+            // Update Ring elements
+            const ringFill = document.querySelector('.progress-ring-fill');
+            const ringPct = document.querySelector('.progress-ring-pct');
+            const caption = document.querySelector('.progress-caption');
+            
+            if (ringPct) ringPct.textContent = `${avgPct}%`;
+            if (ringFill) {
+                const ringCirc = 245; // 2 * Math.PI * 39 (r=39)
+                const offset = ringCirc - (ringCirc * avgPct / 100);
+                ringFill.style.strokeDasharray = `${ringCirc}`;
+                ringFill.style.strokeDashoffset = `${offset}`;
+            }
+            
+            if (caption) {
+                caption.innerHTML = `<strong>${completedCount} of ${totalCount}</strong> simulations completed`;
+            }
+        }
+
+        function wireViewProgressButton() {
+            const btn = document.querySelector('.view-btn');
+            if (btn) {
+                btn.type = 'button';
+                btn.onclick = () => {
+                    window.location.href = 'trackperf.html';
+                };
+            }
+        }
+
+        function updatePracticeStatsAndTabs() {
+            const cards = document.querySelectorAll('.sim-card');
+            const totalCount = cards.length;
+            const lockedCount = document.querySelectorAll('.sim-card.locked-card').length;
+            const unlockedCount = totalCount - lockedCount;
+
+            // 1. Update Hero stats
+            document.querySelectorAll('.hero-stat').forEach(stat => {
+                const labelEl = stat.querySelector('.hero-stat-label');
+                const numEl = stat.querySelector('.hero-stat-num');
+                if (labelEl && numEl) {
+                    const label = labelEl.textContent.trim().toLowerCase();
+                    if (label.includes('total')) {
+                        numEl.textContent = totalCount;
+                    } else if (label.includes('locked')) {
+                        numEl.textContent = lockedCount;
+                    }
+                }
+            });
+
+            // 2. Update Tab buttons
+            document.querySelectorAll('.tabs-row .tab').forEach(tab => {
+                const tabText = tab.textContent.trim();
+                if (tabText.startsWith('All')) {
+                    tab.textContent = `All Simulations (${totalCount})`;
+                } else if (tabText.startsWith('Unlocked')) {
+                    tab.textContent = `Unlocked (${unlockedCount})`;
+                } else if (tabText.startsWith('Locked')) {
+                    tab.textContent = `Locked (${lockedCount})`;
+                }
+            });
+        }
+
+        function wireTabFiltering() {
+            const tabs = document.querySelectorAll('.tabs-row .tab');
+            const cards = document.querySelectorAll('.sim-card');
+            
+            tabs.forEach(tab => {
+                tab.onclick = () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    const tabText = tab.textContent.trim().toLowerCase();
+                    cards.forEach(card => {
+                        if (tabText.includes('all')) {
+                            card.style.display = '';
+                        } else if (tabText.includes('unlocked')) {
+                            card.style.display = card.classList.contains('locked-card') ? 'none' : '';
+                        } else if (tabText.includes('locked')) {
+                            card.style.display = card.classList.contains('locked-card') ? '' : 'none';
+                        }
+                    });
+                };
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', loadAndRenderSimulationProgress);
+        window.addEventListener('pageshow', loadAndRenderSimulationProgress);
+
+        // MODULE SEARCH
+        const searchBox = document.querySelector('.search-box');
+        const moduleItems = document.querySelectorAll('.module-item');
+
+        if (searchBox) {
+            searchBox.addEventListener('keyup', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                moduleItems.forEach(item => {
+                    const moduleName = item.querySelector('.module-name').textContent.toLowerCase();
+                    item.style.display = moduleName.includes(searchTerm) ? 'flex' : 'none';
+                });
+            });
+        }
+
+        // MODULE ITEM CLICK
+        if (moduleItems.length) {
+            moduleItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const target = item.dataset.target;
+                    if (target) {
+                        window.location.href = target;
+                        return;
+                    }
+
+                    moduleItems.forEach(m => m.classList.remove('active'));
+                    item.classList.add('active');
+                });
+            });
+        }
+        function syncTaskActionLabels() {
+            const taskItems = document.querySelectorAll('.task-item');
+            taskItems.forEach(item => {
+                const icon = item.querySelector('.task-status-icon');
+                const actionBtn = item.querySelector('.start-btn');
+                if (!icon || !actionBtn) return;
+                actionBtn.textContent = icon.classList.contains('completed') ? 'Review' : 'Start';
+            });
+        }
+
+        // MARK ALL COMPLETED
+        const markAllBtn = document.querySelector('.mark-all-btn');
+        const taskItems = document.querySelectorAll('.task-item');
+        if (markAllBtn) {
+            markAllBtn.addEventListener('click', () => {
+                taskItems.forEach(item => {
+                    const icon = item.querySelector('.task-status-icon');
+                    if (!icon) return;
+                    icon.classList.remove('in-progress', 'not-started');
+                    icon.classList.add('completed');
+                    icon.textContent = '✓';
+                });
+                syncTaskActionLabels();
+            });
+        }
+
+        // TASK ITEM BUTTONS
+        const startBtns = document.querySelectorAll('.start-btn');
+        if (startBtns.length) {
+            startBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const taskItem = btn.closest('.task-item');
+                    const taskName = taskItem ? taskItem.querySelector('.task-name').textContent.trim() : '';
+                    if (taskName === 'Drain Old Oil') {
+                        window.location.href = 'practicearea_engine.html';
+                        return;
+                    }
+                    alert('Starting task...');
+                });
+            });
+        }
+        syncTaskActionLabels();
+        const viewScoreBtns = document.querySelectorAll('.view-score-btn');
+        if (viewScoreBtns.length) {
+            viewScoreBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    alert('Viewing task score...');
+                });
+            });
+        }
+    </script>
+
+    <script src="js/notifications.js"></script>
+</body>
+
+</html>

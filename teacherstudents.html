@@ -1,0 +1,1880 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotoMaster – My Students</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f3f4f6;
+            --border-color: #e5e7eb;
+            --text-primary: #1a1a2e;
+            --text-secondary: #6b7280;
+            --accent: #2563eb;
+            --accent-dark: #1d4ed8;
+            --accent-light: #eff6ff;
+            --green: #16a34a;
+            --red: #dc2626;
+            --orange: #d97706;
+            --purple: #9333ea;
+            --sidebar-w: 240px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+
+        .sidebar {
+            width: var(--sidebar-w);
+            background: #fff;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .logo-container {
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-container img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .logo-sub {
+            font-size: 0.62rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+        }
+
+        .nav-section-label {
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 14px 18px 4px;
+        }
+
+        .nav-menu {
+            list-style: none;
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+
+        .nav-menu::-webkit-scrollbar {
+            width: 0;
+        }
+
+        .nav-item {
+            padding: 9px 16px;
+            margin: 2px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            font-weight: 700;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .nav-item i {
+            width: 16px;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .nav-item:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .nav-item.active {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .sidebar-bottom {
+            padding: 12px 0 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .teacher-card {
+            margin: 12px 12px 4px;
+            padding: 12px;
+            background: var(--accent-light);
+            border-radius: 10px;
+            border: 1px solid #bfdbfe;
+        }
+
+        .teacher-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .teacher-name {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .teacher-role {
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-top: 2px;
+        }
+
+        .teacher-dept {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            background: var(--bg-color);
+        }
+
+        .topbar {
+            background: #fff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 28px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .topbar-left h1 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .topbar-left p {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-color);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            padding: 6px 12px;
+        }
+
+        .search-bar i {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.78rem;
+            color: var(--text-primary);
+            width: 180px;
+        }
+
+        .notif-btn {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--bg-color);
+            border: 1.5px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--red);
+            color: #fff;
+            font-size: 0.58rem;
+            font-weight: 800;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-pill {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 5px 12px 5px 5px;
+            border-radius: 30px;
+            border: 1.5px solid var(--border-color);
+            background: #fff;
+            cursor: pointer;
+        }
+
+        .profile-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 12px;
+        }
+
+        .profile-name {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .profile-role {
+            font-size: 0.62rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .page-container {
+            padding: 22px 28px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .kpi-card {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 16px 18px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .kpi-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .kpi-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .kpi-title {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .kpi-value {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .kpi-foot {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .action-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 4px;
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
+            padding: 4px;
+        }
+
+        .filter-tab {
+            padding: 5px 14px;
+            border-radius: 7px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-family: 'Nunito', sans-serif;
+            transition: all 0.15s;
+        }
+
+        .filter-tab:hover {
+            color: var(--accent);
+        }
+
+        .filter-tab.active {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .action-bar-right {
+            margin-left: auto;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            padding: 7px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.76rem;
+            font-weight: 800;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dark);
+        }
+
+        .btn-outline {
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 7px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-danger {
+            background: #fef2f2;
+            border: 1.5px solid #fecaca;
+            color: var(--red);
+            padding: 7px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 800;
+        }
+
+        .btn-danger:hover {
+            background: #fee2e2;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 9px;
+            border-radius: 20px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .badge-green {
+            background: #f0fdf4;
+            color: var(--green);
+            border: 1px solid #bbf7d0;
+        }
+
+        .badge-orange {
+            background: #fff7ed;
+            color: var(--orange);
+            border: 1px solid #fed7aa;
+        }
+
+        .badge-blue {
+            background: var(--accent-light);
+            color: var(--accent);
+            border: 1px solid #bfdbfe;
+        }
+
+        .badge-gray {
+            background: #f3f4f6;
+            color: #6b7280;
+            border: 1px solid #e5e7eb;
+        }
+
+        .badge-red {
+            background: #fef2f2;
+            color: var(--red);
+            border: 1px solid #fecaca;
+        }
+
+        .badge-purple {
+            background: #fdf4ff;
+            color: var(--purple);
+            border: 1px solid #e9d5ff;
+        }
+
+        .panel {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+        }
+
+        .panel-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .panel-title {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .panel-subtitle {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 290px;
+            gap: 20px;
+            align-items: start;
+        }
+
+        /* TABLE */
+        .std-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .std-table thead th {
+            padding: 8px 14px;
+            text-align: left;
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: var(--bg-color);
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        .std-table tbody tr {
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.15s;
+        }
+
+        .std-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .std-table tbody tr:hover {
+            background: #f8f9ff;
+        }
+
+        .std-table td {
+            padding: 10px 14px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            vertical-align: middle;
+        }
+
+        .std-table td.muted {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+
+        .std-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .std-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .std-name {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .std-sub {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        .td-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .icon-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: 1.5px solid var(--border-color);
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 11px;
+            transition: all 0.15s;
+        }
+
+        .icon-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .icon-btn.danger:hover {
+            border-color: var(--red);
+            color: var(--red);
+            background: #fef2f2;
+        }
+
+        /* PROGRESS */
+        .prog-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .prog-track {
+            flex: 1;
+            height: 6px;
+            background: #f3f4f6;
+            border-radius: 10px;
+            overflow: hidden;
+            min-width: 60px;
+        }
+
+        .prog-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: var(--accent);
+        }
+
+        .prog-pct {
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+
+        /* SIDE */
+        .side-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .side-item:last-child {
+            border-bottom: none;
+        }
+
+        .side-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .side-label {
+            flex: 1;
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .side-val {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .risk-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .risk-item:last-child {
+            border-bottom: none;
+        }
+
+        .risk-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .risk-name {
+            font-size: 0.74rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .risk-sub {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 28px;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            background: #fff;
+            margin-top: auto;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        footer span {
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: flex-start;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 30px 16px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .nm-modal {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 640px;
+            overflow: hidden;
+            animation: slideUp 0.22s ease;
+            margin: auto;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(28px);
+                opacity: 0
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1
+            }
+        }
+
+        .nm-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            color: #fff;
+        }
+
+        .nm-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nm-header-icon {
+            width: 38px;
+            height: 38px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .nm-header h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .nm-header p {
+            font-size: 0.72rem;
+            opacity: 0.8;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .nm-close {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .nm-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .nm-body {
+            padding: 22px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .nm-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .nm-grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 14px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-label {
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .form-label .req {
+            color: var(--red);
+            margin-left: 2px;
+        }
+
+        .form-control {
+            padding: 8px 12px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.82rem;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.2s;
+            background: #fff;
+            font-weight: 700;
+            width: 100%;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+        }
+
+        .form-control-textarea {
+            padding: 8px 12px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.82rem;
+            color: var(--text-primary);
+            outline: none;
+            background: #fff;
+            font-weight: 600;
+            width: 100%;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .form-control-textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .nm-section-title {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: -4px;
+        }
+
+        .nm-section-title i {
+            color: var(--accent);
+        }
+
+        .nm-footer {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-color);
+        }
+
+        /* Profile modal */
+        .pm-banner {
+            height: 80px;
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            position: relative;
+        }
+
+        .pm-avatar-wrap {
+            position: absolute;
+            bottom: -24px;
+            left: 24px;
+        }
+
+        .pm-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .pm-body {
+            padding: 36px 24px 20px;
+        }
+
+        .pm-name {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .pm-meta {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .pm-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .pm-stat {
+            background: var(--bg-color);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .pm-stat-val {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .pm-stat-label {
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-top: 2px;
+        }
+
+        .pm-module-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .pm-module-row:last-child {
+            border-bottom: none;
+        }
+
+        .pm-mod-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .pm-mod-name {
+            flex: 1;
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        .pm-mod-prog {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 120px;
+        }
+
+        .pm-mod-score {
+            font-size: 0.7rem;
+            font-weight: 800;
+            min-width: 34px;
+            text-align: right;
+        }
+
+        /* Message modal */
+        .msg-modal {
+            max-width: 480px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="logo-container">
+            <img src="images/finalogo.png" alt="MotoMaster" />
+            <div><span class="logo-text">MotoMaster</span><span class="logo-sub">Teacher Portal</span></div>
+        </div>
+        <div class="teacher-card">
+            <div class="teacher-avatar"><i class="fa-solid fa-chalkboard-user"></i></div>
+            <div class="teacher-name">R. Garcia</div>
+            <div class="teacher-role">Teacher</div>
+            <div class="teacher-dept">Automotive Technology Dept.</div>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-section-label">Overview</li>
+            <li class="nav-item" onclick="location.href='teacherdash.html'"><i class="fa-solid fa-house"></i> Dashboard
+            </li>
+            <li class="nav-section-label">My Classes</li>
+            <li class="nav-item" onclick="location.href='teachermodules.html'"><i class="fa-solid fa-book-open"></i> My
+                Modules</li>
+            <li class="nav-item active"><i class="fa-solid fa-users"></i> My Students</li>
+            <li class="nav-item" onclick="location.href='teacherassess.html'"><i
+                    class="fa-solid fa-clipboard-check"></i> Assessments</li>
+            <li class="nav-item" onclick="location.href='teacherpractice.html'"><i class="fa-solid fa-gamepad"></i>
+                Practice Sessions</li>
+            <li class="nav-section-label">Insights</li>
+            <li class="nav-item" onclick="location.href='teacheranalytics.html'"><i
+                    class="fa-solid fa-chart-simple"></i> Analytics</li>
+            <li class="nav-item" onclick="location.href='teacherreports.html'"><i class="fa-solid fa-file-invoice"></i>
+                Reports</li>
+            <li class="nav-section-label">Account</li>
+            <li class="nav-item" onclick="location.href='teachernotif.html'"><i class="fa-regular fa-bell"></i>
+                Notifications <span
+                    style="margin-left:auto;background:#dc2626;color:#fff;font-size:0.55rem;font-weight:800;border-radius:10px;padding:1px 6px">3</span>
+            </li>
+            <li class="nav-item" onclick="location.href='teachersettings.html'"><i class="fa-solid fa-gear"></i>
+                Settings</li>
+        </ul>
+        <div class="sidebar-bottom">
+            <a class="nav-item" href="index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="topbar">
+            <div class="topbar-left">
+                <h1>My Students</h1>
+                <p>Monitor progress, scores, and engagement across all enrolled students</p>
+            </div>
+            <div class="topbar-right">
+                <div class="search-bar"><i class="fa-solid fa-magnifying-glass"></i><input type="text"
+                        id="studentSearch" placeholder="Search students…" oninput="filterStudents()"></div>
+                <div class="notif-btn"><i class="fa-regular fa-bell"></i><span class="notif-badge">3</span></div>
+                <div class="profile-pill">
+                    <div class="profile-avatar"><i class="fa-solid fa-chalkboard-user"></i></div>
+                    <div>
+                        <div class="profile-name">R. Garcia</div>
+                        <div class="profile-role">Teacher</div>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="openMessageAllModal()"><i class="fa-solid fa-envelope"></i> Message
+                    All</button>
+            </div>
+        </div>
+
+        <div class="page-container">
+            <!-- KPI -->
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#eff6ff;color:#2563eb"><i class="fa-solid fa-users"></i>
+                        </div>
+                        <div class="kpi-title">Total Students</div>
+                    </div>
+                    <div class="kpi-value">87</div>
+                    <div class="kpi-foot"><span>Enrolled</span><span style="color:var(--accent)">All 4 modules</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#f0fdf4;color:#16a34a"><i
+                                class="fa-solid fa-circle-check"></i></div>
+                        <div class="kpi-title">On Track</div>
+                    </div>
+                    <div class="kpi-value">61</div>
+                    <div class="kpi-foot"><span>70%+ completion</span><span style="color:var(--green)">Good
+                            standing</span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#fff7ed;color:#d97706"><i
+                                class="fa-solid fa-triangle-exclamation"></i></div>
+                        <div class="kpi-title">Needs Attention</div>
+                    </div>
+                    <div class="kpi-value">18</div>
+                    <div class="kpi-foot"><span>Below 50% progress</span><span style="color:var(--orange)">Follow-up
+                            needed</span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#fdf4ff;color:#9333ea"><i
+                                class="fa-solid fa-star-half-stroke"></i></div>
+                        <div class="kpi-title">Class Avg. Score</div>
+                    </div>
+                    <div class="kpi-value">73.5%</div>
+                    <div class="kpi-foot"><span>All assessments</span><span style="color:var(--purple)">+3% this
+                            month</span></div>
+                </div>
+            </div>
+
+            <!-- ACTION BAR -->
+            <div class="action-bar">
+                <div class="filter-tabs">
+                    <button class="filter-tab active" onclick="setFilter('all',this)">All <span
+                            style="font-size:0.6rem;opacity:0.7">(87)</span></button>
+                    <button class="filter-tab" onclick="setFilter('on-track',this)">On Track <span
+                            style="font-size:0.6rem;opacity:0.7">(61)</span></button>
+                    <button class="filter-tab" onclick="setFilter('at-risk',this)">At Risk <span
+                            style="font-size:0.6rem;opacity:0.7">(18)</span></button>
+                    <button class="filter-tab" onclick="setFilter('inactive',this)">Inactive <span
+                            style="font-size:0.6rem;opacity:0.7">(8)</span></button>
+                </div>
+                <div class="action-bar-right">
+                    <select class="form-control" id="moduleFilter" onchange="filterStudents()"
+                        style="font-size:0.74rem;font-weight:700;padding:6px 10px;width:auto">
+                        <option value="all">All Modules</option>
+                        <option value="Engine Oil Change">Engine Oil Change</option>
+                        <option value="Brake Pad Replacement">Brake Pad Replacement</option>
+                        <option value="Air Filter Replacement">Air Filter Replacement</option>
+                        <option value="Fuel Filter Replacement">Fuel Filter Replacement</option>
+                        <option value="Battery Maintenance">Battery Maintenance</option>
+                        <option value="Spark Plug Replacement">Spark Plug Replacement</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- MAIN GRID -->
+            <div class="main-grid">
+                <div>
+                    <div class="panel" id="studentTablePanel">
+                        <div class="panel-top">
+                            <div>
+                                <div class="panel-title">Student List</div>
+                                <div class="panel-subtitle" id="studentCount">Showing 12 students</div>
+                            </div>
+                        </div>
+                        <table class="std-table">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Status</th>
+                                    <th>Modules Enrolled</th>
+                                    <th>Overall Progress</th>
+                                    <th>Last Assessment</th>
+                                    <th>Avg. Score</th>
+                                    <th>Last Active</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentTableBody">
+                                <tr>
+                                    <td colspan="8" style="text-align:center;padding:32px;color:var(--text-secondary)">
+                                        <i class="fa-solid fa-spinner fa-spin" style="font-size:1.5rem;margin-bottom:8px;display:block"></i>
+                                        <div style="font-weight:800;font-size:0.84rem">Loading students...</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="noResults"
+                            style="display:none;padding:32px;text-align:center;color:var(--text-secondary)">
+                            <i class="fa-solid fa-magnifying-glass"
+                                style="font-size:1.5rem;margin-bottom:8px;display:block"></i>
+                            <div style="font-weight:800;font-size:0.84rem">No students found</div>
+                            <div style="font-size:0.72rem;margin-top:4px">Try a different name or filter.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN -->
+                <div style="display:flex;flex-direction:column;gap:16px">
+                    <!-- Class Status Breakdown -->
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div>
+                                <div class="panel-title">Class Status</div>
+                                <div class="panel-subtitle">87 total students</div>
+                            </div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#16a34a"></div>
+                            <div class="side-label">On Track</div>
+                            <div class="side-val" style="color:#16a34a">61</div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#dc2626"></div>
+                            <div class="side-label">At Risk</div>
+                            <div class="side-val" style="color:#dc2626">18</div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#9ca3af"></div>
+                            <div class="side-label">Inactive</div>
+                            <div class="side-val" style="color:#6b7280">8</div>
+                        </div>
+                    </div>
+
+                    <!-- Module Enrollment -->
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div class="panel-title">Enrollment per Module</div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#2563eb"></div>
+                            <div class="side-label">Module 1 — Intro</div>
+                            <div class="side-val">87</div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#16a34a"></div>
+                            <div class="side-label">Module 2 — Engine</div>
+                            <div class="side-val">87</div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#d97706"></div>
+                            <div class="side-label">Module 3 — Electrical</div>
+                            <div class="side-val">87</div>
+                        </div>
+                        <div class="side-item">
+                            <div class="side-dot" style="background:#9333ea"></div>
+                            <div class="side-label">Module 4 — Transmission</div>
+                            <div class="side-val">72</div>
+                        </div>
+                    </div>
+
+                    <!-- Students Needing Attention -->
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div>
+                                <div class="panel-title">Needs Attention</div>
+                                <div class="panel-subtitle">Lowest progress students</div>
+                            </div>
+                        </div>
+                        <div class="risk-item">
+                            <div class="risk-avatar" style="background:#dc2626">JP</div>
+                            <div>
+                                <div class="risk-name">Jose Padilla</div>
+                                <div class="risk-sub">35% progress &bull; Score: 50%</div>
+                            </div>
+                            <button class="icon-btn" onclick="openMessageModal(10)" title="Message"><i
+                                    class="fa-solid fa-envelope"></i></button>
+                        </div>
+                        <div class="risk-item">
+                            <div class="risk-avatar" style="background:#dc2626">FT</div>
+                            <div>
+                                <div class="risk-name">Felix Torres</div>
+                                <div class="risk-sub">38% progress &bull; Score: 54%</div>
+                            </div>
+                            <button class="icon-btn" onclick="openMessageModal(6)" title="Message"><i
+                                    class="fa-solid fa-envelope"></i></button>
+                        </div>
+                        <div class="risk-item">
+                            <div class="risk-avatar" style="background:#dc2626">EC</div>
+                            <div>
+                                <div class="risk-name">Elena Cruz</div>
+                                <div class="risk-sub">42% progress &bull; Score: 58%</div>
+                            </div>
+                            <button class="icon-btn" onclick="openMessageModal(5)" title="Message"><i
+                                    class="fa-solid fa-envelope"></i></button>
+                        </div>
+                        <div class="risk-item">
+                            <div class="risk-avatar" style="background:#d97706">GD</div>
+                            <div>
+                                <div class="risk-name">Grace Dela Cruz</div>
+                                <div class="risk-sub">47% progress &bull; Score: 62%</div>
+                            </div>
+                            <button class="icon-btn" onclick="openMessageModal(7)" title="Message"><i
+                                    class="fa-solid fa-envelope"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div class="panel-title">Quick Actions</div>
+                        </div>
+                        <div style="padding:12px 16px;display:flex;flex-direction:column;gap:8px">
+                            <button class="btn-primary" style="width:100%;justify-content:center"
+                                onclick="openMessageAllModal()"><i class="fa-solid fa-envelope"></i> Message All
+                                Students</button>
+                            <button class="btn-outline" style="width:100%;justify-content:center"
+                                onclick="location.href='teachermodules.html'"><i class="fa-solid fa-book-open"></i> Go
+                                to My Modules</button>
+                            <button class="btn-outline" style="width:100%;justify-content:center"
+                                onclick="location.href='teacherassess.html'"><i class="fa-solid fa-clipboard-check"></i>
+                                View Assessments</button>
+                            <button class="btn-outline" style="width:100%;justify-content:center"
+                                onclick="location.href='teacherdash.html'"><i class="fa-solid fa-house"></i> Back to
+                                Dashboard</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer><span>MotoMaster</span> Teacher Portal &mdash; My Students &copy; 2025 <span>v2.1.0</span></footer>
+    </main>
+
+    <!-- STUDENT PROFILE MODAL -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="nm-modal" style="max-width:600px">
+            <div class="pm-banner" id="pmBanner">
+                <div class="pm-avatar-wrap">
+                    <div class="pm-avatar" id="pmAvatar"></div>
+                </div>
+            </div>
+            <button class="nm-close" onclick="closeProfileModal()"
+                style="position:absolute;top:12px;right:16px;z-index:10"><i class="fa-solid fa-xmark"></i></button>
+            <div class="pm-body" id="pmBody"></div>
+            <div style="padding:0 24px 20px;display:flex;flex-direction:column;gap:8px">
+                <div
+                    style="font-size:0.72rem;font-weight:800;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:4px">
+                    Progress by Module</div>
+                <div id="pmModules"></div>
+            </div>
+            <div
+                style="padding:14px 24px;border-top:1px solid var(--border-color);display:flex;justify-content:flex-end;gap:8px">
+                <button class="btn-outline" onclick="closeProfileModal()">Close</button>
+                <button class="btn-primary" id="pmMsgBtn"><i class="fa-solid fa-envelope"></i> Send Message</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MESSAGE MODAL -->
+    <div class="modal-overlay" id="messageModal">
+        <div class="nm-modal msg-modal">
+            <div class="nm-header">
+                <div class="nm-header-left">
+                    <div class="nm-header-icon"><i class="fa-solid fa-envelope"></i></div>
+                    <div>
+                        <h3 id="msgModalTitle">Send Message</h3>
+                        <p id="msgModalSub">Direct message to student</p>
+                    </div>
+                </div>
+                <button class="nm-close" onclick="closeMessageModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="nm-body">
+                <div class="nm-grid-2">
+                    <div class="form-group"><label class="form-label">Recipient</label><input type="text"
+                            class="form-control" id="msgRecipient" readonly></div>
+                    <div class="form-group"><label class="form-label">Message Type</label><select class="form-control">
+                            <option selected>General</option>
+                            <option>Reminder</option>
+                            <option>Warning</option>
+                            <option>Encouragement</option>
+                        </select></div>
+                </div>
+                <div class="form-group"><label class="form-label">Subject <span class="req">*</span></label><input
+                        type="text" class="form-control" id="msgSubject" placeholder="e.g. Module Progress Update">
+                </div>
+                <div class="form-group"><label class="form-label">Message <span class="req">*</span></label><textarea
+                        class="form-control-textarea" id="msgBody" rows="5"
+                        placeholder="Write your message here…"></textarea></div>
+                <div class="form-group">
+                    <label
+                        style="display:flex;align-items:center;gap:8px;font-size:0.76rem;font-weight:700;cursor:pointer"><input
+                            type="checkbox" checked> Send copy to my email</label>
+                </div>
+            </div>
+            <div class="nm-footer">
+                <button class="btn-outline" onclick="closeMessageModal()">Cancel</button>
+                <button class="btn-primary" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i> Send
+                    Message</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="teacher-profile.js"></script>
+    <script>
+        let students = [];
+        let currentFilter = 'all';
+        let activeRecipientId = null;
+        let activeRecipientRole = 'Student';
+
+        async function fetchStudents() {
+            try {
+                const response = await fetch('teacher_data_api.php?action=get_students_data');
+                if (response.status === 403) {
+                    window.location.href = 'teacherlogin.html';
+                    return;
+                }
+                const data = await response.json();
+                if (data.success && data.students) {
+                    students = data.students;
+                    renderStudentsTable();
+                    updateWidgets();
+                } else {
+                    console.error('Failed to load students:', data.message);
+                }
+            } catch (error) {
+                console.error('Error fetching students:', error);
+            }
+        }
+
+        function renderStudentsTable() {
+            const tableBody = document.getElementById('studentTableBody');
+            if (!tableBody) return;
+            tableBody.innerHTML = '';
+
+            const q = document.getElementById('studentSearch').value.toLowerCase();
+            const modFilter = document.getElementById('moduleFilter').value;
+            let vis = 0;
+
+            students.forEach(s => {
+                const matchSearch = s.name.toLowerCase().includes(q) || s.sid.toLowerCase().includes(q);
+                const matchTab = currentFilter === 'all' || s.status === currentFilter;
+
+                let matchModule = true;
+                if (modFilter !== 'all') {
+                    const modProg = s.moduleProgress.find(m => m.n === modFilter);
+                    matchModule = modProg && (modProg.p > 0 || modProg.s > 0);
+                }
+
+                const show = matchSearch && matchTab && matchModule;
+                if (show) {
+                    vis++;
+                    
+                    let badgeClass = 'badge-gray';
+                    let statusLabel = 'Inactive';
+                    if (s.status === 'on-track') {
+                        badgeClass = 'badge-green';
+                        statusLabel = 'On Track';
+                    } else if (s.status === 'at-risk') {
+                        badgeClass = 'badge-red';
+                        statusLabel = 'At Risk';
+                    }
+
+                    let progColor = '#2563eb';
+                    if (s.status === 'on-track') {
+                        progColor = s.progress >= 90 ? '#16a34a' : '#2563eb';
+                    } else if (s.status === 'at-risk') {
+                        progColor = s.progress < 40 ? '#dc2626' : '#d97706';
+                    } else {
+                        progColor = '#9ca3af';
+                    }
+
+                    let scoreColor = '#6b7280';
+                    let scoreDisplay = s.score ? s.score + '%' : '—';
+                    if (s.score) {
+                        scoreColor = s.score >= 85 ? '#16a34a' : s.score >= 70 ? '#2563eb' : s.score >= 60 ? '#d97706' : '#dc2626';
+                    }
+
+                    const tr = document.createElement('tr');
+                    tr.dataset.status = s.status;
+                    tr.dataset.name = s.name.toLowerCase();
+                    tr.innerHTML = `
+                        <td>
+                            <div class="std-cell">
+                                <div class="std-avatar" style="background:${s.color}">${s.initials}</div>
+                                <div>
+                                    <div class="std-name">${s.name}</div>
+                                    <div class="std-sub">ID: ${s.sid} &bull; ${s.grade}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge ${badgeClass}">${statusLabel}</span></td>
+                        <td class="muted">${s.modules} / ${s.moduleProgress.length}</td>
+                        <td>
+                            <div class="prog-wrap">
+                                <div class="prog-track">
+                                    <div class="prog-fill" style="width:${s.progress}%;background:${progColor}"></div>
+                                </div><span class="prog-pct">${s.progress}%</span>
+                            </div>
+                        </td>
+                        <td class="muted">${s.lastAssessment || 'None'}</td>
+                        <td class="muted" style="color:${scoreColor};font-weight:800">${scoreDisplay}</td>
+                        <td class="muted">${s.lastActive}</td>
+                        <td>
+                            <div class="td-actions">
+                                <button class="icon-btn" onclick="openStudentProfile(${s.id})"
+                                    title="View Profile"><i class="fa-solid fa-eye"></i></button>
+                                <button class="icon-btn" onclick="openMessageModal(${s.id})" title="Message"><i
+                                        class="fa-solid fa-envelope"></i></button>
+                            </div>
+                        </td>
+                    `;
+                    tableBody.appendChild(tr);
+                }
+            });
+
+            document.getElementById('noResults').style.display = vis === 0 ? 'block' : 'none';
+            document.getElementById('studentCount').textContent = 'Showing ' + vis + ' student' + (vis !== 1 ? 's' : '');
+        }
+
+        function updateWidgets() {
+            const totalStudents = students.length;
+            const onTrackCount = students.filter(s => s.status === 'on-track').length;
+            const atRiskCount = students.filter(s => s.status === 'at-risk').length;
+            const inactiveCount = students.filter(s => s.status === 'inactive').length;
+
+            let scoreSum = 0;
+            let scoreCount = 0;
+            students.forEach(s => {
+                if (s.score > 0) {
+                    scoreSum += s.score;
+                    scoreCount++;
+                }
+            });
+            const avgScore = scoreCount > 0 ? (scoreSum / scoreCount) : 0;
+
+            // 1. KPI Cards
+            const cards = document.querySelectorAll('.kpi-card .kpi-value');
+            if (cards.length >= 4) {
+                cards[0].textContent = totalStudents;
+                cards[1].textContent = onTrackCount;
+                cards[2].textContent = atRiskCount;
+                cards[3].textContent = avgScore > 0 ? avgScore.toFixed(1) + '%' : '—';
+            }
+
+            // 2. Filter Tabs
+            const tabs = document.querySelectorAll('.filter-tab');
+            if (tabs.length >= 4) {
+                tabs[0].innerHTML = `All <span style="font-size:0.6rem;opacity:0.7">(${totalStudents})</span>`;
+                tabs[1].innerHTML = `On Track <span style="font-size:0.6rem;opacity:0.7">(${onTrackCount})</span>`;
+                tabs[2].innerHTML = `At Risk <span style="font-size:0.6rem;opacity:0.7">(${atRiskCount})</span>`;
+                tabs[3].innerHTML = `Inactive <span style="font-size:0.6rem;opacity:0.7">(${inactiveCount})</span>`;
+            }
+
+            // 3. Class Status Breakdown Panel
+            const classStatusPanel = Array.from(document.querySelectorAll('.panel')).find(p => {
+                const title = p.querySelector('.panel-title');
+                return title && title.textContent.trim() === 'Class Status';
+            });
+            if (classStatusPanel) {
+                const subtitle = classStatusPanel.querySelector('.panel-subtitle');
+                if (subtitle) subtitle.textContent = `${totalStudents} total students`;
+                
+                const sideItems = classStatusPanel.querySelectorAll('.side-item');
+                sideItems.forEach(item => {
+                    const label = item.querySelector('.side-label').textContent.trim();
+                    const val = item.querySelector('.side-val');
+                    if (label === 'On Track') val.textContent = onTrackCount;
+                    if (label === 'At Risk') val.textContent = atRiskCount;
+                    if (label === 'Inactive') val.textContent = inactiveCount;
+                });
+            }
+
+            // 4. Enrollment per Module Panel
+            const moduleEnrollments = {};
+            const moduleTitles = [
+                'Engine Oil Change',
+                'Brake Pad Replacement',
+                'Air Filter Replacement',
+                'Fuel Filter Replacement',
+                'Battery Maintenance',
+                'Spark Plug Replacement'
+            ];
+            moduleTitles.forEach(t => {
+                moduleEnrollments[t] = 0;
+            });
+
+            students.forEach(s => {
+                s.moduleProgress.forEach(m => {
+                    if (m.p > 0 || m.s > 0) {
+                        if (moduleEnrollments[m.n] !== undefined) {
+                            moduleEnrollments[m.n]++;
+                        }
+                    }
+                });
+            });
+
+            const enrollPanel = Array.from(document.querySelectorAll('.panel')).find(p => {
+                const title = p.querySelector('.panel-title');
+                return title && title.textContent.trim() === 'Enrollment per Module';
+            });
+            if (enrollPanel) {
+                const header = enrollPanel.querySelector('.panel-top');
+                enrollPanel.innerHTML = '';
+                enrollPanel.appendChild(header);
+
+                const colors = {
+                    'Engine Oil Change': '#2563eb',
+                    'Brake Pad Replacement': '#16a34a',
+                    'Air Filter Replacement': '#d97706',
+                    'Fuel Filter Replacement': '#9333ea',
+                    'Battery Maintenance': '#06b6d4',
+                    'Spark Plug Replacement': '#ec4899'
+                };
+
+                moduleTitles.forEach(t => {
+                    const count = moduleEnrollments[t] || 0;
+                    const item = document.createElement('div');
+                    item.className = 'side-item';
+                    item.innerHTML = `
+                        <div class="side-dot" style="background:${colors[t] || '#64748b'}"></div>
+                        <div class="side-label">${t}</div>
+                        <div class="side-val">${count}</div>
+                    `;
+                    enrollPanel.appendChild(item);
+                });
+            }
+
+            // 5. Needs Attention Panel
+            const attentionPanel = Array.from(document.querySelectorAll('.panel')).find(p => {
+                const title = p.querySelector('.panel-title');
+                return title && title.textContent.trim() === 'Needs Attention';
+            });
+            if (attentionPanel) {
+                const header = attentionPanel.querySelector('.panel-top');
+                attentionPanel.innerHTML = '';
+                attentionPanel.appendChild(header);
+
+                const lowProgressStudents = [...students]
+                    .filter(s => s.status === 'at-risk' || s.progress < 50)
+                    .sort((a, b) => a.progress - b.progress)
+                    .slice(0, 4);
+
+                lowProgressStudents.forEach(s => {
+                    const item = document.createElement('div');
+                    item.className = 'risk-item';
+                    item.innerHTML = `
+                        <div class="risk-avatar" style="background:${s.status === 'at-risk' ? '#dc2626' : '#d97706'}">${s.initials}</div>
+                        <div>
+                            <div class="risk-name">${s.name}</div>
+                            <div class="risk-sub">${s.progress}% progress &bull; Score: ${s.score ? s.score + '%' : '—'}</div>
+                        </div>
+                        <button class="icon-btn" onclick="openMessageModal(${s.id})" title="Message"><i
+                                class="fa-solid fa-envelope"></i></button>
+                    `;
+                    attentionPanel.appendChild(item);
+                });
+            }
+        }
+
+        function setFilter(f, el) {
+            currentFilter = f;
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            filterStudents();
+        }
+
+        function filterStudents() {
+            renderStudentsTable();
+        }
+
+        function openStudentProfile(id) {
+            const s = students.find(s => s.id === id); if (!s) return;
+            document.getElementById('pmBanner').style.background = `linear-gradient(135deg,${s.color}cc,${s.color})`;
+            document.getElementById('pmAvatar').style.background = s.color;
+            document.getElementById('pmAvatar').textContent = s.initials;
+            document.getElementById('pmMsgBtn').onclick = () => { closeProfileModal(); openMessageModal(id); };
+            const statusBadge = s.status === 'on-track' ? 'badge-green' : s.status === 'at-risk' ? 'badge-red' : 'badge-gray';
+            const statusLabel = s.status === 'on-track' ? 'On Track' : s.status === 'at-risk' ? 'At Risk' : 'Inactive';
+            const sc = s.score >= 80 ? '#16a34a' : s.score >= 65 ? '#2563eb' : '#d97706';
+            document.getElementById('pmBody').innerHTML = `
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <div><div class="pm-name">${s.name}</div><div class="pm-meta">${s.grade} &bull; ID: ${s.sid} &bull; <span class="badge ${statusBadge}">${statusLabel}</span></div></div>
+        </div>
+        <div class="pm-grid">
+            <div class="pm-stat"><div class="pm-stat-val" style="color:#2563eb">${s.modules}/${s.moduleProgress.length}</div><div class="pm-stat-label">Modules Completed</div></div>
+            <div class="pm-stat"><div class="pm-stat-val" style="color:#16a34a">${s.progress}%</div><div class="pm-stat-label">Overall Progress</div></div>
+            <div class="pm-stat"><div class="pm-stat-val" style="color:${sc}">${s.score}%</div><div class="pm-stat-label">Avg. Score</div></div>
+        </div>
+        <div style="margin-top:12px;font-size:0.72rem;font-weight:600;color:var(--text-secondary)">Last Assessment: ${s.lastAssessment} &bull; Last Active: ${s.lastActive}</div>`;
+            document.getElementById('pmModules').innerHTML = s.moduleProgress.map(m => `
+        <div class="pm-module-row">
+            <div class="pm-mod-dot" style="background:${m.c}"></div>
+            <div class="pm-mod-name">${m.n}</div>
+            <div class="pm-mod-prog"><div class="prog-track"><div class="prog-fill" style="width:${m.p}%;background:${m.c}"></div></div><span class="prog-pct">${m.p}%</span></div>
+            <div class="pm-mod-score" style="color:${m.s >= 75 ? '#16a34a' : m.s >= 60 ? '#2563eb' : '#dc2626'}">${m.s ? m.s + '%' : '—'}</div>
+        </div>`).join('');
+            document.getElementById('profileModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeProfileModal() { document.getElementById('profileModal').classList.remove('open'); document.body.style.overflow = ''; }
+
+        function openMessageModal(id) {
+            const s = students.find(s => s.id === id);
+            activeRecipientId = id;
+            activeRecipientRole = 'Student';
+            document.getElementById('msgModalTitle').textContent = 'Send Message';
+            document.getElementById('msgModalSub').textContent = s ? 'To: ' + s.name : 'Direct message';
+            document.getElementById('msgRecipient').value = s ? s.name + ' (' + s.sid + ')' : '';
+            document.getElementById('msgSubject').value = '';
+            document.getElementById('msgBody').value = '';
+            document.getElementById('messageModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function openMessageAllModal() {
+            activeRecipientId = 0;
+            activeRecipientRole = 'Student';
+            document.getElementById('msgModalTitle').textContent = 'Message All Students';
+            document.getElementById('msgModalSub').textContent = `Broadcast to all ${students.length} enrolled students`;
+            document.getElementById('msgRecipient').value = `All Students (${students.length})`;
+            document.getElementById('msgSubject').value = '';
+            document.getElementById('msgBody').value = '';
+            document.getElementById('messageModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeMessageModal() { document.getElementById('messageModal').classList.remove('open'); document.body.style.overflow = ''; }
+        
+        async function sendMessage() {
+            const sub = document.getElementById('msgSubject').value.trim();
+            const body = document.getElementById('msgBody').value.trim();
+            if (!sub || !body) { alert('Please fill in the subject and message.'); return; }
+            
+            const sendBtn = document.querySelector('.nm-footer .btn-primary');
+            const originalBtnHtml = sendBtn.innerHTML;
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+
+            try {
+                const response = await fetch('student_messages.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        recipient_role: activeRecipientRole,
+                        recipient_id: activeRecipientId,
+                        subject: sub,
+                        message_text: body,
+                        broadcast: activeRecipientId === 0 ? 1 : 0
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    closeMessageModal();
+                    const b = document.querySelector('.topbar-right .btn-primary');
+                    if (b) {
+                        const o = b.innerHTML; 
+                        b.innerHTML = '<i class="fa-solid fa-check"></i> Sent!'; 
+                        b.style.background = '#16a34a';
+                        setTimeout(() => { b.innerHTML = o; b.style.background = ''; }, 2000);
+                    }
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error sending message:', error);
+                alert('An error occurred while sending the message.');
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = originalBtnHtml;
+            }
+        }
+        ['profileModal', 'messageModal'].forEach(id => {
+            document.getElementById(id).addEventListener('click', function (e) { if (e.target === this) { this.classList.remove('open'); document.body.style.overflow = ''; } });
+        });
+
+        document.addEventListener('DOMContentLoaded', fetchStudents);
+    </script>
+</body>
+
+</html>

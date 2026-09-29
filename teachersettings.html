@@ -1,0 +1,1853 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotoMaster – Settings</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f3f4f6;
+            --border-color: #e5e7eb;
+            --text-primary: #1a1a2e;
+            --text-secondary: #6b7280;
+            --accent: #2563eb;
+            --accent-dark: #1d4ed8;
+            --accent-light: #eff6ff;
+            --green: #16a34a;
+            --red: #dc2626;
+            --orange: #d97706;
+            --purple: #9333ea;
+            --sidebar-w: 240px;
+
+            /* Dynamic Theme Variables */
+            --bg-white: #ffffff;
+            --bg-sidebar: #ffffff;
+            --bg-panel: #ffffff;
+            --bg-form: #ffffff;
+            --shadow-alpha: 0.04;
+        }
+
+        body.dark-theme {
+            --bg-color: #0b0f19;
+            --border-color: #1f2937;
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --accent: #3b82f6;
+            --accent-dark: #2563eb;
+            --accent-light: #172554;
+            --bg-white: #1e293b;
+            --bg-sidebar: #0f172a;
+            --bg-panel: #1e293b;
+            --bg-form: #111827;
+            --shadow-alpha: 0.15;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+
+        .sidebar {
+            width: var(--sidebar-w);
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, var(--shadow-alpha));
+        }
+
+        .logo-container {
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-container img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .logo-sub {
+            font-size: 0.62rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+        }
+
+        .nav-section-label {
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 14px 18px 4px;
+        }
+
+        .nav-menu {
+            list-style: none;
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+
+        .nav-menu::-webkit-scrollbar {
+            width: 0;
+        }
+
+        .nav-item {
+            padding: 9px 16px;
+            margin: 2px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            font-weight: 700;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .nav-item i {
+            width: 16px;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .nav-item:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .nav-item.active {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .sidebar-bottom {
+            padding: 12px 0 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .teacher-card {
+            margin: 12px 12px 4px;
+            padding: 12px;
+            background: var(--accent-light);
+            border-radius: 10px;
+            border: 1px solid #bfdbfe;
+        }
+
+        .teacher-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .teacher-name {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .teacher-role {
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-top: 2px;
+        }
+
+        .teacher-dept {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            background: var(--bg-color);
+        }
+
+        .topbar {
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 28px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, var(--shadow-alpha));
+        }
+
+        .topbar-left h1 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .topbar-left p {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notif-btn {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--bg-color);
+            border: 1.5px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--red);
+            color: #fff;
+            font-size: 0.58rem;
+            font-weight: 800;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-pill {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 5px 12px 5px 5px;
+            border-radius: 30px;
+            border: 1.5px solid var(--border-color);
+            background: var(--bg-white);
+            cursor: pointer;
+        }
+
+        .profile-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 12px;
+        }
+
+        .profile-name {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .profile-role {
+            font-size: 0.62rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            padding: 7px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.76rem;
+            font-weight: 800;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dark);
+        }
+
+        .btn-outline {
+            background: var(--bg-white);
+            border: 1.5px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 7px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-danger {
+            background: #fef2f2;
+            border: 1.5px solid #fecaca;
+            color: var(--red);
+            padding: 7px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 800;
+        }
+
+        .btn-danger:hover {
+            background: #fee2e2;
+        }
+
+        .page-container {
+            padding: 22px 28px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* SETTINGS LAYOUT */
+        .settings-layout {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .settings-nav {
+            background: var(--bg-panel);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, var(--shadow-alpha));
+            overflow: hidden;
+            position: sticky;
+            top: 0;
+        }
+
+        .settings-nav-title {
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 14px 16px 6px;
+        }
+
+        .settings-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 14px;
+            cursor: pointer;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            transition: all 0.15s;
+            border-left: 3px solid transparent;
+        }
+
+        .settings-nav-item i {
+            width: 14px;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .settings-nav-item:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .settings-nav-item.active {
+            background: var(--accent-light);
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+
+        .settings-panels {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .settings-panel {
+            background: var(--bg-panel);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, var(--shadow-alpha));
+            overflow: hidden;
+            display: none;
+        }
+
+        .settings-panel.active {
+            display: block;
+        }
+
+        .panel-header {
+            padding: 16px 22px 14px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .panel-header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-header-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .panel-title {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .panel-subtitle {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-top: 1px;
+        }
+
+        .panel-body {
+            padding: 20px 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        /* FORM */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 14px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group.full {
+            grid-column: 1/-1;
+        }
+
+        .form-label {
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .form-control {
+            padding: 8px 12px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.82rem;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.2s;
+            background: var(--bg-form);
+            font-weight: 700;
+            width: 100%;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 72px;
+        }
+
+        .form-hint {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 4px 0;
+        }
+
+        /* PROFILE CARD */
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 22px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--accent-light);
+        }
+
+        .profile-big-av {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-info-name {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .profile-info-sub {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .profile-info-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--bg-white);
+            border: 1px solid #bfdbfe;
+            color: var(--accent);
+            font-size: 0.62rem;
+            font-weight: 800;
+            border-radius: 20px;
+            padding: 2px 8px;
+            margin-top: 4px;
+        }
+
+        /* TOGGLE */
+        .toggle {
+            position: relative;
+            width: 36px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: #d1d5db;
+            border-radius: 20px;
+            transition: 0.2s;
+        }
+
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            left: 3px;
+            bottom: 3px;
+            background: #fff;
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+
+        .toggle input:checked+.toggle-slider {
+            background: var(--accent);
+        }
+
+        .toggle input:checked+.toggle-slider::before {
+            transform: translateX(16px);
+        }
+
+        /* PREF ROWS */
+        .pref-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .pref-row:last-child {
+            border-bottom: none;
+        }
+
+        .pref-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .pref-text {
+            flex: 1;
+        }
+
+        .pref-label {
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .pref-sub {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        /* DANGER ZONE */
+        .danger-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .danger-item:last-child {
+            border-bottom: none;
+        }
+
+        .danger-text {
+            flex: 1;
+        }
+
+        .danger-title {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .danger-desc {
+            font-size: 0.66rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            line-height: 1.5;
+        }
+
+        /* SECTION TITLE */
+        .section-title {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-title i {
+            color: var(--accent);
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 28px;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-white);
+            margin-top: auto;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        footer span {
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: flex-start;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 30px 16px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .nm-modal {
+            background: var(--bg-white);
+            border-radius: 16px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 480px;
+            overflow: hidden;
+            animation: slideUp 0.22s ease;
+            margin: auto;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(28px);
+                opacity: 0
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1
+            }
+        }
+
+        .nm-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            color: #fff;
+        }
+
+        .nm-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nm-header-icon {
+            width: 38px;
+            height: 38px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .nm-header h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .nm-header p {
+            font-size: 0.72rem;
+            opacity: 0.8;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .nm-close {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .nm-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .nm-body {
+            padding: 22px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .nm-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-color);
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="logo-container">
+            <img src="images/finalogo.png" alt="MotoMaster" />
+            <div><span class="logo-text">MotoMaster</span><span class="logo-sub">Teacher Portal</span></div>
+        </div>
+        <div class="teacher-card">
+            <div class="teacher-avatar"><i class="fa-solid fa-chalkboard-user"></i></div>
+            <div class="teacher-name">R. Garcia</div>
+            <div class="teacher-role">Teacher</div>
+            <div class="teacher-dept">Automotive Technology Dept.</div>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-section-label">Overview</li>
+            <li class="nav-item" onclick="location.href='teacherdash.html'"><i class="fa-solid fa-house"></i> Dashboard
+            </li>
+            <li class="nav-section-label">My Classes</li>
+            <li class="nav-item" onclick="location.href='teachermodules.html'"><i class="fa-solid fa-book-open"></i> My
+                Modules</li>
+            <li class="nav-item" onclick="location.href='teacherstudents.html'"><i class="fa-solid fa-users"></i> My
+                Students</li>
+            <li class="nav-item" onclick="location.href='teacherassess.html'"><i
+                    class="fa-solid fa-clipboard-check"></i> Assessments</li>
+            <li class="nav-item" onclick="location.href='teacherpractice.html'"><i class="fa-solid fa-gamepad"></i>
+                Practice Sessions</li>
+            <li class="nav-section-label">Insights</li>
+            <li class="nav-item" onclick="location.href='teacheranalytics.html'"><i
+                    class="fa-solid fa-chart-simple"></i> Analytics</li>
+            <li class="nav-item" onclick="location.href='teacherreports.html'"><i class="fa-solid fa-file-invoice"></i>
+                Reports</li>
+            <li class="nav-section-label">Account</li>
+            <li class="nav-item" onclick="location.href='teachernotif.html'"><i class="fa-regular fa-bell"></i>
+                Notifications <span
+                    style="margin-left:auto;background:#dc2626;color:#fff;font-size:0.55rem;font-weight:800;border-radius:10px;padding:1px 6px">3</span>
+            </li>
+            <li class="nav-item active"><i class="fa-solid fa-gear"></i> Settings</li>
+        </ul>
+        <div class="sidebar-bottom">
+            <a class="nav-item" href="index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="topbar">
+            <div class="topbar-left">
+                <h1>Settings</h1>
+                <p>Manage your profile, preferences, and account security</p>
+            </div>
+            <div class="topbar-right">
+                <div class="notif-btn" onclick="location.href='teachernotif.html'"><i
+                        class="fa-regular fa-bell"></i><span class="notif-badge">3</span></div>
+                <div class="profile-pill">
+                    <div class="profile-avatar"><i class="fa-solid fa-chalkboard-user"></i></div>
+                    <div>
+                        <div class="profile-name">R. Garcia</div>
+                        <div class="profile-role">Teacher</div>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="saveSettings()"><i class="fa-solid fa-floppy-disk"></i> Save
+                    Changes</button>
+            </div>
+        </div>
+
+        <div class="page-container">
+            <div class="settings-layout">
+
+                <!-- SETTINGS NAV -->
+                <div class="settings-nav">
+                    <div class="settings-nav-title">Settings</div>
+                    <div class="settings-nav-item active" onclick="showPanel('profile',this)"><i
+                            class="fa-solid fa-user"></i> Profile</div>
+                    <div class="settings-nav-item" onclick="showPanel('notifications',this)"><i
+                            class="fa-regular fa-bell"></i> Notifications</div>
+                    <div class="settings-nav-item" onclick="showPanel('class',this)"><i
+                            class="fa-solid fa-chalkboard-user"></i> Class Defaults</div>
+                    <div class="settings-nav-item" onclick="showPanel('security',this)"><i class="fa-solid fa-lock"></i>
+                        Security</div>
+                    <div class="settings-nav-item" onclick="showPanel('appearance',this)"><i
+                            class="fa-solid fa-palette"></i> Appearance</div>
+                    <div class="settings-nav-item" onclick="showPanel('danger',this)" style="color:var(--red)"><i
+                            class="fa-solid fa-triangle-exclamation" style="color:var(--red)"></i> Danger Zone</div>
+                </div>
+
+                <!-- PANELS -->
+                <div class="settings-panels">
+
+                    <!-- PROFILE -->
+                    <div class="settings-panel active" id="panel-profile">
+                        <div class="profile-section">
+                            <div class="profile-big-av"><i class="fa-solid fa-chalkboard-user"></i></div>
+                            <div class="profile-info">
+                                <div class="profile-info-name">R. Garcia</div>
+                                <div class="profile-info-sub">Automotive Technology Department</div>
+                                <div class="profile-info-badge"><i class="fa-solid fa-chalkboard-user"></i> Teacher
+                                </div>
+                            </div>
+                            <button class="btn-outline" onclick="openAvatarModal()"><i class="fa-solid fa-camera"></i>
+                                Change Photo</button>
+                        </div>
+                        <div class="panel-body">
+                            <div class="section-title"><i class="fa-solid fa-id-card"></i> Personal Information</div>
+                            <div class="form-row">
+                                <div class="form-group"><label class="form-label">First Name</label><input
+                                        class="form-control" value="Ricardo"></div>
+                                <div class="form-group"><label class="form-label">Last Name</label><input
+                                        class="form-control" value="Garcia"></div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group"><label class="form-label">Email Address</label><input
+                                        class="form-control" type="email" value="r.garcia@motomaster.edu"></div>
+                                <div class="form-group"><label class="form-label">Phone Number</label><input
+                                        class="form-control" value="+63 912 345 6789"></div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group"><label class="form-label">Employee ID</label><input
+                                        class="form-control" value="TCH-2021-004" readonly
+                                        style="background:#f3f4f6;color:var(--text-secondary)"></div>
+                                <div class="form-group"><label class="form-label">Department</label>
+                                    <select class="form-control">
+                                        <option selected>Automotive Technology</option>
+                                        <option>Mechanical Engineering</option>
+                                        <option>Electrical Technology</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="section-title"><i class="fa-solid fa-building"></i> Professional Details</div>
+                            <div class="form-row">
+                                <div class="form-group"><label class="form-label">Position / Title</label><input
+                                        class="form-control" value="Senior Instructor"></div>
+                                <div class="form-group"><label class="form-label">Years of Experience</label><input
+                                        class="form-control" type="number" value="8"></div>
+                            </div>
+                            <div class="form-group"><label class="form-label">Bio / About</label>
+                                <textarea
+                                    class="form-control">Experienced automotive technology instructor specializing in motorcycle mechanics, engine systems, and electrical diagnostics. Committed to hands-on, gamified learning experiences.</textarea>
+                            </div>
+                            <div class="form-group"><label class="form-label">Specializations</label>
+                                <input class="form-control"
+                                    value="Motorcycle Mechanics, Engine Systems, Electrical Diagnostics, Transmission">
+                                <div class="form-hint">Comma-separated list of specialization areas</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NOTIFICATIONS -->
+                    <div class="settings-panel" id="panel-notifications">
+                        <div class="panel-header">
+                            <div class="panel-header-left">
+                                <div class="panel-header-icon" style="background:#eff6ff;color:#2563eb"><i
+                                        class="fa-regular fa-bell"></i></div>
+                                <div>
+                                    <div class="panel-title">Notification Settings</div>
+                                    <div class="panel-subtitle">Control what alerts you receive and how</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="section-title"><i class="fa-solid fa-filter"></i> Alert Types</div>
+                            <div class="pref-row">
+                                <div class="pref-icon" style="background:#fef2f2;color:#dc2626"><i
+                                        class="fa-solid fa-triangle-exclamation"></i></div>
+                                <div class="pref-text">
+                                    <div class="pref-label">At-Risk Student Alerts</div>
+                                    <div class="pref-sub">Notified when a student drops below 65% avg. score or becomes
+                                        inactive</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox" checked><span
+                                        class="toggle-slider"></span></label>
+                            </div>
+                            <div class="pref-row">
+                                <div class="pref-icon" style="background:#fff7ed;color:#d97706"><i
+                                        class="fa-solid fa-clipboard-check"></i></div>
+                                <div class="pref-text">
+                                    <div class="pref-label">New Submissions</div>
+                                    <div class="pref-sub">Alerts when students submit assessments awaiting grading</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox" checked><span
+                                        class="toggle-slider"></span></label>
+                            </div>
+                            <div class="pref-row">
+                                <div class="pref-icon" style="background:#eff6ff;color:#2563eb"><i
+                                        class="fa-solid fa-trophy"></i></div>
+                                <div class="pref-text">
+                                    <div class="pref-label">Leaderboard Milestones</div>
+                                    <div class="pref-sub">Student practice points and ranking achievements</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox" checked><span
+                                        class="toggle-slider"></span></label>
+                            </div>
+                            <div class="pref-row">
+                                <div class="pref-icon" style="background:#f0fdf4;color:#16a34a"><i
+                                        class="fa-solid fa-book-open"></i></div>
+                                <div class="pref-text">
+                                    <div class="pref-label">Module Activity</div>
+                                    <div class="pref-sub">Completion milestones and enrollment updates</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox" checked><span
+                                        class="toggle-slider"></span></label>
+                            </div>
+                            <div class="pref-row">
+                                <div class="pref-icon" style="background:#f3f4f6;color:#6b7280"><i
+                                        class="fa-solid fa-gear"></i></div>
+                                <div class="pref-text">
+                                    <div class="pref-label">System Notices</div>
+                                    <div class="pref-sub">Platform updates, maintenance windows, and changelogs</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="section-title"><i class="fa-solid fa-envelope"></i> Delivery Channels</div>
+                            <div class="pref-row">
+                                <div class="pref-icon" style="background:#eff6ff;color:#2563eb"><i
+                                        class="fa-solid fa-bell"></i></div>
+                                <div class="pref-text">
+                                    <div class="pref-label">In-App Notifications</div>
+                                    <div class="pref-sub">Show alerts in the notification center</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox" checked><span
+                                        class="toggle-slider"></span></label>
+                            </div>
+                            <div class="pref-row">
+                                <div class="pref-icon" style="background:#f0fdf4;color:#16a34a"><i
+                                        class="fa-solid fa-envelope"></i></div>
+                                <div class="pref-text">
+                                    <div class="pref-label">Email Digest</div>
+                                    <div class="pref-sub">Daily summary sent to r.garcia@motomaster.edu</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox" checked><span
+                                        class="toggle-slider"></span></label>
+                            </div>
+                            <div class="pref-row">
+                                <div class="pref-icon" style="background:#fdf4ff;color:#9333ea"><i
+                                        class="fa-solid fa-mobile-screen"></i></div>
+                                <div class="pref-text">
+                                    <div class="pref-label">Push Notifications</div>
+                                    <div class="pref-sub">Mobile and browser push alerts</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CLASS DEFAULTS -->
+                    <div class="settings-panel" id="panel-class">
+                        <div class="panel-header">
+                            <div class="panel-header-left">
+                                <div class="panel-header-icon" style="background:#f0fdf4;color:#16a34a"><i
+                                        class="fa-solid fa-chalkboard-user"></i></div>
+                                <div>
+                                    <div class="panel-title">Class Defaults</div>
+                                    <div class="panel-subtitle">Default settings applied to new modules, assessments,
+                                        and sessions</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="section-title"><i class="fa-solid fa-book-open"></i> Module Defaults</div>
+                            <div class="form-row">
+                                <div class="form-group"><label class="form-label">Default Module Visibility</label>
+                                    <select class="form-control">
+                                        <option selected>Draft (Hidden)</option>
+                                        <option>Published (Visible)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group"><label class="form-label">Default Enrollment</label>
+                                    <select class="form-control">
+                                        <option selected>All Students</option>
+                                        <option>By Invitation</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group"><label class="form-label">Completion Threshold (%)</label><input
+                                        class="form-control" type="number" value="80"></div>
+                                <div class="form-group"><label class="form-label">At-Risk Score Threshold
+                                        (%)</label><input class="form-control" type="number" value="65"></div>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="section-title"><i class="fa-solid fa-clipboard-check"></i> Assessment Defaults
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group"><label class="form-label">Passing Score (%)</label><input
+                                        class="form-control" type="number" value="75"></div>
+                                <div class="form-group"><label class="form-label">Max Attempts</label><input
+                                        class="form-control" type="number" value="2"></div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group"><label class="form-label">Time Limit (minutes)</label><input
+                                        class="form-control" type="number" value="60"></div>
+                                <div class="form-group"><label class="form-label">Auto-Grade</label>
+                                    <select class="form-control">
+                                        <option selected>Enabled</option>
+                                        <option>Disabled</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="section-title"><i class="fa-solid fa-gamepad"></i> Practice Session Defaults
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group"><label class="form-label">Points per Correct
+                                        Answer</label><input class="form-control" type="number" value="10"></div>
+                                <div class="form-group"><label class="form-label">Streak Bonus Points</label><input
+                                        class="form-control" type="number" value="5"></div>
+                            </div>
+                            <div class="pref-row">
+                                <div class="pref-icon" style="background:#eff6ff;color:#2563eb"><i
+                                        class="fa-solid fa-trophy"></i></div>
+                                <div class="pref-text">
+                                    <div class="pref-label">Show Leaderboard by Default</div>
+                                    <div class="pref-sub">Enable leaderboard on all new practice sessions</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox" checked><span
+                                        class="toggle-slider"></span></label>
+                            </div>
+                            <div class="pref-row">
+                                <div class="pref-icon" style="background:#f0fdf4;color:#16a34a"><i
+                                        class="fa-solid fa-infinity"></i></div>
+                                <div class="pref-text">
+                                    <div class="pref-label">Allow Unlimited Attempts</div>
+                                    <div class="pref-sub">Students can retry practice sessions without limit</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox" checked><span
+                                        class="toggle-slider"></span></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECURITY -->
+                    <div class="settings-panel" id="panel-security">
+                        <div class="panel-header">
+                            <div class="panel-header-left">
+                                <div class="panel-header-icon" style="background:#fdf4ff;color:#9333ea"><i
+                                        class="fa-solid fa-lock"></i></div>
+                                <div>
+                                    <div class="panel-title">Security Settings</div>
+                                    <div class="panel-subtitle">Manage password and account access</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="section-title"><i class="fa-solid fa-key"></i> Change Password</div>
+                            <div class="form-group"><label class="form-label">Current Password</label><input
+                                    class="form-control" type="password" placeholder="Enter current password"></div>
+                            <div class="form-row">
+                                <div class="form-group"><label class="form-label">New Password</label><input
+                                        class="form-control" type="password" placeholder="Min. 8 characters"></div>
+                                <div class="form-group"><label class="form-label">Confirm New Password</label><input
+                                        class="form-control" type="password" placeholder="Repeat new password"></div>
+                            </div>
+                            <div
+                                style="padding:10px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;font-size:0.72rem;font-weight:700;color:var(--green)">
+                                <i class="fa-solid fa-shield-halved" style="margin-right:5px"></i>Password last changed:
+                                March 15, 2025
+                            </div>
+                            <button class="btn-primary" style="align-self:flex-start" onclick="openChangePassModal()"><i
+                                    class="fa-solid fa-key"></i> Update Password</button>
+                            <div class="divider"></div>
+                            <div class="section-title"><i class="fa-solid fa-mobile-screen"></i> Two-Factor
+                                Authentication</div>
+                            <div class="pref-row">
+                                <div class="pref-icon" style="background:#fdf4ff;color:#9333ea"><i
+                                        class="fa-solid fa-shield-halved"></i></div>
+                                <div class="pref-text">
+                                    <div class="pref-label">Enable 2FA</div>
+                                    <div class="pref-sub">Adds an extra layer of security to your account login</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="section-title"><i class="fa-solid fa-clock-rotate-left"></i> Active Sessions
+                            </div>
+                            <div style="border:1.5px solid var(--border-color);border-radius:10px;overflow:hidden">
+                                <div
+                                    style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border-color);background:var(--accent-light)">
+                                    <i class="fa-solid fa-desktop"
+                                        style="color:var(--accent);font-size:13px;width:14px"></i>
+                                    <div style="flex:1">
+                                        <div style="font-size:0.74rem;font-weight:800">Chrome — Windows 11</div>
+                                        <div style="font-size:0.62rem;font-weight:600;color:var(--text-secondary)">
+                                            192.168.1.4 &bull; Current session</div>
+                                    </div>
+                                    <span
+                                        style="font-size:0.6rem;font-weight:800;color:var(--green);background:#f0fdf4;border:1px solid #bbf7d0;border-radius:20px;padding:2px 8px">Active</span>
+                                </div>
+                                <div style="display:flex;align-items:center;gap:12px;padding:12px 14px">
+                                    <i class="fa-solid fa-mobile-screen"
+                                        style="color:var(--text-secondary);font-size:13px;width:14px"></i>
+                                    <div style="flex:1">
+                                        <div style="font-size:0.74rem;font-weight:800">Mobile Browser — Android</div>
+                                        <div style="font-size:0.62rem;font-weight:600;color:var(--text-secondary)">
+                                            192.168.1.12 &bull; Last active: May 27</div>
+                                    </div>
+                                    <button class="btn-danger" style="padding:4px 10px;font-size:0.62rem"
+                                        onclick="alert('Session revoked. (UI demo)')">Revoke</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- APPEARANCE -->
+                    <div class="settings-panel" id="panel-appearance">
+                        <div class="panel-header">
+                            <div class="panel-header-left">
+                                <div class="panel-header-icon" style="background:#fdf4ff;color:#9333ea"><i
+                                        class="fa-solid fa-palette"></i></div>
+                                <div>
+                                    <div class="panel-title">Appearance</div>
+                                    <div class="panel-subtitle">Personalize your portal look and feel</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="section-title"><i class="fa-solid fa-moon"></i> Theme</div>
+                            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+                                <div onclick="selectTheme(this,'light')"
+                                    style="border:2px solid var(--accent);border-radius:10px;padding:14px;text-align:center;cursor:pointer;background:var(--accent-light)"
+                                    data-theme="light">
+                                    <i class="fa-solid fa-sun"
+                                        style="font-size:1.3rem;color:var(--accent);margin-bottom:6px;display:block"></i>
+                                    <div style="font-size:0.74rem;font-weight:800;color:var(--accent)">Light</div>
+                                    <div
+                                        style="font-size:0.6rem;font-weight:600;color:var(--text-secondary);margin-top:2px">
+                                        Current</div>
+                                </div>
+                                <div onclick="selectTheme(this,'dark')"
+                                    style="border:1.5px solid var(--border-color);border-radius:10px;padding:14px;text-align:center;cursor:pointer"
+                                    data-theme="dark">
+                                    <i class="fa-solid fa-moon"
+                                        style="font-size:1.3rem;color:#6b7280;margin-bottom:6px;display:block"></i>
+                                    <div style="font-size:0.74rem;font-weight:800">Dark</div>
+                                    <div
+                                        style="font-size:0.6rem;font-weight:600;color:var(--text-secondary);margin-top:2px">
+                                        Coming soon</div>
+                                </div>
+                                <div onclick="selectTheme(this,'system')"
+                                    style="border:1.5px solid var(--border-color);border-radius:10px;padding:14px;text-align:center;cursor:pointer"
+                                    data-theme="system">
+                                    <i class="fa-solid fa-circle-half-stroke"
+                                        style="font-size:1.3rem;color:#6b7280;margin-bottom:6px;display:block"></i>
+                                    <div style="font-size:0.74rem;font-weight:800">System</div>
+                                    <div
+                                        style="font-size:0.6rem;font-weight:600;color:var(--text-secondary);margin-top:2px">
+                                        Auto-detect</div>
+                                </div>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="section-title"><i class="fa-solid fa-text-height"></i> Display</div>
+                            <div class="form-row">
+                                <div class="form-group"><label class="form-label">Font Size</label>
+                                    <select class="form-control">
+                                        <option>Small</option>
+                                        <option selected>Medium</option>
+                                        <option>Large</option>
+                                    </select>
+                                </div>
+                                <div class="form-group"><label class="form-label">Language</label>
+                                    <select class="form-control">
+                                        <option selected>English (US)</option>
+                                        <option>Filipino</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="pref-row">
+                                <div class="pref-icon" style="background:#eff6ff;color:#2563eb"><i
+                                        class="fa-solid fa-sidebar"></i></div>
+                                <div class="pref-text">
+                                    <div class="pref-label">Compact Sidebar</div>
+                                    <div class="pref-sub">Show icons only in the navigation sidebar</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+                            </div>
+                            <div class="pref-row">
+                                <div class="pref-icon" style="background:#f0fdf4;color:#16a34a"><i
+                                        class="fa-solid fa-chart-bar"></i></div>
+                                <div class="pref-text">
+                                    <div class="pref-label">Show Animations</div>
+                                    <div class="pref-sub">Enable UI transitions and chart animations</div>
+                                </div>
+                                <label class="toggle"><input type="checkbox" checked><span
+                                        class="toggle-slider"></span></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DANGER ZONE -->
+                    <div class="settings-panel" id="panel-danger">
+                        <div class="panel-header">
+                            <div class="panel-header-left">
+                                <div class="panel-header-icon" style="background:#fef2f2;color:#dc2626"><i
+                                        class="fa-solid fa-triangle-exclamation"></i></div>
+                                <div>
+                                    <div class="panel-title" style="color:var(--red)">Danger Zone</div>
+                                    <div class="panel-subtitle">Irreversible account actions — proceed with caution
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="danger-item">
+                                <div style="flex:1">
+                                    <div class="danger-title">Export My Data</div>
+                                    <div class="danger-desc">Download all your class data, student records, modules,
+                                        assessments, and analytics in a ZIP file. Does not affect any live data.</div>
+                                </div>
+                                <button class="btn-outline" onclick="alert('Preparing export... (UI demo)')"><i
+                                        class="fa-solid fa-download"></i> Export Data</button>
+                            </div>
+                            <div class="danger-item">
+                                <div style="flex:1">
+                                    <div class="danger-title">Reset All Class Settings</div>
+                                    <div class="danger-desc">Resets all class defaults, passing thresholds, and grading
+                                        configurations to system defaults. Student data and modules are preserved.</div>
+                                </div>
+                                <button class="btn-danger" onclick="openResetModal()"><i
+                                        class="fa-solid fa-rotate-left"></i> Reset Defaults</button>
+                            </div>
+                            <div class="danger-item">
+                                <div style="flex:1">
+                                    <div class="danger-title">Delete All Draft Modules</div>
+                                    <div class="danger-desc">Permanently deletes all unpublished draft modules.
+                                        Published modules and student data are not affected. This action cannot be
+                                        undone.</div>
+                                </div>
+                                <button class="btn-danger" onclick="openDeleteDraftsModal()"><i
+                                        class="fa-solid fa-trash"></i> Delete Drafts</button>
+                            </div>
+                            <div class="danger-item" style="border-bottom:none">
+                                <div style="flex:1">
+                                    <div class="danger-title" style="color:var(--red)">Deactivate Account</div>
+                                    <div class="danger-desc">Temporarily deactivates your account. Students will lose
+                                        access to your modules until the account is reactivated by an administrator.
+                                    </div>
+                                </div>
+                                <button class="btn-danger" onclick="openDeactivateModal()"><i
+                                        class="fa-solid fa-user-slash"></i> Deactivate</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <footer><span>MotoMaster</span> Teacher Portal &mdash; Settings &copy; 2025 <span>v2.1.0</span></footer>
+    </main>
+
+    <!-- CHANGE PASSWORD MODAL -->
+    <div class="modal-overlay" id="changePassModal">
+        <div class="nm-modal">
+            <div class="nm-header">
+                <div class="nm-header-left">
+                    <div class="nm-header-icon"><i class="fa-solid fa-key"></i></div>
+                    <div>
+                        <h3>Update Password</h3>
+                        <p>Enter your current and new password</p>
+                    </div>
+                </div>
+                <button class="nm-close" onclick="closeModal('changePassModal')"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="nm-body">
+                <div class="form-group"><label class="form-label">Current Password</label><input class="form-control"
+                        type="password" placeholder="Enter current password"></div>
+                <div class="form-group"><label class="form-label">New Password</label><input class="form-control"
+                        type="password" placeholder="Minimum 8 characters"></div>
+                <div class="form-group"><label class="form-label">Confirm New Password</label><input
+                        class="form-control" type="password" placeholder="Repeat new password"></div>
+                <div
+                    style="font-size:0.7rem;font-weight:600;color:var(--text-secondary);background:var(--bg-color);border-radius:8px;padding:10px 12px">
+                    Password must be at least 8 characters and include one number and one special character.</div>
+            </div>
+            <div class="nm-footer">
+                <button class="btn-outline" onclick="closeModal('changePassModal')">Cancel</button>
+                <button class="btn-primary"
+                    onclick="saveAndClose('changePassModal','Password updated successfully!')"><i
+                        class="fa-solid fa-check"></i> Update Password</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AVATAR MODAL -->
+    <div class="modal-overlay" id="avatarModal">
+        <div class="nm-modal">
+            <div class="nm-header">
+                <div class="nm-header-left">
+                    <div class="nm-header-icon"><i class="fa-solid fa-camera"></i></div>
+                    <div>
+                        <h3>Change Profile Photo</h3>
+                        <p>Upload a new avatar image</p>
+                    </div>
+                </div>
+                <button class="nm-close" onclick="closeModal('avatarModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="nm-body">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:14px;padding:10px 0">
+                    <div
+                        style="width:80px;height:80px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px">
+                        <i class="fa-solid fa-chalkboard-user"></i></div>
+                    <div style="border:2px dashed var(--border-color);border-radius:12px;padding:24px 32px;text-align:center;cursor:pointer;width:100%;background:var(--bg-color)"
+                        onclick="alert('File picker — UI demo')">
+                        <i class="fa-solid fa-cloud-arrow-up"
+                            style="font-size:1.5rem;color:var(--text-secondary);margin-bottom:8px;display:block"></i>
+                        <div style="font-size:0.78rem;font-weight:800;color:var(--text-primary)">Click to upload</div>
+                        <div style="font-size:0.64rem;font-weight:600;color:var(--text-secondary);margin-top:3px">JPG,
+                            PNG or GIF &bull; Max 2MB</div>
+                    </div>
+                </div>
+            </div>
+            <div class="nm-footer">
+                <button class="btn-outline" onclick="closeModal('avatarModal')">Cancel</button>
+                <button class="btn-primary" onclick="saveAndClose('avatarModal','Photo updated!')"><i
+                        class="fa-solid fa-check"></i> Save Photo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESET MODAL -->
+    <div class="modal-overlay" id="resetModal">
+        <div class="nm-modal">
+            <div class="nm-header" style="background:linear-gradient(135deg,#b45309,#d97706)">
+                <div class="nm-header-left">
+                    <div class="nm-header-icon"><i class="fa-solid fa-rotate-left"></i></div>
+                    <div>
+                        <h3>Reset Class Settings</h3>
+                        <p>This will revert all class defaults</p>
+                    </div>
+                </div>
+                <button class="nm-close" onclick="closeModal('resetModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="nm-body">
+                <div
+                    style="padding:12px 14px;background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;font-size:0.74rem;font-weight:700;color:var(--orange)">
+                    <i class="fa-solid fa-triangle-exclamation" style="margin-right:6px"></i>All class configuration
+                    settings will be reset to system defaults. Student data and modules will not be affected.</div>
+                <div class="form-group"><label class="form-label">Type RESET to confirm</label><input
+                        class="form-control" id="resetConfirmInput" placeholder="RESET"></div>
+            </div>
+            <div class="nm-footer">
+                <button class="btn-outline" onclick="closeModal('resetModal')">Cancel</button>
+                <button class="btn-danger" onclick="confirmReset()"><i class="fa-solid fa-rotate-left"></i> Reset
+                    Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DELETE DRAFTS MODAL -->
+    <div class="modal-overlay" id="deleteDraftsModal">
+        <div class="nm-modal">
+            <div class="nm-header" style="background:linear-gradient(135deg,#991b1b,#dc2626)">
+                <div class="nm-header-left">
+                    <div class="nm-header-icon"><i class="fa-solid fa-trash"></i></div>
+                    <div>
+                        <h3>Delete Draft Modules</h3>
+                        <p>Permanently removes all unpublished modules</p>
+                    </div>
+                </div>
+                <button class="nm-close" onclick="closeModal('deleteDraftsModal')"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="nm-body">
+                <div
+                    style="padding:12px 14px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;font-size:0.74rem;font-weight:700;color:var(--red)">
+                    <i class="fa-solid fa-triangle-exclamation" style="margin-right:6px"></i>This will permanently
+                    delete all draft modules. This action cannot be undone.</div>
+                <div style="border:1.5px solid var(--border-color);border-radius:10px;overflow:hidden">
+                    <div
+                        style="padding:10px 14px;border-bottom:1px solid var(--border-color);font-size:0.72rem;font-weight:800;color:var(--text-secondary);background:var(--bg-color)">
+                        Modules to be deleted (2 drafts)</div>
+                    <div
+                        style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border-color)">
+                        <i class="fa-solid fa-book-open" style="color:#9333ea;font-size:12px"></i>
+                        <div style="font-size:0.74rem;font-weight:700">Module 3: Electrical Systems</div><span
+                            style="margin-left:auto;font-size:0.6rem;font-weight:800;background:#f3f4f6;border-radius:10px;padding:2px 8px;color:#6b7280">Draft</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px"><i
+                            class="fa-solid fa-book-open" style="color:#d97706;font-size:12px"></i>
+                        <div style="font-size:0.74rem;font-weight:700">Module 4: Transmission Systems</div><span
+                            style="margin-left:auto;font-size:0.6rem;font-weight:800;background:#f3f4f6;border-radius:10px;padding:2px 8px;color:#6b7280">Draft</span>
+                    </div>
+                </div>
+            </div>
+            <div class="nm-footer">
+                <button class="btn-outline" onclick="closeModal('deleteDraftsModal')">Cancel</button>
+                <button class="btn-danger" onclick="saveAndClose('deleteDraftsModal','Draft modules deleted.')"><i
+                        class="fa-solid fa-trash"></i> Delete All Drafts</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DEACTIVATE MODAL -->
+    <div class="modal-overlay" id="deactivateModal">
+        <div class="nm-modal">
+            <div class="nm-header" style="background:linear-gradient(135deg,#991b1b,#dc2626)">
+                <div class="nm-header-left">
+                    <div class="nm-header-icon"><i class="fa-solid fa-user-slash"></i></div>
+                    <div>
+                        <h3>Deactivate Account</h3>
+                        <p>Students will lose access to your modules</p>
+                    </div>
+                </div>
+                <button class="nm-close" onclick="closeModal('deactivateModal')"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="nm-body">
+                <div
+                    style="padding:12px 14px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;font-size:0.74rem;font-weight:700;color:var(--red)">
+                    <i class="fa-solid fa-triangle-exclamation" style="margin-right:6px"></i>Deactivating your account
+                    will immediately block access for all 87 enrolled students. An administrator must reactivate your
+                    account.</div>
+                <div class="form-group"><label class="form-label">Reason for Deactivation</label>
+                    <select class="form-control">
+                        <option>Taking a leave of absence</option>
+                        <option>Transferring departments</option>
+                        <option>Technical issue</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="form-group"><label class="form-label">Type DEACTIVATE to confirm</label><input
+                        class="form-control" placeholder="DEACTIVATE"></div>
+            </div>
+            <div class="nm-footer">
+                <button class="btn-outline" onclick="closeModal('deactivateModal')">Cancel</button>
+                <button class="btn-danger"
+                    onclick="saveAndClose('deactivateModal','Deactivation request submitted.')"><i
+                        class="fa-solid fa-user-slash"></i> Deactivate Account</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="teacher-profile.js"></script>
+    <script>
+        function showPanel(id, el) {
+            document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.settings-nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('panel-' + id).classList.add('active');
+            el.classList.add('active');
+        }
+
+        function saveSettings() {
+            const teacher = JSON.parse(localStorage.getItem('motomasterTeacher') || sessionStorage.getItem('motomasterTeacher') || '{}');
+            
+            const firstInput = document.querySelector('#panel-profile input[value="Ricardo"]') || document.querySelector('#panel-profile input:nth-of-type(1)');
+            const lastInput = document.querySelector('#panel-profile input[value="Garcia"]') || document.querySelector('#panel-profile input:nth-of-type(2)');
+            const emailInput = document.querySelector('#panel-profile input[type="email"]');
+            const contactInput = document.querySelector('#panel-profile input[value="+63 912 345 6789"]') || document.querySelector('#panel-profile input:nth-of-type(4)');
+            const deptSelect = document.querySelector('#panel-profile select');
+            const posInput = document.querySelector('#panel-profile input[value="Senior Instructor"]') || document.querySelector('#panel-profile input:nth-of-type(5)');
+            const expInput = document.querySelector('#panel-profile input[type="number"]');
+            const bioTextarea = document.querySelector('#panel-profile textarea');
+            const specsInput = document.querySelector('#panel-profile input[value="Motorcycle Mechanics, Engine Systems, Electrical Diagnostics, Transmission"]') || document.querySelector('#panel-profile input:nth-of-type(7)');
+
+            if (firstInput) teacher.first_name = firstInput.value;
+            if (lastInput) teacher.last_name = lastInput.value;
+            if (emailInput) teacher.email = emailInput.value;
+            if (contactInput) teacher.contact_number = contactInput.value;
+            if (deptSelect) teacher.department = deptSelect.value;
+            if (posInput) teacher.position = posInput.value;
+            if (expInput) teacher.experience = expInput.value;
+            if (bioTextarea) teacher.bio = bioTextarea.value;
+            if (specsInput) teacher.specializations = specsInput.value;
+
+            localStorage.setItem('motomasterTeacher', JSON.stringify(teacher));
+            sessionStorage.setItem('motomasterTeacher', JSON.stringify(teacher));
+
+            const prefs = {};
+
+            const notifCheckboxes = document.querySelectorAll('#panel-notifications input[type="checkbox"]');
+            if (notifCheckboxes.length >= 7) {
+                prefs.atRiskAlerts = notifCheckboxes[0].checked;
+                prefs.newSubmissions = notifCheckboxes[1].checked;
+                prefs.leaderboardUpdates = notifCheckboxes[2].checked;
+                prefs.moduleActivity = notifCheckboxes[3].checked;
+                prefs.systemNotices = notifCheckboxes[4].checked;
+                prefs.inAppNotifications = notifCheckboxes[5].checked;
+                prefs.emailDigest = notifCheckboxes[6].checked;
+            }
+
+            const classInputs = document.querySelectorAll('#panel-class input');
+            if (classInputs.length >= 3) {
+                prefs.passThreshold = classInputs[0].value;
+                prefs.maxAttempts = classInputs[1].value;
+                prefs.allowUnlimited = classInputs[2].checked;
+            }
+
+            const securityCheckboxes = document.querySelectorAll('#panel-security input[type="checkbox"]');
+            if (securityCheckboxes.length >= 1) {
+                prefs.twoFactor = securityCheckboxes[0].checked;
+            }
+
+            const appearanceSelects = document.querySelectorAll('#panel-appearance select');
+            if (appearanceSelects.length >= 2) {
+                prefs.fontSize = appearanceSelects[0].value;
+                prefs.language = appearanceSelects[1].value;
+            }
+            const appearanceCheckboxes = document.querySelectorAll('#panel-appearance input[type="checkbox"]');
+            if (appearanceCheckboxes.length >= 2) {
+                prefs.compactSidebar = appearanceCheckboxes[0].checked;
+                prefs.showAnimations = appearanceCheckboxes[1].checked;
+            }
+
+            localStorage.setItem('motomasterTeacherPrefs', JSON.stringify(prefs));
+
+            if (window.applyTeacherProfile) window.applyTeacherProfile();
+
+            const b = document.querySelector('.topbar-right .btn-primary');
+            const o = b.innerHTML;
+            b.innerHTML = '<i class="fa-solid fa-check"></i> Saved!';
+            b.style.background = '#16a34a';
+            setTimeout(() => { b.innerHTML = o; b.style.background = ''; }, 2000);
+        }
+
+        function loadSettings() {
+            const theme = localStorage.getItem('motomasterTheme') || 'light';
+            selectTheme(theme);
+
+            const teacher = JSON.parse(localStorage.getItem('motomasterTeacher') || sessionStorage.getItem('motomasterTeacher') || '{}');
+            if (teacher) {
+                const firstInput = document.querySelector('#panel-profile input[value="Ricardo"]') || document.querySelector('#panel-profile input:nth-of-type(1)');
+                const lastInput = document.querySelector('#panel-profile input[value="Garcia"]') || document.querySelector('#panel-profile input:nth-of-type(2)');
+                const emailInput = document.querySelector('#panel-profile input[type="email"]');
+                const contactInput = document.querySelector('#panel-profile input[value="+63 912 345 6789"]') || document.querySelector('#panel-profile input:nth-of-type(4)');
+                const deptSelect = document.querySelector('#panel-profile select');
+                const posInput = document.querySelector('#panel-profile input[value="Senior Instructor"]') || document.querySelector('#panel-profile input:nth-of-type(5)');
+                const expInput = document.querySelector('#panel-profile input[type="number"]');
+                const bioTextarea = document.querySelector('#panel-profile textarea');
+                const specsInput = document.querySelector('#panel-profile input[value="Motorcycle Mechanics, Engine Systems, Electrical Diagnostics, Transmission"]') || document.querySelector('#panel-profile input:nth-of-type(7)');
+
+                if (firstInput && teacher.first_name) firstInput.value = teacher.first_name;
+                if (lastInput && teacher.last_name) lastInput.value = teacher.last_name;
+                if (emailInput && teacher.email) emailInput.value = teacher.email;
+                if (contactInput && teacher.contact_number) contactInput.value = teacher.contact_number;
+                if (deptSelect && teacher.department) deptSelect.value = teacher.department;
+                if (posInput && teacher.position) posInput.value = teacher.position;
+                if (expInput && teacher.experience) expInput.value = teacher.experience;
+                if (bioTextarea && teacher.bio) bioTextarea.value = teacher.bio;
+                if (specsInput && teacher.specializations) specsInput.value = teacher.specializations;
+            }
+
+            const prefs = JSON.parse(localStorage.getItem('motomasterTeacherPrefs') || '{}');
+            
+            const notifCheckboxes = document.querySelectorAll('#panel-notifications input[type="checkbox"]');
+            if (notifCheckboxes.length >= 7) {
+                notifCheckboxes[0].checked = prefs.atRiskAlerts !== false;
+                notifCheckboxes[1].checked = prefs.newSubmissions !== false;
+                notifCheckboxes[2].checked = prefs.leaderboardUpdates !== false;
+                notifCheckboxes[3].checked = prefs.moduleActivity !== false;
+                notifCheckboxes[4].checked = prefs.systemNotices === true;
+                notifCheckboxes[5].checked = prefs.inAppNotifications !== false;
+                notifCheckboxes[6].checked = prefs.emailDigest !== false;
+            }
+
+            const classInputs = document.querySelectorAll('#panel-class input');
+            if (classInputs.length >= 3) {
+                classInputs[0].value = prefs.passThreshold || 75;
+                classInputs[1].value = prefs.maxAttempts || 3;
+                classInputs[2].checked = prefs.allowUnlimited !== false;
+            }
+
+            const securityCheckboxes = document.querySelectorAll('#panel-security input[type="checkbox"]');
+            if (securityCheckboxes.length >= 1) {
+                securityCheckboxes[0].checked = prefs.twoFactor === true;
+            }
+
+            const appearanceSelects = document.querySelectorAll('#panel-appearance select');
+            if (appearanceSelects.length >= 2) {
+                appearanceSelects[0].value = prefs.fontSize || 'Medium';
+                appearanceSelects[1].value = prefs.language || 'English (US)';
+            }
+            const appearanceCheckboxes = document.querySelectorAll('#panel-appearance input[type="checkbox"]');
+            if (appearanceCheckboxes.length >= 2) {
+                appearanceCheckboxes[0].checked = prefs.compactSidebar === true;
+                appearanceCheckboxes[1].checked = prefs.showAnimations !== false;
+            }
+        }
+
+        function openChangePassModal() { document.getElementById('changePassModal').classList.add('open'); document.body.style.overflow = 'hidden'; }
+        function openAvatarModal() { document.getElementById('avatarModal').classList.add('open'); document.body.style.overflow = 'hidden'; }
+        function openResetModal() { document.getElementById('resetModal').classList.add('open'); document.body.style.overflow = 'hidden'; }
+        function openDeleteDraftsModal() { document.getElementById('deleteDraftsModal').classList.add('open'); document.body.style.overflow = 'hidden'; }
+        function openDeactivateModal() { document.getElementById('deactivateModal').classList.add('open'); document.body.style.overflow = 'hidden'; }
+        function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
+
+        function saveAndClose(id, msg) {
+            closeModal(id);
+            const b = document.querySelector('.topbar-right .btn-primary');
+            const o = b.innerHTML;
+            b.innerHTML = '<i class="fa-solid fa-check"></i> ' + msg;
+            b.style.background = '#16a34a';
+            setTimeout(() => { b.innerHTML = o; b.style.background = ''; }, 2200);
+        }
+
+        function confirmReset() {
+            const v = document.getElementById('resetConfirmInput').value.trim();
+            if (v !== 'RESET') { alert('Please type RESET to confirm.'); return; }
+            localStorage.removeItem('motomasterTeacherPrefs');
+            loadSettings();
+            saveAndClose('resetModal', 'Settings reset to defaults.');
+        }
+
+        function selectTheme(elOrTheme, theme) {
+            let activeTheme = theme;
+            if (arguments.length === 1 && typeof elOrTheme === 'string') {
+                activeTheme = elOrTheme;
+            }
+
+            localStorage.setItem('motomasterTheme', activeTheme);
+            
+            if (activeTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+            } else {
+                document.body.classList.remove('dark-theme');
+            }
+
+            document.querySelectorAll('[data-theme]').forEach(e => {
+                const t = e.getAttribute('data-theme');
+                const isSelected = t === activeTheme;
+                if (isSelected) {
+                    e.style.border = '2px solid var(--accent)';
+                    e.style.background = 'var(--accent-light)';
+                    const icon = e.querySelector('i');
+                    if (icon) icon.style.color = 'var(--accent)';
+                    const label = e.querySelector('div');
+                    if (label) label.style.color = 'var(--accent)';
+                    const indicator = e.querySelector('.theme-indicator') || e.querySelector('div:last-child');
+                    if (indicator) indicator.textContent = 'Active';
+                } else {
+                    e.style.border = '1.5px solid var(--border-color)';
+                    e.style.background = '';
+                    const icon = e.querySelector('i');
+                    if (icon) icon.style.color = '#6b7280';
+                    const label = e.querySelector('div');
+                    if (label) label.style.color = '';
+                    const indicator = e.querySelector('.theme-indicator') || e.querySelector('div:last-child');
+                    if (indicator) indicator.textContent = t === 'light' ? 'Default' : t === 'dark' ? 'Modern Look' : 'Auto-detect';
+                }
+            });
+        }
+
+        document.querySelectorAll('.modal-overlay').forEach(m => {
+            m.addEventListener('click', function (e) { if (e.target === this) closeModal(this.id); });
+        });
+
+        document.addEventListener('DOMContentLoaded', loadSettings);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,714 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --red: #c0161a;
+    --red-bright: #e8222a;
+    --text: #ffffff;
+    --text-muted: #aaaaaa;
+}
+
+html,
+body {
+    height: 100%;
+    font-family: 'Nunito', sans-serif;
+    color: var(--text);
+    overflow-x: hidden;
+}
+
+body {
+    /* Exact background from screenshot: deep black right, dark red glow bottom-left */
+    background:
+        radial-gradient(ellipse 55% 75% at 0% 60%, rgba(150, 8, 10, 0.85) 0%, rgba(90, 4, 6, 0.5) 35%, transparent 65%),
+        radial-gradient(ellipse 30% 40% at 2% 95%, rgba(180, 10, 12, 0.4) 0%, transparent 50%),
+        #080808;
+    min-height: 100vh;
+}
+
+/* ── Navbar ── */
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 52px;
+    position: relative;
+    z-index: 10;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+/* M chevron logo in red */
+.nav-logo svg {
+    width: 44px;
+    height: 30px;
+}
+
+.nav-logo-img {
+    width: 180px;
+    height: auto;
+    object-fit: contain;
+}
+
+.nav-brand {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.nav-links {
+    display: flex;
+    gap: 48px;
+    list-style: none;
+}
+
+.nav-links a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover {
+    color: var(--red-bright);
+}
+
+.admin-login-btn {
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 6px 16px;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+}
+
+.admin-login-btn:hover {
+    background: rgba(232, 34, 42, 0.15);
+    border-color: var(--red-bright);
+}
+
+/* ── Main Layout ── */
+main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 74px);
+    padding: 20px 80px;
+    gap: 60px;
+}
+
+
+
+/* ── Login Panel (centered vertically) ── */
+.login-panel {
+    flex: 0 0 400px;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* center WELCOME + all content */
+    text-align: center;
+    margin-left: 70px;
+    animation: slideInLeft 0.7s cubic-bezier(.23, 1, .32, 1) both;
+}
+
+.btn-google {
+    width: 100%;
+    padding: 14px 22px;
+    background: #fff;
+    border: none;
+    border-radius: 50px;
+    color: #333;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: transform 0.15s, box-shadow 0.3s;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.google-icon {
+    width: 22px;
+    height: 22px;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.login-panel h1 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 3.2rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.signup-hint {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.93rem;
+    color: #ddd;
+    margin-bottom: 32px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.signup-hint a {
+    color: var(--red-bright);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.signup-hint a:hover {
+    color: #ff5a60;
+}
+
+/* Fields take full width of panel */
+.field-group {
+    width: 100%;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.field-group label {
+    display: block;
+    font-size: 0.92rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.field-group input {
+    width: 100%;
+    padding: 14px 22px;
+    background: rgba(180, 180, 180, 0.22);
+    border: 1.5px solid transparent;
+    border-radius: 50px;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-family: 'Nunito', sans-serif;
+    outline: none;
+    transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+}
+
+.field-group input::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.field-group input:focus {
+    border-color: var(--red-bright);
+    background: rgba(200, 200, 200, 0.25);
+    box-shadow: 0 0 0 3px rgba(232, 34, 42, 0.2);
+}
+
+.field-options {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 12px 0 26px;
+    font-size: 0.88rem;
+}
+
+.show-pwd {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #ccc;
+    user-select: none;
+}
+
+.show-pwd input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--red-bright);
+    cursor: pointer;
+}
+
+.forgot-link {
+    color: #ccc;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.forgot-link:hover {
+    color: var(--red-bright);
+}
+
+.btn-signin {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #b81218 0%, #e8222a 60%, #ff3a42 100%);
+    border: none;
+    border-radius: 50px;
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.3s;
+    box-shadow: 0 4px 22px rgba(192, 22, 26, 0.55);
+    margin-bottom: 20px;
+}
+
+.btn-signin::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.18) 60%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.5s;
+}
+
+.btn-signin:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(232, 34, 42, 0.65);
+}
+
+.btn-signin:hover::before {
+    transform: translateX(100%);
+}
+
+.btn-signin:active {
+    transform: translateY(0);
+}
+
+/* ── Logo Panel ── */
+.logo-panel {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeInScale 0.8s cubic-bezier(.23, 1, .32, 1) 0.15s both;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.88);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.logo-img {
+    width: 500px;
+    height: 500px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 35px rgba(192, 22, 26, 0.65));
+    animation: pulseGlow 3.5s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 0 30px rgba(192, 22, 26, 0.6));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 55px rgba(232, 34, 42, 0.85));
+    }
+}
+
+/* ── Social Bar ── */
+.social-bar {
+    position: fixed;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 20;
+}
+
+.social-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--red);
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+.social-btn:hover {
+    transform: scale(1.15);
+    box-shadow: 0 4px 20px rgba(192, 22, 26, 0.5);
+}
+
+.social-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* ── Bottom red line ── */
+.bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--red), var(--red-bright), var(--red), transparent);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --red: #c0161a;
+    --red-bright: #e8222a;
+}
+
+html,
+body {
+    height: 100%;
+    font-family: 'Nunito', sans-serif;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+body {
+    background:
+        radial-gradient(ellipse 55% 75% at 0% 60%, rgba(150, 8, 10, 0.85) 0%, rgba(90, 4, 6, 0.5) 35%, transparent 65%),
+        radial-gradient(ellipse 30% 40% at 2% 95%, rgba(180, 10, 12, 0.4) 0%, transparent 50%),
+        #080808;
+    min-height: 100vh;
+}
+
+/* ── Navbar ── */
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 52px;
+    position: relative;
+    z-index: 10;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.nav-logo svg {
+    width: 44px;
+    height: 30px;
+}
+
+.nav-brand {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.nav-links {
+    display: flex;
+    gap: 48px;
+    list-style: none;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--red-bright);
+}
+
+/* ── Main Layout ── */
+main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 74px);
+    padding: 20px 80px 40px 100px;
+    gap: 60px;
+}
+
+/* ── Form Panel ── */
+.signup-panel {
+    flex: 0 0 420px;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    animation: slideInLeft 0.7s cubic-bezier(.23, 1, .32, 1) both;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.signup-panel h1 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 3.2rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+    width: 100%;
+    text-align: center;
+}
+
+.signin-hint {
+    font-size: 0.93rem;
+    color: #ddd;
+    margin-bottom: 28px;
+    font-weight: 600;
+    width: 100%;
+    text-align: center;
+}
+
+.signin-hint a {
+    color: var(--red-bright);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.signin-hint a:hover {
+    color: #ff5a60;
+}
+
+.field-group {
+    width: 100%;
+    margin-bottom: 18px;
+}
+
+.field-group label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.field-group input {
+    width: 100%;
+    padding: 14px 22px;
+    background: rgba(180, 180, 180, 0.22);
+    border: 1.5px solid transparent;
+    border-radius: 50px;
+    color: #fff;
+    font-size: 0.95rem;
+    font-family: 'Nunito', sans-serif;
+    outline: none;
+    transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+}
+
+.field-group input::placeholder {
+    color: rgba(255, 255, 255, 0.15);
+}
+
+.field-group input:focus {
+    border-color: var(--red-bright);
+    background: rgba(200, 200, 200, 0.25);
+    box-shadow: 0 0 0 3px rgba(232, 34, 42, 0.2);
+}
+
+.field-options {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 2px 0 22px;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.show-pwd {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.show-pwd input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--red-bright);
+    cursor: pointer;
+}
+
+.forgot-link {
+    color: #ccc;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.forgot-link:hover {
+    color: var(--red-bright);
+}
+
+/* ── Buttons ── */
+.btn-primary {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #b81218 0%, #e8222a 60%, #ff3a42 100%);
+    border: none;
+    border-radius: 50px;
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.3s;
+    box-shadow: 0 4px 22px rgba(192, 22, 26, 0.55);
+    margin-bottom: 16px;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.18) 60%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.5s;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(232, 34, 42, 0.65);
+}
+
+.btn-primary:hover::before {
+    transform: translateX(100%);
+}
+
+.btn-google {
+    width: 100%;
+    padding: 14px 22px;
+    background: #fff;
+    border: none;
+    border-radius: 50px;
+    color: #333;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: transform 0.15s, box-shadow 0.3s;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.google-icon {
+    width: 22px;
+    height: 22px;
+}
+
+/* ── Logo Panel ── */
+.logo-panel {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeInScale 0.8s cubic-bezier(.23, 1, .32, 1) 0.15s both;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.88);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.logo-img {
+    width: 430px;
+    height: 430px;
+    object-fit: contain;
+    animation: pulseGlow 3.5s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 0 30px rgba(192, 22, 26, 0.6));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 55px rgba(232, 34, 42, 0.85));
+    }
+}
+
+.bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--red), var(--red-bright), var(--red), transparent);
+}

@@ -1,0 +1,1823 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotoMaster Admin – Notifications</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        (function () {
+            const saved = localStorage.getItem('motomasterAdminTheme') || localStorage.getItem('motomasterTheme') || 'light';
+            let effective = saved;
+            if (saved === 'system') {
+                effective = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            if (effective === 'dark') {
+                document.documentElement.classList.add('dark-theme');
+            }
+        })();
+    </script>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --panel-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --accent: #2563eb;
+            --accent-dark: #1d4ed8;
+            --accent-light: #eff6ff;
+            --green: #16a34a;
+            --red: #dc2626;
+            --orange: #d97706;
+            --purple: #9333ea;
+            --sidebar-w: 240px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: #fff;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .logo-container {
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-container img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .logo-sub {
+            font-size: 0.62rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+        }
+
+        .nav-section-label {
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 14px 18px 4px;
+        }
+
+        .nav-menu {
+            list-style: none;
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+
+        .nav-menu::-webkit-scrollbar {
+            width: 0;
+        }
+
+        .nav-item {
+            padding: 9px 16px;
+            margin: 2px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            font-weight: 700;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .nav-item i {
+            width: 16px;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .nav-item:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .nav-item.active {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .sidebar-bottom {
+            padding: 12px 0 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* ── MAIN ── */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            background: var(--bg-color);
+        }
+
+        /* ── TOPBAR ── */
+        .topbar {
+            background: #fff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 28px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .topbar-left h1 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .topbar-left p {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .notif-btn {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--bg-color);
+            border: 1.5px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--red);
+            color: #fff;
+            font-size: 0.58rem;
+            font-weight: 800;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-pill {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 5px 12px 5px 5px;
+            border-radius: 30px;
+            border: 1.5px solid var(--border-color);
+            background: #fff;
+            cursor: pointer;
+        }
+
+        .profile-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 12px;
+        }
+
+        .profile-name {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .profile-role {
+            font-size: 0.62rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* ── BUTTONS ── */
+        .btn-primary {
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            padding: 7px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 800;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dark);
+        }
+
+        .btn-outline {
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 7px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            transition: border-color 0.2s;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-danger {
+            background: #fef2f2;
+            border: 1.5px solid #fecaca;
+            color: var(--red);
+            padding: 7px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            transition: background 0.2s;
+        }
+
+        .btn-danger:hover {
+            background: #fee2e2;
+        }
+
+        /* ── LAYOUT ── */
+        .page-container {
+            padding: 22px 28px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ── KPI ROW ── */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .kpi-card {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 16px 18px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .kpi-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .kpi-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .kpi-title {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .kpi-value {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .kpi-foot {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        /* ── MAIN GRID ── */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+            align-items: start;
+        }
+
+        /* ── PANEL ── */
+        .panel {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+        }
+
+        .panel-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .panel-title {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .panel-subtitle {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        /* ── FILTER TABS ── */
+        .filter-tabs {
+            display: flex;
+            gap: 4px;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border-color);
+            background: #ffffff;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            cursor: pointer;
+            border: 1.5px solid var(--border-color);
+            background: #fff;
+            color: var(--text-secondary);
+            transition: all 0.15s;
+        }
+
+        .filter-tab:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .filter-tab.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        .filter-tab .tab-count {
+            display: inline-flex;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 10px;
+            padding: 0 6px;
+            font-size: 0.6rem;
+            margin-left: 4px;
+        }
+
+        .filter-tab:not(.active) .tab-count {
+            background: #f1f5f9;
+            color: var(--text-secondary);
+        }
+
+        /* ── NOTIFICATION ITEM ── */
+        .notif-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.15s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notif-item:last-child {
+            border-bottom: none;
+        }
+
+        .notif-item:hover {
+            background: #f8f9ff;
+        }
+
+        .notif-item.unread {
+            background: #f5f8ff;
+        }
+
+        .notif-item.unread::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--accent);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .notif-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .notif-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notif-title {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .notif-desc {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 3px;
+            line-height: 1.5;
+        }
+
+        .notif-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .notif-time {
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .notif-actions {
+            display: flex;
+            gap: 5px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .notif-act-btn {
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            transition: all 0.15s;
+            border: 1.5px solid var(--border-color);
+            background: #fff;
+            color: var(--text-secondary);
+        }
+
+        .notif-act-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .notif-act-btn.del:hover {
+            border-color: #fecaca;
+            color: var(--red);
+            background: #fef2f2;
+        }
+
+        .unread-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            flex-shrink: 0;
+        }
+
+        /* ── BADGE ── */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 9px;
+            border-radius: 20px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .badge-green {
+            background: #f0fdf4;
+            color: var(--green);
+            border: 1px solid #bbf7d0;
+        }
+
+        .badge-orange {
+            background: #fff7ed;
+            color: var(--orange);
+            border: 1px solid #fed7aa;
+        }
+
+        .badge-red {
+            background: #fef2f2;
+            color: var(--red);
+            border: 1px solid #fecaca;
+        }
+
+        .badge-blue {
+            background: var(--accent-light);
+            color: var(--accent);
+            border: 1px solid #bfdbfe;
+        }
+
+        .badge-purple {
+            background: #fdf4ff;
+            color: var(--purple);
+            border: 1px solid #e9d5ff;
+        }
+
+        .badge-gray {
+            background: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* ── SIDE PANEL ── */
+        .side-panel {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+        }
+
+        .side-panel-title {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            padding: 12px 16px 10px;
+            border-bottom: 1px solid var(--border-color);
+            background: #ffffff;
+        }
+
+        /* ── TOGGLE SWITCH ── */
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 11px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .toggle-row:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-label .t-title {
+            font-size: 0.76rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .toggle-label .t-sub {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .toggle {
+            position: relative;
+            width: 38px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: #d1d5db;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            left: 3px;
+            top: 3px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+
+        .toggle input:checked+.toggle-slider {
+            background: var(--accent);
+        }
+
+        .toggle input:checked+.toggle-slider::before {
+            transform: translateX(18px);
+        }
+
+        /* ── STAT ROWS ── */
+        .stat-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.76rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .stat-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .stat-count {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* ── SEND MODAL ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
+            width: 100%;
+            max-width: 500px;
+            overflow: hidden;
+            animation: slideUp 0.22s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(24px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 22px 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            padding: 4px;
+            border-radius: 6px;
+        }
+
+        .modal-close:hover {
+            background: var(--bg-color);
+        }
+
+        .modal-body {
+            padding: 20px 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-label {
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .form-control {
+            padding: 8px 12px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.82rem;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.2s;
+            background: #fff;
+            font-weight: 700;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+        }
+
+        .form-hint {
+            font-size: 0.62rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .modal-footer-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            padding: 14px 22px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn-save {
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 800;
+        }
+
+        .btn-save:hover {
+            background: var(--accent-dark);
+        }
+
+        .btn-cancel {
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .btn-cancel:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ── EMPTY STATE ── */
+        .empty-state {
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--text-secondary);
+            display: none;
+        }
+
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #d1d5db;
+        }
+
+        .empty-state p {
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 28px;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            background: #fff;
+            margin-top: auto;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        footer span {
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        /* ── DARK THEME STYLES ── */
+        body.dark-theme, html.dark-theme {
+            --bg-color: #0b0f19;
+            --panel-bg: #111827;
+            --border-color: #1f2937;
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --accent: #3b82f6;
+            --accent-dark: #2563eb;
+            --accent-light: #172554;
+        }
+        body.dark-theme .sidebar,
+        body.dark-theme .topbar,
+        body.dark-theme .panel,
+        body.dark-theme .kpi-card,
+        body.dark-theme .filter-tabs,
+        body.dark-theme .side-panel,
+        body.dark-theme .modal,
+        body.dark-theme footer {
+            background: #111827 !important;
+            border-color: #1f2937 !important;
+            color: #f3f4f6 !important;
+        }
+        body.dark-theme .side-panel-title,
+        body.dark-theme .form-control {
+            background: #1f2937 !important;
+            border-color: #374151 !important;
+            color: #f3f4f6 !important;
+        }
+        body.dark-theme .notif-item {
+            background: #111827 !important;
+            border-color: #1f2937 !important;
+        }
+        body.dark-theme .notif-item:hover {
+            background: #1e293b !important;
+        }
+        body.dark-theme .notif-item.unread {
+            background: #172554 !important;
+        }
+        body.dark-theme .filter-tab {
+            background: #1f2937 !important;
+            border-color: #374151 !important;
+            color: #9ca3af !important;
+        }
+        body.dark-theme .filter-tab.active {
+            background: var(--accent) !important;
+            color: #fff !important;
+        }
+        body.dark-theme .filter-tab:not(.active) .tab-count {
+            background: #374151 !important;
+            color: #d1d5db !important;
+        }
+        body.dark-theme .notif-act-btn {
+            background: #1f2937 !important;
+            border-color: #374151 !important;
+            color: #9ca3af !important;
+        }
+        body.dark-theme .btn-outline {
+            background: #1f2937 !important;
+            border-color: #374151 !important;
+            color: #9ca3af !important;
+        }
+        body.dark-theme .btn-outline:hover {
+            border-color: var(--accent) !important;
+            color: var(--accent) !important;
+        }
+        body.dark-theme .btn-cancel {
+            background: #1f2937 !important;
+            border-color: #374151 !important;
+            color: #9ca3af !important;
+        }
+        body.dark-theme .profile-pill,
+        body.dark-theme .notif-btn {
+            background: #1f2937 !important;
+            border-color: #374151 !important;
+        }
+        body.dark-theme .badge-gray {
+            background: #1f2937 !important;
+            border-color: #374151 !important;
+            color: #9ca3af !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar">
+        <div class="logo-container">
+            <img src="images/finalogo.png" alt="MotoMaster" />
+            <div>
+                <span class="logo-text">MotoMaster</span>
+                <span class="logo-sub">Admin Panel</span>
+            </div>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-section-label">Main</li>
+            <li class="nav-item" onclick="window.location.href='admindash.html'"><i class="fa-solid fa-house"></i>
+                Dashboard</li>
+            <li class="nav-item" onclick="window.location.href='admintech.html'"><i
+                    class="fa-solid fa-chalkboard-user"></i> Teachers</li>
+            <li class="nav-item" onclick="window.location.href='adminstud.html'"><i class="fa-solid fa-users"></i>
+                Students</li>
+            <li class="nav-item" onclick="window.location.href='adminmod.html'"><i class="fa-solid fa-book-open"></i>
+                Modules</li>
+            <li class="nav-item" onclick="window.location.href='adminassess.html'"><i
+                    class="fa-solid fa-clipboard-check"></i> Assessments</li>
+            <li class="nav-item" onclick="window.location.href='adminpractice.html'"><i class="fa-solid fa-gamepad"></i>
+                Practice Sessions</li>
+            <li class="nav-section-label">Insights</li>
+            <li class="nav-item" onclick="window.location.href='adminanalytics.html'"><i
+                    class="fa-solid fa-chart-simple"></i> Analytics</li>
+            <li class="nav-item" onclick="window.location.href='adminreports.html'"><i
+                    class="fa-solid fa-file-invoice"></i> Reports</li>
+            <li class="nav-section-label">System</li>
+            <li class="nav-item" onclick="window.location.href='adminsettings.html'"><i class="fa-solid fa-gear"></i>
+                Settings</li>
+            <li class="nav-item" onclick="window.location.href='adminactivitylogs.html'"><i
+                    class="fa-solid fa-list-check"></i> Activity Logs</li>
+            <li class="nav-item" onclick="window.location.href='adminsystembackup.html'"><i
+                    class="fa-solid fa-server"></i> System Backup</li>
+            <li class="nav-item active"><i class="fa-regular fa-bell"></i> Notifications</li>
+        </ul>
+        <div class="sidebar-bottom">
+            <a class="nav-item" href="index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+        </div>
+    </aside>
+
+    <!-- ── MAIN ── -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <h1>Notifications</h1>
+                <p>System alerts, student updates, and platform announcements.</p>
+            </div>
+            <div class="topbar-right">
+                <button class="btn-outline" onclick="markAllRead()"><i class="fa-solid fa-check-double"></i> Mark All
+                    Read</button>
+                <button class="btn-primary" onclick="openSendModal()"><i class="fa-solid fa-paper-plane"></i> Send
+                    Notification</button>
+                <div class="notif-btn">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notif-badge" id="unreadBadge">8</span>
+                </div>
+                <div class="profile-pill">
+                    <div class="profile-avatar"><i class="fa-solid fa-user"></i></div>
+                    <div>
+                        <div class="profile-name" id="adminTopName">Administrator</div>
+                        <div class="profile-role" id="adminTopRole">Super Admin</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-container">
+
+            <!-- ── KPI ROW ── -->
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#fef2f2;color:#dc2626"><i class="fa-solid fa-bell"></i>
+                        </div>
+                        <div class="kpi-title">Unread</div>
+                    </div>
+                    <div class="kpi-value" id="kpiUnread">8</div>
+                    <div class="kpi-foot"><span>Needs attention</span><span style="color:#dc2626" id="kpiCritical">3 critical</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#eff6ff;color:#2563eb"><i class="fa-solid fa-inbox"></i>
+                        </div>
+                        <div class="kpi-title">Total Today</div>
+                    </div>
+                    <div class="kpi-value" id="kpiTotalToday">24</div>
+                    <div class="kpi-foot"><span>All types</span><span style="color:var(--accent)">+12 vs yesterday</span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#f0fdf4;color:#16a34a"><i
+                                class="fa-solid fa-paper-plane"></i></div>
+                        <div class="kpi-title">Sent This Month</div>
+                    </div>
+                    <div class="kpi-value" id="kpiSentMonth">47</div>
+                    <div class="kpi-foot"><span>By admins</span><span style="color:var(--green)">All delivered</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#fff7ed;color:#d97706"><i
+                                class="fa-solid fa-triangle-exclamation"></i></div>
+                        <div class="kpi-title">System Alerts</div>
+                    </div>
+                    <div class="kpi-value" id="kpiSystemAlerts">3</div>
+                    <div class="kpi-foot"><span>Active alerts</span><span style="color:var(--orange)" id="kpiHighPriority">1 high priority</span></div>
+                </div>
+            </div>
+
+            <!-- ── MAIN GRID ── -->
+            <div class="main-grid">
+
+                <!-- ── NOTIFICATION FEED ── -->
+                <div class="panel">
+                    <div class="panel-top">
+                        <div>
+                            <div class="panel-title">Notification Feed</div>
+                            <div class="panel-subtitle">Click any notification to mark as read</div>
+                        </div>
+                        <button class="btn-danger" style="font-size:0.7rem;padding:5px 12px" onclick="clearAll()"><i
+                                class="fa-solid fa-trash-can"></i> Clear All</button>
+                    </div>
+
+                    <!-- Filter tabs -->
+                    <div class="filter-tabs">
+                        <div class="filter-tab active" data-filter="all" onclick="filterNotifs('all', this)">All <span
+                                class="tab-count" id="countAll">16</span></div>
+                        <div class="filter-tab" data-filter="unread" onclick="filterNotifs('unread', this)">Unread <span
+                                class="tab-count" id="countUnread">8</span></div>
+                        <div class="filter-tab" data-filter="alert" onclick="filterNotifs('alert', this)">Alerts <span
+                                class="tab-count" id="countAlert">3</span></div>
+                        <div class="filter-tab" data-filter="student" onclick="filterNotifs('student', this)">Students <span
+                                class="tab-count" id="countStudent">5</span></div>
+                        <div class="filter-tab" data-filter="system" onclick="filterNotifs('system', this)">System <span
+                                class="tab-count" id="countSystem">4</span></div>
+                        <div class="filter-tab" data-filter="report" onclick="filterNotifs('report', this)">Reports <span
+                                class="tab-count" id="countReport">2</span></div>
+                        <div class="filter-tab" data-filter="content" onclick="filterNotifs('content', this)">Content <span
+                                class="tab-count" id="countContent">2</span></div>
+                    </div>
+
+                    <!-- Notifications list -->
+                    <div id="notifList">
+                        <!-- Notifications dynamically populated from motomasterdb -->
+                    </div>
+                    <div class="empty-state" id="emptyState">
+                        <i class="fa-regular fa-bell-slash"></i>
+                        <p>No notifications to show</p>
+                    </div>
+                </div>
+
+                <!-- ── RIGHT COLUMN ── -->
+                <div style="display:flex;flex-direction:column;gap:16px">
+
+                    <!-- Notification Preferences -->
+                    <div class="side-panel">
+                        <div class="side-panel-title"><i class="fa-solid fa-sliders"
+                                style="color:var(--accent);margin-right:6px"></i>Alert Preferences</div>
+                        <div class="toggle-row">
+                            <div class="toggle-label">
+                                <div class="t-title">Failed Login Alerts</div>
+                                <div class="t-sub">Suspicious login activity</div>
+                            </div>
+                            <label class="toggle"><input type="checkbox" id="prefFailedLogin" checked><span
+                                    class="toggle-slider"></span></label>
+                        </div>
+                        <div class="toggle-row">
+                            <div class="toggle-label">
+                                <div class="t-title">Student Progress Alerts</div>
+                                <div class="t-sub">Below 60% completion</div>
+                            </div>
+                            <label class="toggle"><input type="checkbox" id="prefStudentProgress" checked><span
+                                    class="toggle-slider"></span></label>
+                        </div>
+                        <div class="toggle-row">
+                            <div class="toggle-label">
+                                <div class="t-title">Assessment Failures</div>
+                                <div class="t-sub">2nd failed exam attempt</div>
+                            </div>
+                            <label class="toggle"><input type="checkbox" id="prefAssessmentFailures" checked><span
+                                    class="toggle-slider"></span></label>
+                        </div>
+                        <div class="toggle-row">
+                            <div class="toggle-label">
+                                <div class="t-title">New Registrations</div>
+                                <div class="t-sub">New student sign-ups</div>
+                            </div>
+                            <label class="toggle"><input type="checkbox" id="prefNewRegistrations" checked><span
+                                    class="toggle-slider"></span></label>
+                        </div>
+                        <div class="toggle-row">
+                            <div class="toggle-label">
+                                <div class="t-title">Backup Status</div>
+                                <div class="t-sub">Backup success/failure</div>
+                            </div>
+                            <label class="toggle"><input type="checkbox" id="prefBackupStatus" checked><span
+                                    class="toggle-slider"></span></label>
+                        </div>
+                        <div class="toggle-row">
+                            <div class="toggle-label">
+                                <div class="t-title">Report Ready</div>
+                                <div class="t-sub">Scheduled reports done</div>
+                            </div>
+                            <label class="toggle"><input type="checkbox" id="prefReportReady" checked><span
+                                    class="toggle-slider"></span></label>
+                        </div>
+                        <div class="toggle-row">
+                            <div class="toggle-label">
+                                <div class="t-title">Module Published</div>
+                                <div class="t-sub">Teacher publishes content</div>
+                            </div>
+                            <label class="toggle"><input type="checkbox" id="prefModulePublished"><span class="toggle-slider"></span></label>
+                        </div>
+                        <div style="padding:10px 16px;border-top:1px solid var(--border-color)">
+                            <button class="btn-primary" style="width:100%;justify-content:center"
+                                onclick="savePref()"><i class="fa-solid fa-floppy-disk"></i> Save Preferences</button>
+                        </div>
+                    </div>
+
+                    <!-- Notification Summary -->
+                    <div class="side-panel">
+                        <div class="side-panel-title"><i class="fa-solid fa-chart-bar"
+                                style="color:var(--accent);margin-right:6px"></i>By Category</div>
+                        <div class="stat-row">
+                            <div class="stat-label">
+                                <div class="stat-dot" style="background:#dc2626"></div>Alerts
+                            </div>
+                            <div class="stat-count" id="statAlerts">3</div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-label">
+                                <div class="stat-dot" style="background:#d97706"></div>Students
+                            </div>
+                            <div class="stat-count" id="statStudents">5</div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-label">
+                                <div class="stat-dot" style="background:#6b7280"></div>System
+                            </div>
+                            <div class="stat-count" id="statSystem">4</div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-label">
+                                <div class="stat-dot" style="background:#2563eb"></div>Reports
+                            </div>
+                            <div class="stat-count" id="statReports">2</div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-label">
+                                <div class="stat-dot" style="background:#16a34a"></div>Content
+                            </div>
+                            <div class="stat-count" id="statContent">2</div>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Channel -->
+                    <div class="side-panel">
+                        <div class="side-panel-title"><i class="fa-solid fa-satellite-dish"
+                                style="color:var(--accent);margin-right:6px"></i>Delivery Channels</div>
+                        <div class="toggle-row">
+                            <div class="toggle-label">
+                                <div class="t-title">In-App Notifications</div>
+                                <div class="t-sub">Bell icon in admin panel</div>
+                            </div>
+                            <label class="toggle"><input type="checkbox" id="prefChannelInApp" checked><span
+                                    class="toggle-slider"></span></label>
+                        </div>
+                        <div class="toggle-row">
+                            <div class="toggle-label">
+                                <div class="t-title">Email Digest</div>
+                                <div class="t-sub">Daily summary email</div>
+                            </div>
+                            <label class="toggle"><input type="checkbox" id="prefChannelEmail" checked><span
+                                    class="toggle-slider"></span></label>
+                        </div>
+                        <div class="toggle-row">
+                            <div class="toggle-label">
+                                <div class="t-title">Browser Push</div>
+                                <div class="t-sub">Desktop notifications</div>
+                            </div>
+                            <label class="toggle"><input type="checkbox" id="prefChannelPush"><span class="toggle-slider"></span></label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <span>MotoMaster</span> Admin Panel &mdash; Notifications &copy; 2025
+            <span>v2.1.0</span>
+        </footer>
+
+    </main>
+
+    <!-- ── SEND NOTIFICATION MODAL ── -->
+    <div class="modal-overlay" id="sendModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-paper-plane"
+                        style="color:var(--accent);margin-right:8px;font-size:0.9rem"></i>Send Notification</h3>
+                <button class="modal-close" onclick="closeSendModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Recipient</label>
+                    <select class="form-control" id="sendRecipient">
+                        <option value="All Admins" selected>All Admins</option>
+                        <option value="All Teachers">All Teachers</option>
+                        <option value="All Students">All Students</option>
+                        <option value="All Users">All Users</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-control" id="sendCategory">
+                        <option value="Announcement" selected>Announcement</option>
+                        <option value="Alert">Alert</option>
+                        <option value="Reminder">Reminder</option>
+                        <option value="System">System</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <input type="text" class="form-control" id="sendTitle" placeholder="Notification title…">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Message</label>
+                    <textarea class="form-control" id="sendMessage" rows="3" style="resize:vertical"
+                        placeholder="Write your notification message here…"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Delivery Channel</label>
+                    <select class="form-control" id="sendChannel">
+                        <option value="In-App Only" selected>In-App Only</option>
+                        <option value="Email Only">Email Only</option>
+                        <option value="In-App + Email">In-App + Email</option>
+                    </select>
+                    <span class="form-hint">Push notifications require browser permission from the recipient.</span>
+                </div>
+            </div>
+            <div class="modal-footer-row">
+                <button class="btn-cancel" onclick="closeSendModal()">Cancel</button>
+                <button class="btn-save" onclick="sendNotif()"><i class="fa-solid fa-paper-plane"></i> Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── TOAST NOTIFICATION ── -->
+    <div id="notifToast" style="display:none;position:fixed;top:24px;right:24px;z-index:9999;background:#1e293b;color:#fff;padding:12px 20px;border-radius:10px;box-shadow:0 10px 25px rgba(0,0,0,0.25);font-size:0.8rem;font-weight:700;align-items:center;gap:10px;">
+        <i id="notifToastIcon" class="fa-solid fa-circle-check" style="color:#22c55e;font-size:1.1rem"></i>
+        <span id="notifToastMsg"></span>
+    </div>
+
+    <script src="teacher-profile.js"></script>
+    <script>
+        let allNotifs = [];
+        let currentFilter = 'all';
+
+        function showNotifToast(msg, isError = false) {
+            const toast = document.getElementById('notifToast');
+            const toastMsg = document.getElementById('notifToastMsg');
+            const toastIcon = document.getElementById('notifToastIcon');
+            if (!toast) return;
+            toastMsg.textContent = msg;
+            toastIcon.className = isError ? 'fa-solid fa-circle-exclamation' : 'fa-solid fa-circle-check';
+            toastIcon.style.color = isError ? '#ef4444' : '#22c55e';
+            toast.style.display = 'flex';
+            clearTimeout(window._ntTimer);
+            window._ntTimer = setTimeout(() => { toast.style.display = 'none'; }, 3200);
+        }
+
+        function escapeHtml(str) {
+            return String(str || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[m]);
+        }
+
+        function loadNotificationsData() {
+            fetch('admin_data_api.php?action=get_notifications_data')
+                .then(r => r.json())
+                .then(res => {
+                    if (!res.success) {
+                        console.error('Error fetching notifications:', res.message);
+                        return;
+                    }
+
+                    // 1. Admin Info
+                    if (res.admin) {
+                        const topName = document.getElementById('adminTopName');
+                        if (topName) topName.textContent = res.admin.name || 'Administrator';
+                        const topRole = document.getElementById('adminTopRole');
+                        if (topRole) topRole.textContent = res.admin.role || 'Super Admin';
+                    }
+
+                    // 2. KPIs
+                    if (res.kpis) {
+                        if (document.getElementById('kpiUnread')) document.getElementById('kpiUnread').textContent = res.kpis.unread;
+                        if (document.getElementById('unreadBadge')) document.getElementById('unreadBadge').textContent = res.kpis.unread;
+                        if (document.getElementById('kpiCritical')) document.getElementById('kpiCritical').textContent = res.kpis.critical_unread + ' critical';
+                        if (document.getElementById('kpiTotalToday')) document.getElementById('kpiTotalToday').textContent = res.kpis.total_today;
+                        if (document.getElementById('kpiSentMonth')) document.getElementById('kpiSentMonth').textContent = res.kpis.sent_this_month;
+                        if (document.getElementById('kpiSystemAlerts')) document.getElementById('kpiSystemAlerts').textContent = res.kpis.system_alerts;
+                        if (document.getElementById('kpiHighPriority')) document.getElementById('kpiHighPriority').textContent = res.kpis.high_priority + ' high priority';
+                    }
+
+                    // 3. Category Counts & Filter Tabs
+                    if (res.categories) {
+                        if (document.getElementById('countAll')) document.getElementById('countAll').textContent = res.categories.all;
+                        if (document.getElementById('countUnread')) document.getElementById('countUnread').textContent = res.categories.unread;
+                        if (document.getElementById('countAlert')) document.getElementById('countAlert').textContent = res.categories.alert;
+                        if (document.getElementById('countStudent')) document.getElementById('countStudent').textContent = res.categories.student;
+                        if (document.getElementById('countSystem')) document.getElementById('countSystem').textContent = res.categories.system;
+                        if (document.getElementById('countReport')) document.getElementById('countReport').textContent = res.categories.report;
+                        if (document.getElementById('countContent')) document.getElementById('countContent').textContent = res.categories.content;
+
+                        if (document.getElementById('statAlerts')) document.getElementById('statAlerts').textContent = res.categories.alert;
+                        if (document.getElementById('statStudents')) document.getElementById('statStudents').textContent = res.categories.student;
+                        if (document.getElementById('statSystem')) document.getElementById('statSystem').textContent = res.categories.system;
+                        if (document.getElementById('statReports')) document.getElementById('statReports').textContent = res.categories.report;
+                        if (document.getElementById('statContent')) document.getElementById('statContent').textContent = res.categories.content;
+                    }
+
+                    // 4. Preferences
+                    if (res.preferences) {
+                        const p = res.preferences;
+                        if (document.getElementById('prefFailedLogin')) document.getElementById('prefFailedLogin').checked = Boolean(p.failed_login_alerts);
+                        if (document.getElementById('prefStudentProgress')) document.getElementById('prefStudentProgress').checked = Boolean(p.student_progress_alerts);
+                        if (document.getElementById('prefAssessmentFailures')) document.getElementById('prefAssessmentFailures').checked = Boolean(p.assessment_failures);
+                        if (document.getElementById('prefNewRegistrations')) document.getElementById('prefNewRegistrations').checked = Boolean(p.new_registrations);
+                        if (document.getElementById('prefBackupStatus')) document.getElementById('prefBackupStatus').checked = Boolean(p.backup_status);
+                        if (document.getElementById('prefReportReady')) document.getElementById('prefReportReady').checked = Boolean(p.report_ready);
+                        if (document.getElementById('prefModulePublished')) document.getElementById('prefModulePublished').checked = Boolean(p.module_published);
+
+                        if (document.getElementById('prefChannelInApp')) document.getElementById('prefChannelInApp').checked = Boolean(p.channel_in_app);
+                        if (document.getElementById('prefChannelEmail')) document.getElementById('prefChannelEmail').checked = Boolean(p.channel_email);
+                        if (document.getElementById('prefChannelPush')) document.getElementById('prefChannelPush').checked = Boolean(p.channel_push);
+                    }
+
+                    // 5. Notifications List
+                    allNotifs = res.notifications || [];
+                    renderNotifications(currentFilter);
+                })
+                .catch(err => console.error('Failed to load notifications from database:', err));
+        }
+
+        function renderNotifications(filter = 'all') {
+            const container = document.getElementById('notifList');
+            const emptyState = document.getElementById('emptyState');
+            if (!container) return;
+
+            let filtered = allNotifs;
+            if (filter === 'unread') {
+                filtered = allNotifs.filter(n => Number(n.is_read) === 0);
+            } else if (filter !== 'all') {
+                filtered = allNotifs.filter(n => n.type === filter);
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                if (emptyState) emptyState.style.display = 'block';
+                return;
+            }
+
+            if (emptyState) emptyState.style.display = 'none';
+            container.innerHTML = '';
+
+            filtered.forEach(item => {
+                const isUnread = Number(item.is_read) === 0;
+                const div = document.createElement('div');
+                div.className = `notif-item ${isUnread ? 'unread' : ''}`;
+                div.dataset.id = item.notification_id;
+                div.dataset.type = item.type;
+                div.onclick = function() { markRead(item.notification_id, div); };
+
+                div.innerHTML = `
+                    <div class="notif-icon" style="background:${item.icon_bg};color:${item.icon_color}">
+                        <i class="${item.icon}"></i>
+                    </div>
+                    <div class="notif-body">
+                        <div class="notif-title">${escapeHtml(item.title)}</div>
+                        <div class="notif-desc">${escapeHtml(item.message)}</div>
+                        <div class="notif-meta">
+                            <span class="notif-time"><i class="fa-regular fa-clock" style="margin-right:3px"></i>${escapeHtml(item.formatted_time)}</span>
+                            <span class="badge ${item.badge_class}">${escapeHtml(item.badge_text)}</span>
+                        </div>
+                    </div>
+                    <div class="notif-actions">
+                        ${isUnread ? '<div class="unread-dot"></div>' : ''}
+                        <button class="notif-act-btn del" title="Dismiss" onclick="dismissNotif(event, ${item.notification_id}, this)"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function markRead(notifId, itemEl) {
+            if (!itemEl || !itemEl.classList.contains('unread')) return;
+
+            fetch('admin_data_api.php?action=mark_notification_read', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ notification_id: notifId })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    itemEl.classList.remove('unread');
+                    const dot = itemEl.querySelector('.unread-dot');
+                    if (dot) dot.remove();
+
+                    // Update in-memory item
+                    const found = allNotifs.find(n => n.notification_id === notifId);
+                    if (found) found.is_read = 1;
+
+                    updateUnreadCount(-1);
+                }
+            })
+            .catch(err => console.error('Error marking as read:', err));
+        }
+
+        function markAllRead() {
+            fetch('admin_data_api.php?action=mark_notification_read', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ all: 1 })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    allNotifs.forEach(n => n.is_read = 1);
+                    document.querySelectorAll('.notif-item.unread').forEach(item => {
+                        item.classList.remove('unread');
+                        const dot = item.querySelector('.unread-dot');
+                        if (dot) dot.remove();
+                    });
+                    if (document.getElementById('kpiUnread')) document.getElementById('kpiUnread').textContent = '0';
+                    if (document.getElementById('unreadBadge')) document.getElementById('unreadBadge').textContent = '0';
+                    if (document.getElementById('countUnread')) document.getElementById('countUnread').textContent = '0';
+                    showNotifToast('All notifications marked as read in database.');
+                }
+            })
+            .catch(err => console.error('Error marking all as read:', err));
+        }
+
+        function updateUnreadCount(delta) {
+            const kpi = document.getElementById('kpiUnread');
+            const badge = document.getElementById('unreadBadge');
+            const countTab = document.getElementById('countUnread');
+            let count = (parseInt(kpi ? kpi.textContent : '0') || 0) + delta;
+            if (count < 0) count = 0;
+            if (kpi) kpi.textContent = count;
+            if (badge) badge.textContent = count;
+            if (countTab) countTab.textContent = count;
+        }
+
+        function dismissNotif(e, notifId, btn) {
+            e.stopPropagation();
+            const item = btn ? btn.closest('.notif-item') : document.querySelector(`.notif-item[data-id="${notifId}"]`);
+            if (item && item.classList.contains('unread')) {
+                updateUnreadCount(-1);
+            }
+
+            fetch('admin_data_api.php?action=dismiss_notification', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ notification_id: notifId })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    if (item) {
+                        item.style.transition = 'opacity 0.2s, max-height 0.3s';
+                        item.style.opacity = '0';
+                        setTimeout(() => {
+                            item.remove();
+                            allNotifs = allNotifs.filter(n => n.notification_id !== notifId);
+                            checkEmpty();
+                            refreshCategoryCounts();
+                        }, 250);
+                    }
+                    showNotifToast('Notification dismissed from database.');
+                }
+            })
+            .catch(err => console.error('Error dismissing notification:', err));
+        }
+
+        function clearAll() {
+            if (!confirm('Are you sure you want to clear all notifications from the database?')) return;
+
+            fetch('admin_data_api.php?action=dismiss_notification', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ clear_all: 1 })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    allNotifs = [];
+                    const container = document.getElementById('notifList');
+                    if (container) container.innerHTML = '';
+                    if (document.getElementById('kpiUnread')) document.getElementById('kpiUnread').textContent = '0';
+                    if (document.getElementById('unreadBadge')) document.getElementById('unreadBadge').textContent = '0';
+                    checkEmpty();
+                    refreshCategoryCounts();
+                    showNotifToast('All notifications cleared from motomasterdb.');
+                }
+            })
+            .catch(err => console.error('Error clearing notifications:', err));
+        }
+
+        function refreshCategoryCounts() {
+            const counts = { all: allNotifs.length, unread: 0, alert: 0, student: 0, system: 0, report: 0, content: 0 };
+            allNotifs.forEach(n => {
+                if (Number(n.is_read) === 0) counts.unread++;
+                if (counts[n.type] !== undefined) counts[n.type]++;
+            });
+            if (document.getElementById('countAll')) document.getElementById('countAll').textContent = counts.all;
+            if (document.getElementById('countUnread')) document.getElementById('countUnread').textContent = counts.unread;
+            if (document.getElementById('countAlert')) document.getElementById('countAlert').textContent = counts.alert;
+            if (document.getElementById('countStudent')) document.getElementById('countStudent').textContent = counts.student;
+            if (document.getElementById('countSystem')) document.getElementById('countSystem').textContent = counts.system;
+            if (document.getElementById('countReport')) document.getElementById('countReport').textContent = counts.report;
+            if (document.getElementById('countContent')) document.getElementById('countContent').textContent = counts.content;
+
+            if (document.getElementById('statAlerts')) document.getElementById('statAlerts').textContent = counts.alert;
+            if (document.getElementById('statStudents')) document.getElementById('statStudents').textContent = counts.student;
+            if (document.getElementById('statSystem')) document.getElementById('statSystem').textContent = counts.system;
+            if (document.getElementById('statReports')) document.getElementById('statReports').textContent = counts.report;
+            if (document.getElementById('statContent')) document.getElementById('statContent').textContent = counts.content;
+        }
+
+        function checkEmpty() {
+            const remaining = document.querySelectorAll('.notif-item');
+            const emptyEl = document.getElementById('emptyState');
+            if (emptyEl) emptyEl.style.display = remaining.length === 0 ? 'block' : 'none';
+        }
+
+        function filterNotifs(type, tab) {
+            currentFilter = type;
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            if (tab) tab.classList.add('active');
+            renderNotifications(type);
+        }
+
+        function openSendModal() { document.getElementById('sendModal').classList.add('open'); }
+        function closeSendModal() { document.getElementById('sendModal').classList.remove('open'); }
+
+        function sendNotif() {
+            const recipient = document.getElementById('sendRecipient').value;
+            const category = document.getElementById('sendCategory').value;
+            const title = document.getElementById('sendTitle').value.trim();
+            const message = document.getElementById('sendMessage').value.trim();
+            const channel = document.getElementById('sendChannel').value;
+
+            if (!title || !message) {
+                alert('Please enter both a title and message.');
+                return;
+            }
+
+            fetch('admin_data_api.php?action=send_notification', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    recipient: recipient,
+                    category: category,
+                    title: title,
+                    message: message,
+                    channel: channel
+                })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    closeSendModal();
+                    document.getElementById('sendTitle').value = '';
+                    document.getElementById('sendMessage').value = '';
+                    showNotifToast(res.message || 'Notification broadcasted and saved to database.');
+                    loadNotificationsData();
+                } else {
+                    alert(res.message || 'Failed to send notification.');
+                }
+            })
+            .catch(err => {
+                console.error('Error sending notification:', err);
+                alert('Network error sending notification.');
+            });
+        }
+
+        function savePref() {
+            const prefs = {
+                failed_login_alerts: document.getElementById('prefFailedLogin').checked,
+                student_progress_alerts: document.getElementById('prefStudentProgress').checked,
+                assessment_failures: document.getElementById('prefAssessmentFailures').checked,
+                new_registrations: document.getElementById('prefNewRegistrations').checked,
+                backup_status: document.getElementById('prefBackupStatus').checked,
+                report_ready: document.getElementById('prefReportReady').checked,
+                module_published: document.getElementById('prefModulePublished').checked,
+                channel_in_app: document.getElementById('prefChannelInApp').checked,
+                channel_email: document.getElementById('prefChannelEmail').checked,
+                channel_push: document.getElementById('prefChannelPush').checked
+            };
+
+            fetch('admin_data_api.php?action=save_notification_preferences', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ preferences: prefs })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    showNotifToast(res.message || 'Notification preferences saved to motomasterdb.');
+                } else {
+                    alert(res.message || 'Error saving preferences.');
+                }
+            })
+            .catch(err => {
+                console.error('Error saving preferences:', err);
+                alert('Network error saving preferences.');
+            });
+        }
+
+        document.getElementById('sendModal').addEventListener('click', function (e) {
+            if (e.target === this) closeSendModal();
+        });
+
+        function applyThemeToDOM(theme) {
+            let effective = theme;
+            if (theme === 'system') {
+                effective = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            if (effective === 'dark') {
+                document.documentElement.classList.add('dark-theme');
+                if (document.body) document.body.classList.add('dark-theme');
+            } else {
+                document.documentElement.classList.remove('dark-theme');
+                if (document.body) document.body.classList.remove('dark-theme');
+            }
+        }
+
+        (function () {
+            const saved = localStorage.getItem('motomasterAdminTheme') || localStorage.getItem('motomasterTheme') || 'light';
+            applyThemeToDOM(saved);
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'motomasterAdminTheme' || e.key === 'motomasterTheme') {
+                    applyThemeToDOM(e.newValue || 'light');
+                }
+            });
+            if (window.matchMedia) {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                    const current = localStorage.getItem('motomasterAdminTheme') || localStorage.getItem('motomasterTheme') || 'light';
+                    if (current === 'system') applyThemeToDOM('system');
+                });
+            }
+            window.addEventListener('DOMContentLoaded', () => {
+                loadNotificationsData();
+            });
+        })();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,2875 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotoMaster – Teacher Dashboard</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-color: #f3f4f6;
+            --border-color: #e5e7eb;
+            --text-primary: #1a1a2e;
+            --text-secondary: #6b7280;
+            --accent: #2563eb;
+            --accent-dark: #1d4ed8;
+            --accent-light: #eff6ff;
+            --green: #16a34a;
+            --red: #dc2626;
+            --orange: #d97706;
+            --purple: #9333ea;
+            --sidebar-w: 240px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: #fff;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .logo-container {
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-container img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .logo-sub {
+            font-size: 0.62rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+        }
+
+        .nav-section-label {
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 14px 18px 4px;
+        }
+
+        .nav-menu {
+            list-style: none;
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+
+        .nav-menu::-webkit-scrollbar {
+            width: 0;
+        }
+
+        .nav-item {
+            padding: 9px 16px;
+            margin: 2px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            font-weight: 700;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .nav-item i {
+            width: 16px;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .nav-item:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .nav-item.active {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .sidebar-bottom {
+            padding: 12px 0 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* ── TEACHER PROFILE CARD IN SIDEBAR ── */
+        .teacher-card {
+            margin: 12px 12px 4px;
+            padding: 12px;
+            background: var(--accent-light);
+            border-radius: 10px;
+            border: 1px solid #bfdbfe;
+        }
+
+        .teacher-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .teacher-name {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .teacher-role {
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-top: 2px;
+        }
+
+        .teacher-dept {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        /* ── MAIN ── */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            background: var(--bg-color);
+        }
+
+        /* ── TOPBAR ── */
+        .topbar {
+            background: #fff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 28px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .topbar-left h1 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .topbar-left p {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-color);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            padding: 6px 12px;
+        }
+
+        .search-bar i {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.78rem;
+            color: var(--text-primary);
+            width: 160px;
+        }
+
+        .notif-btn {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--bg-color);
+            border: 1.5px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--red);
+            color: #fff;
+            font-size: 0.58rem;
+            font-weight: 800;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-pill {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 5px 12px 5px 5px;
+            border-radius: 30px;
+            border: 1.5px solid var(--border-color);
+            background: #fff;
+            cursor: pointer;
+        }
+
+        .profile-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 12px;
+        }
+
+        .profile-name {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .profile-role {
+            font-size: 0.62rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* ── LAYOUT ── */
+        .page-container {
+            padding: 22px 28px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ── WELCOME BANNER ── */
+        .welcome-banner {
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 60%, #3b82f6 100%);
+            border-radius: 14px;
+            padding: 22px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
+        }
+
+        .wb-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .wb-sub {
+            font-size: 0.78rem;
+            opacity: 0.85;
+            font-weight: 600;
+        }
+
+        .wb-stats {
+            display: flex;
+            gap: 24px;
+        }
+
+        .wb-stat {
+            text-align: center;
+        }
+
+        .wb-stat-val {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .wb-stat-label {
+            font-size: 0.62rem;
+            font-weight: 800;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        /* ── KPI ROW ── */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .kpi-card {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 16px 18px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .kpi-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .kpi-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .kpi-title {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .kpi-value {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .kpi-foot {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        /* ── MAIN GRID ── */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+            align-items: start;
+        }
+
+        /* ── PANEL ── */
+        .panel {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+        }
+
+        .panel-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .panel-title {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .panel-subtitle {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        /* ── BUTTON ── */
+        .btn-primary {
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 800;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dark);
+        }
+
+        .btn-outline {
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ── MODULE TABLE ── */
+        .mod-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .mod-table thead th {
+            padding: 8px 14px;
+            text-align: left;
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: var(--bg-color);
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        .mod-table tbody tr {
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.15s;
+            cursor: pointer;
+        }
+
+        .mod-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .mod-table tbody tr:hover {
+            background: #f8f9ff;
+        }
+
+        .mod-table td {
+            padding: 10px 14px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            vertical-align: middle;
+        }
+
+        .mod-table td.muted {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+
+        .mod-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mod-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .mod-name {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .mod-sub {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        /* ── PROGRESS BAR ── */
+        .prog-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .prog-track {
+            flex: 1;
+            height: 6px;
+            background: #f3f4f6;
+            border-radius: 10px;
+            overflow: hidden;
+            min-width: 60px;
+        }
+
+        .prog-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: var(--accent);
+        }
+
+        .prog-pct {
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+
+        /* ── BADGE ── */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 9px;
+            border-radius: 20px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .badge-green {
+            background: #f0fdf4;
+            color: var(--green);
+            border: 1px solid #bbf7d0;
+        }
+
+        .badge-orange {
+            background: #fff7ed;
+            color: var(--orange);
+            border: 1px solid #fed7aa;
+        }
+
+        .badge-blue {
+            background: var(--accent-light);
+            color: var(--accent);
+            border: 1px solid #bfdbfe;
+        }
+
+        .badge-gray {
+            background: #f3f4f6;
+            color: #6b7280;
+            border: 1px solid #e5e7eb;
+        }
+
+        .badge-red {
+            background: #fef2f2;
+            color: var(--red);
+            border: 1px solid #fecaca;
+        }
+
+        .badge-purple {
+            background: #fdf4ff;
+            color: var(--purple);
+            border: 1px solid #e9d5ff;
+        }
+
+        /* ── STUDENT LIST ITEMS ── */
+        .stud-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stud-item:last-child {
+            border-bottom: none;
+        }
+
+        .stud-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .stud-name {
+            font-size: 0.76rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .stud-sub {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        .stud-prog {
+            margin-left: auto;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* ── TASK LIST ── */
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-check {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            border: 2px solid var(--border-color);
+            flex-shrink: 0;
+            margin-top: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            color: transparent;
+            transition: all 0.15s;
+        }
+
+        .task-check.done {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .task-body {
+            flex: 1;
+        }
+
+        .task-title {
+            font-size: 0.76rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .task-title.done-text {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+        }
+
+        .task-due {
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        /* ── ACTIVITY FEED ── */
+        .act-item {
+            display: flex;
+            gap: 10px;
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .act-item:last-child {
+            border-bottom: none;
+        }
+
+        .act-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+
+        .act-text {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .act-time {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        /* ── CHART WRAPPER ── */
+        .chart-wrap {
+            padding: 16px 18px;
+        }
+
+        /* ── CALENDAR-STYLE SCHEDULE ── */
+        .schedule-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .schedule-item:last-child {
+            border-bottom: none;
+        }
+
+        .schedule-day {
+            width: 36px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .sch-day-num {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .sch-day-name {
+            font-size: 0.58rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .schedule-body {
+            flex: 1;
+        }
+
+        .sch-title {
+            font-size: 0.76rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .sch-meta {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .sch-bar {
+            width: 3px;
+            border-radius: 2px;
+            align-self: stretch;
+            flex-shrink: 0;
+        }
+
+        /* ── NEW MODULE MODAL ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: flex-start;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 30px 16px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .nm-modal {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 720px;
+            overflow: hidden;
+            animation: slideUp 0.22s ease;
+            margin: auto;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(28px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .nm-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            color: #fff;
+        }
+
+        .nm-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nm-header-icon {
+            width: 38px;
+            height: 38px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .nm-header h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .nm-header p {
+            font-size: 0.72rem;
+            opacity: 0.8;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .nm-close {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .nm-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .nm-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-color);
+        }
+
+        .nm-tab {
+            padding: 10px 20px;
+            font-size: 0.74rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nm-tab:hover {
+            color: var(--accent);
+        }
+
+        .nm-tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+            background: #fff;
+        }
+
+        .nm-body {
+            padding: 22px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .nm-body.hidden {
+            display: none;
+        }
+
+        .nm-section-title {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: -6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nm-section-title i {
+            color: var(--accent);
+        }
+
+        .nm-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .nm-grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 14px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-label {
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .form-label .req {
+            color: var(--red);
+            margin-left: 2px;
+        }
+
+        .form-control {
+            padding: 8px 12px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.82rem;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.2s;
+            background: #fff;
+            font-weight: 700;
+            width: 100%;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+        }
+
+        .form-control-textarea {
+            padding: 8px 12px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.82rem;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.2s;
+            background: #fff;
+            font-weight: 600;
+            width: 100%;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .form-control-textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .form-hint {
+            font-size: 0.62rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .char-count {
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-align: right;
+            margin-top: 2px;
+        }
+
+        .tag-input-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 7px 10px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            background: #fff;
+            cursor: text;
+            min-height: 38px;
+            align-items: center;
+        }
+
+        .tag-input-wrap:focus-within {
+            border-color: var(--accent);
+        }
+
+        .tag-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--accent-light);
+            color: var(--accent);
+            border: 1px solid #bfdbfe;
+            border-radius: 20px;
+            padding: 2px 10px;
+            font-size: 0.68rem;
+            font-weight: 800;
+        }
+
+        .tag-pill button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--accent);
+            font-size: 10px;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .tag-input {
+            border: none;
+            outline: none;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            min-width: 80px;
+            flex: 1;
+        }
+
+        .upload-zone {
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .upload-zone i {
+            font-size: 1.5rem;
+            color: #d1d5db;
+            margin-bottom: 6px;
+        }
+
+        .upload-zone p {
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .upload-zone span {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: #9ca3af;
+        }
+
+        .resource-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--bg-color);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .resource-row i {
+            color: var(--accent);
+            font-size: 13px;
+        }
+
+        .resource-row span {
+            flex: 1;
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .resource-row .rm {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--red);
+            font-size: 11px;
+            padding: 2px 4px;
+        }
+
+        .objective-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .objective-row input {
+            flex: 1;
+        }
+
+        .objective-row .rm-obj {
+            width: 30px;
+            height: 32px;
+            border-radius: 6px;
+            border: 1.5px solid #fecaca;
+            background: #fef2f2;
+            color: var(--red);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            flex-shrink: 0;
+        }
+
+        .add-row-btn {
+            background: none;
+            border: 1.5px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 7px;
+            width: 100%;
+            color: var(--text-secondary);
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.15s;
+        }
+
+        .add-row-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .nm-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-color);
+        }
+
+        .nm-footer-left {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .nm-footer-right {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-save-draft {
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            transition: all 0.15s;
+        }
+
+        .btn-save-draft:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-publish {
+            background: var(--green);
+            border: none;
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+
+        .btn-publish:hover {
+            background: #15803d;
+        }
+
+        .btn-save-nm {
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+
+        .btn-save-nm:hover {
+            background: var(--accent-dark);
+        }
+
+
+
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #e5e7eb;
+        }
+
+        .step-dot.active {
+            background: var(--accent);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 28px;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            background: #fff;
+            margin-top: auto;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        footer span {
+            color: var(--accent);
+            font-weight: 800;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar">
+        <div class="logo-container">
+            <img src="images/finalogo.png" alt="MotoMaster" />
+            <div>
+                <span class="logo-text">MotoMaster</span>
+                <span class="logo-sub">Teacher Portal</span>
+            </div>
+        </div>
+
+        <!-- Teacher card -->
+        <div class="teacher-card">
+            <div class="teacher-avatar"><i class="fa-solid fa-chalkboard-user"></i></div>
+            <div class="teacher-name">R. Garcia</div>
+            <div class="teacher-role">Teacher</div>
+            <div class="teacher-dept">Automotive Technology Dept.</div>
+        </div>
+
+        <ul class="nav-menu">
+            <li class="nav-section-label">Overview</li>
+            <li class="nav-item active"><i class="fa-solid fa-house"></i> Dashboard</li>
+
+            <li class="nav-section-label">My Classes</li>
+            <li class="nav-item" onclick="window.location.href='teachermodules.html'"><i
+                    class="fa-solid fa-book-open"></i> My Modules</li>
+            <li class="nav-item" onclick="window.location.href='teacherstudents.html'"><i class="fa-solid fa-users"></i>
+                My Students</li>
+            <li class="nav-item" onclick="window.location.href='teacherassess.html'"><i
+                    class="fa-solid fa-clipboard-check"></i> Assessments</li>
+            <li class="nav-item" onclick="window.location.href='teacherpractice.html'"><i
+                    class="fa-solid fa-gamepad"></i> Practice Sessions</li>
+
+            <li class="nav-section-label">Insights</li>
+            <li class="nav-item" onclick="window.location.href='teacheranalytics.html'"><i
+                    class="fa-solid fa-chart-simple"></i> Analytics</li>
+            <li class="nav-item" onclick="window.location.href='teacherreports.html'"><i
+                    class="fa-solid fa-file-invoice"></i> Reports</li>
+
+            <li class="nav-section-label">Account</li>
+            <li class="nav-item" onclick="window.location.href='messages.html'"><i class="fa-solid fa-envelope"></i>
+                Messages</li>
+            <li class="nav-item" onclick="window.location.href='teachernotif.html'"><i class="fa-regular fa-bell"></i>
+                Notifications <span
+                    style="margin-left:auto;background:#dc2626;color:#fff;font-size:0.55rem;font-weight:800;border-radius:10px;padding:1px 6px">3</span>
+            </li>
+            <li class="nav-item" onclick="window.location.href='teachersettings.html'"><i class="fa-solid fa-gear"></i>
+                Settings</li>
+        </ul>
+
+        <div class="sidebar-bottom">
+            <a class="nav-item" href="index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+        </div>
+    </aside>
+
+    <!-- ── MAIN ── -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <h1>Welcome back, R. Garcia!</h1>
+                <p>Wednesday, May 28, 2025 &mdash; Here's what's happening in your classes today.</p>
+            </div>
+            <div class="topbar-right">
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search students, modules…">
+                </div>
+                <div class="notif-btn">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notif-badge">3</span>
+                </div>
+                <div class="profile-pill">
+                    <div class="profile-avatar"><i class="fa-solid fa-chalkboard-user"></i></div>
+                    <div>
+                        <div class="profile-name">R. Garcia</div>
+                        <div class="profile-role">Teacher</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-container">
+
+            <!-- ── WELCOME BANNER ── -->
+            <div class="welcome-banner">
+                <div>
+                    <div class="wb-title">Good morning, Teacher Garcia!</div>
+                    <div class="wb-sub">You have <strong>3 pending assessments</strong> to review and <strong>2
+                            students</strong> needing attention today.</div>
+                </div>
+                <div class="wb-stats">
+                    <div class="wb-stat">
+                        <div class="wb-stat-val">4</div>
+                        <div class="wb-stat-label">Active Modules</div>
+                    </div>
+                    <div class="wb-stat">
+                        <div class="wb-stat-val">87</div>
+                        <div class="wb-stat-label">My Students</div>
+                    </div>
+                    <div class="wb-stat">
+                        <div class="wb-stat-val">78%</div>
+                        <div class="wb-stat-label">Avg. Progress</div>
+                    </div>
+                    <div class="wb-stat">
+                        <div class="wb-stat-val">3</div>
+                        <div class="wb-stat-label">To Review</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── KPI ROW ── -->
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#eff6ff;color:#2563eb"><i
+                                class="fa-solid fa-book-open"></i></div>
+                        <div class="kpi-title">Active Modules</div>
+                    </div>
+                    <div class="kpi-value">4</div>
+                    <div class="kpi-foot"><span>Published</span><span style="color:var(--accent)">1 draft</span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#f0fdf4;color:#16a34a"><i class="fa-solid fa-users"></i>
+                        </div>
+                        <div class="kpi-title">My Students</div>
+                    </div>
+                    <div class="kpi-value">87</div>
+                    <div class="kpi-foot"><span>Enrolled</span><span style="color:var(--green)">+5 this month</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#fff7ed;color:#d97706"><i
+                                class="fa-solid fa-clipboard-check"></i></div>
+                        <div class="kpi-title">Pending Reviews</div>
+                    </div>
+                    <div class="kpi-value">3</div>
+                    <div class="kpi-foot"><span>Assessments</span><span style="color:var(--orange)">Due today</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#fdf4ff;color:#9333ea"><i
+                                class="fa-solid fa-chart-line"></i></div>
+                        <div class="kpi-title">Avg. Score</div>
+                    </div>
+                    <div class="kpi-value">74%</div>
+                    <div class="kpi-foot"><span>All assessments</span><span style="color:var(--purple)">+3% vs last
+                            month</span></div>
+                </div>
+            </div>
+
+            <!-- ── MAIN GRID ── -->
+            <div class="main-grid">
+
+                <!-- ── LEFT COLUMN ── -->
+                <div style="display:flex;flex-direction:column;gap:20px">
+
+                    <!-- My Modules -->
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div>
+                                <div class="panel-title">My Modules</div>
+                                <div class="panel-subtitle">Student completion across all active modules</div>
+                            </div>
+                            <button class="btn-primary" onclick="openNewModuleModal()"><i class="fa-solid fa-plus"></i>
+                                New Module</button>
+                        </div>
+                        <table class="mod-table">
+                            <thead>
+                                <tr>
+                                    <th>Module</th>
+                                    <th>Students</th>
+                                    <th>Avg. Completion</th>
+                                    <th>Avg. Score</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="mod-cell">
+                                            <div class="mod-icon" style="background:#eff6ff;color:#2563eb"><i
+                                                    class="fa-solid fa-engine"></i></div>
+                                            <div>
+                                                <div class="mod-name">Module 1: Introduction to Motorcycles</div>
+                                                <div class="mod-sub">Updated May 20, 2025</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="muted">87</td>
+                                    <td>
+                                        <div class="prog-wrap">
+                                            <div class="prog-track">
+                                                <div class="prog-fill" style="width:91%;background:#16a34a"></div>
+                                            </div><span class="prog-pct">91%</span>
+                                        </div>
+                                    </td>
+                                    <td class="muted">82%</td>
+                                    <td><span class="badge badge-green">Published</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="mod-cell">
+                                            <div class="mod-icon" style="background:#f0fdf4;color:#16a34a"><i
+                                                    class="fa-solid fa-gears"></i></div>
+                                            <div>
+                                                <div class="mod-name">Module 2: Engine Systems</div>
+                                                <div class="mod-sub">Updated May 22, 2025</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="muted">87</td>
+                                    <td>
+                                        <div class="prog-wrap">
+                                            <div class="prog-track">
+                                                <div class="prog-fill" style="width:76%"></div>
+                                            </div><span class="prog-pct">76%</span>
+                                        </div>
+                                    </td>
+                                    <td class="muted">74%</td>
+                                    <td><span class="badge badge-green">Published</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="mod-cell">
+                                            <div class="mod-icon" style="background:#fff7ed;color:#d97706"><i
+                                                    class="fa-solid fa-bolt"></i></div>
+                                            <div>
+                                                <div class="mod-name">Module 3: Electrical Systems</div>
+                                                <div class="mod-sub">Published May 27, 2025</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="muted">87</td>
+                                    <td>
+                                        <div class="prog-wrap">
+                                            <div class="prog-track">
+                                                <div class="prog-fill" style="width:48%;background:#d97706"></div>
+                                            </div><span class="prog-pct">48%</span>
+                                        </div>
+                                    </td>
+                                    <td class="muted">68%</td>
+                                    <td><span class="badge badge-green">Published</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="mod-cell">
+                                            <div class="mod-icon" style="background:#fdf4ff;color:#9333ea"><i
+                                                    class="fa-solid fa-sliders"></i></div>
+                                            <div>
+                                                <div class="mod-name">Module 4: Transmission Systems</div>
+                                                <div class="mod-sub">Updated May 24, 2025</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="muted">72</td>
+                                    <td>
+                                        <div class="prog-wrap">
+                                            <div class="prog-track">
+                                                <div class="prog-fill" style="width:61%"></div>
+                                            </div><span class="prog-pct">61%</span>
+                                        </div>
+                                    </td>
+                                    <td class="muted">70%</td>
+                                    <td><span class="badge badge-green">Published</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="mod-cell">
+                                            <div class="mod-icon" style="background:#f3f4f6;color:#6b7280"><i
+                                                    class="fa-solid fa-wrench"></i></div>
+                                            <div>
+                                                <div class="mod-name">Module 5: Brake Systems</div>
+                                                <div class="mod-sub">Last edited May 28, 2025</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="muted">—</td>
+                                    <td>
+                                        <div class="prog-wrap">
+                                            <div class="prog-track">
+                                                <div class="prog-fill" style="width:0%"></div>
+                                            </div><span class="prog-pct">—</span>
+                                        </div>
+                                    </td>
+                                    <td class="muted">—</td>
+                                    <td><span class="badge badge-gray">Draft</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pending Reviews + Student Progress chart -->
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+
+                        <!-- Pending Assessment Reviews -->
+                        <div class="panel" id="pendingReviewsPanel">
+                            <div class="panel-top">
+                                <div>
+                                    <div class="panel-title">Pending Reviews</div>
+                                    <div class="panel-subtitle">Assessments awaiting feedback</div>
+                                </div>
+                                <span class="badge badge-orange">3 due</span>
+                            </div>
+                            <div>
+                                <div class="stud-item">
+                                    <div class="stud-avatar" style="background:#eff6ff;color:#2563eb">MS</div>
+                                    <div>
+                                        <div class="stud-name">M. Santos</div>
+                                        <div class="stud-sub">Module 2 — Final Exam</div>
+                                    </div>
+                                    <span class="badge badge-orange" style="margin-left:auto">Due today</span>
+                                </div>
+                                <div class="stud-item">
+                                    <div class="stud-avatar" style="background:#fdf4ff;color:#9333ea">JC</div>
+                                    <div>
+                                        <div class="stud-name">J. Cruz</div>
+                                        <div class="stud-sub">Module 3 — Quiz 2</div>
+                                    </div>
+                                    <span class="badge badge-orange" style="margin-left:auto">Due today</span>
+                                </div>
+                                <div class="stud-item">
+                                    <div class="stud-avatar" style="background:#f0fdf4;color:#16a34a">AL</div>
+                                    <div>
+                                        <div class="stud-name">A. Lim</div>
+                                        <div class="stud-sub">Module 1 — Final Exam</div>
+                                    </div>
+                                    <span class="badge badge-blue" style="margin-left:auto">Tomorrow</span>
+                                </div>
+                                <div style="padding:10px 16px;border-top:1px solid var(--border-color)">
+                                    <button class="btn-primary"
+                                        style="width:100%;justify-content:center;font-size:0.7rem"
+                                        onclick="window.location.href='teacherassess.html'"><i
+                                            class="fa-solid fa-pen-to-square"></i> Review All</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Students Needing Attention -->
+                        <div class="panel" id="needsAttentionPanel">
+                            <div class="panel-top">
+                                <div>
+                                    <div class="panel-title">Needs Attention</div>
+                                    <div class="panel-subtitle">Students below 60% progress</div>
+                                </div>
+                                <span class="badge badge-red">2 at risk</span>
+                            </div>
+                            <div>
+                                <div class="stud-item">
+                                    <div class="stud-avatar" style="background:#fef2f2;color:#dc2626">MR</div>
+                                    <div>
+                                        <div class="stud-name">Marco Reyes</div>
+                                        <div class="stud-sub">Failed exam twice — Module 2</div>
+                                    </div>
+                                    <div class="stud-prog" style="color:#dc2626">34%</div>
+                                </div>
+                                <div class="stud-item">
+                                    <div class="stud-avatar" style="background:#fff7ed;color:#d97706">AR</div>
+                                    <div>
+                                        <div class="stud-name">Ana Reyes</div>
+                                        <div class="stud-sub">Low completion — Module 3</div>
+                                    </div>
+                                    <div class="stud-prog" style="color:#d97706">42%</div>
+                                </div>
+                                <div class="stud-item" style="padding:10px 16px;border-bottom:none">
+                                    <div style="font-size:0.7rem;font-weight:700;color:var(--text-secondary)">All other
+                                        students are on track.</div>
+                                </div>
+                                <div style="padding:10px 16px;border-top:1px solid var(--border-color)">
+                                    <button class="btn-outline"
+                                        style="width:100%;justify-content:center;font-size:0.7rem"
+                                        onclick="window.location.href='teacherstudents.html'"><i
+                                            class="fa-solid fa-users"></i> View All Students</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Class Progress Chart -->
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div>
+                                <div class="panel-title">Class Progress Over Time</div>
+                                <div class="panel-subtitle">Average module completion % — last 8 weeks</div>
+                            </div>
+                        </div>
+                        <div class="chart-wrap" style="height:200px">
+                            <canvas id="progressChart"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ── RIGHT COLUMN ── -->
+                <div style="display:flex;flex-direction:column;gap:16px">
+
+                    <!-- Today's Schedule -->
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div class="panel-title">Today's Schedule</div>
+                        </div>
+                        <div class="schedule-item">
+                            <div class="sch-bar" style="background:#2563eb"></div>
+                            <div class="schedule-day">
+                                <div class="sch-day-num">28</div>
+                                <div class="sch-day-name">Wed</div>
+                            </div>
+                            <div class="schedule-body">
+                                <div class="sch-title">Module 3 Live Q&A</div>
+                                <div class="sch-meta">08:00 – 09:00 AM &bull; 87 students</div>
+                            </div>
+                        </div>
+                        <div class="schedule-item">
+                            <div class="sch-bar" style="background:#d97706"></div>
+                            <div class="schedule-day">
+                                <div class="sch-day-num">28</div>
+                                <div class="sch-day-name">Wed</div>
+                            </div>
+                            <div class="schedule-body">
+                                <div class="sch-title">Assessment Review Deadline</div>
+                                <div class="sch-meta">11:59 PM &bull; 3 pending</div>
+                            </div>
+                        </div>
+                        <div class="schedule-item">
+                            <div class="sch-bar" style="background:#9333ea"></div>
+                            <div class="schedule-day">
+                                <div class="sch-day-num">29</div>
+                                <div class="sch-day-name">Thu</div>
+                            </div>
+                            <div class="schedule-body">
+                                <div class="sch-title">Module 4 Quiz Opens</div>
+                                <div class="sch-meta">09:00 AM &bull; Module 4</div>
+                            </div>
+                        </div>
+                        <div class="schedule-item">
+                            <div class="sch-bar" style="background:#16a34a"></div>
+                            <div class="schedule-day">
+                                <div class="sch-day-num">30</div>
+                                <div class="sch-day-name">Fri</div>
+                            </div>
+                            <div class="schedule-body">
+                                <div class="sch-title">Module 5 Draft Due</div>
+                                <div class="sch-meta">Submit for admin review</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- My Tasks -->
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div class="panel-title">My Tasks</div>
+                            <span class="badge badge-blue" id="taskCount">4 left</span>
+                        </div>
+                        <div id="taskList">
+                            <div class="task-item">
+                                <div class="task-check" onclick="toggleTask(this)"><i class="fa-solid fa-check"></i>
+                                </div>
+                                <div class="task-body">
+                                    <div class="task-title">Review M. Santos Final Exam</div>
+                                    <div class="task-due"><i class="fa-regular fa-clock"
+                                            style="margin-right:3px"></i>Due today</div>
+                                </div>
+                            </div>
+                            <div class="task-item">
+                                <div class="task-check" onclick="toggleTask(this)"><i class="fa-solid fa-check"></i>
+                                </div>
+                                <div class="task-body">
+                                    <div class="task-title">Review J. Cruz Quiz 2</div>
+                                    <div class="task-due"><i class="fa-regular fa-clock"
+                                            style="margin-right:3px"></i>Due today</div>
+                                </div>
+                            </div>
+                            <div class="task-item">
+                                <div class="task-check" onclick="toggleTask(this)"><i class="fa-solid fa-check"></i>
+                                </div>
+                                <div class="task-body">
+                                    <div class="task-title">Finish Module 5 content draft</div>
+                                    <div class="task-due"><i class="fa-regular fa-clock"
+                                            style="margin-right:3px"></i>Due May 30</div>
+                                </div>
+                            </div>
+                            <div class="task-item">
+                                <div class="task-check" onclick="toggleTask(this)"><i class="fa-solid fa-check"></i>
+                                </div>
+                                <div class="task-body">
+                                    <div class="task-title">Message Marco Reyes about exam retake</div>
+                                    <div class="task-due"><i class="fa-regular fa-clock"
+                                            style="margin-right:3px"></i>Due today</div>
+                                </div>
+                            </div>
+                            <div class="task-item">
+                                <div class="task-check done" onclick="toggleTask(this)"><i
+                                        class="fa-solid fa-check"></i></div>
+                                <div class="task-body">
+                                    <div class="task-title done-text">Publish Module 3: Electrical Systems</div>
+                                    <div class="task-due">Completed May 27</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="panel" id="recentActivityPanel">
+                        <div class="panel-top">
+                            <div class="panel-title">Recent Activity</div>
+                        </div>
+                        <div class="act-item">
+                            <div class="act-dot" style="background:#2563eb"></div>
+                            <div>
+                                <div class="act-text">M. Santos submitted Final Exam — Module 2</div>
+                                <div class="act-time">Today, 07:40 AM</div>
+                            </div>
+                        </div>
+                        <div class="act-item">
+                            <div class="act-dot" style="background:#16a34a"></div>
+                            <div>
+                                <div class="act-text">You published Module 3: Electrical Systems</div>
+                                <div class="act-time">Yesterday, 08:30 AM</div>
+                            </div>
+                        </div>
+                        <div class="act-item">
+                            <div class="act-dot" style="background:#dc2626"></div>
+                            <div>
+                                <div class="act-text">Marco Reyes failed Module 2 exam (2nd attempt)</div>
+                                <div class="act-time">Yesterday, 10:15 AM</div>
+                            </div>
+                        </div>
+                        <div class="act-item">
+                            <div class="act-dot" style="background:#9333ea"></div>
+                            <div>
+                                <div class="act-text">J. Cruz submitted Module 3 Quiz 2</div>
+                                <div class="act-time">May 26, 03:20 PM</div>
+                            </div>
+                        </div>
+                        <div class="act-item">
+                            <div class="act-dot" style="background:#d97706"></div>
+                            <div>
+                                <div class="act-text">Ana Reyes progress dropped below 60%</div>
+                                <div class="act-time">May 26, 09:00 AM</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <span>MotoMaster</span> Teacher Portal &mdash; Dashboard &copy; 2025
+            <span>v2.1.0</span>
+        </footer>
+
+    </main>
+
+    <!-- ── NEW MODULE MODAL ── -->
+    <div class="modal-overlay" id="newModuleModal">
+        <div class="nm-modal">
+            <div class="nm-header">
+                <div class="nm-header-left">
+                    <div class="nm-header-icon"><i class="fa-solid fa-book-open"></i></div>
+                    <div>
+                        <h3>Create New Module</h3>
+                        <p>Fill in all sections to publish or save as draft</p>
+                    </div>
+                </div>
+                <button class="nm-close" onclick="closeNewModuleModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- TABS -->
+            <div class="nm-tabs">
+                <div class="nm-tab active" onclick="switchNMTab(0,this)"><i class="fa-solid fa-circle-info"></i> Basic
+                    Info</div>
+                <div class="nm-tab" onclick="switchNMTab(1,this)"><i class="fa-solid fa-list-check"></i> Objectives
+                </div>
+                <div class="nm-tab" onclick="switchNMTab(2,this)"><i class="fa-solid fa-puzzle-piece"></i> Content</div>
+                <div class="nm-tab" onclick="switchNMTab(3,this)"><i class="fa-solid fa-clipboard-list"></i> Assessment
+                </div>
+                <div class="nm-tab" onclick="switchNMTab(4,this)"><i class="fa-solid fa-gear"></i> Settings</div>
+            </div>
+
+            <!-- TAB 0: BASIC INFO -->
+            <div class="nm-body" id="nmTab0">
+                <div class="nm-section-title"><i class="fa-solid fa-tag"></i> Module Identity</div>
+                <div class="nm-grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Module Title <span class="req">*</span></label>
+                        <input type="text" class="form-control" id="nmTitle" placeholder="e.g. Module 5: Brake Systems"
+                            oninput="updateCharCount(this,'nmTitleCount',80)">
+                        <div class="char-count"><span id="nmTitleCount">0</span>/80</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Module Number <span class="req">*</span></label>
+                        <input type="number" class="form-control" id="nmNumber" placeholder="e.g. 5" min="1">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Short Description <span class="req">*</span></label>
+                    <textarea class="form-control-textarea" id="nmShortDesc" rows="2"
+                        placeholder="A brief one-to-two sentence summary shown on the module card…"
+                        oninput="updateCharCount(this,'nmShortDescCount',200)"></textarea>
+                    <div class="char-count"><span id="nmShortDescCount">0</span>/200</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Full Description</label>
+                    <textarea class="form-control-textarea" id="nmFullDesc" rows="4"
+                        placeholder="Detailed overview of what this module covers, its purpose, and what students will gain…"></textarea>
+                </div>
+                <div class="nm-section-title" style="margin-top:4px"><i class="fa-solid fa-layer-group"></i>
+                    Classification</div>
+                <div class="nm-grid-3">
+                    <div class="form-group">
+                        <label class="form-label">Subject Area <span class="req">*</span></label>
+                        <select class="form-control" id="nmSubject">
+                            <option value="" disabled selected>Select…</option>
+                            <option>Automotive Technology</option>
+                            <option>Motorcycle Mechanics</option>
+                            <option>Electrical Systems</option>
+                            <option>Safety & Regulations</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Grade / Year Level</label>
+                        <select class="form-control" id="nmGrade">
+                            <option value="" disabled selected>Select…</option>
+                            <option>Grade 11</option>
+                            <option>Grade 12</option>
+                            <option>Year 1</option>
+                            <option>Year 2</option>
+                            <option>All Levels</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Estimated Duration <span class="req">*</span></label>
+                        <input type="text" class="form-control" id="nmDuration" placeholder="e.g. 3 hours">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tags / Keywords</label>
+                    <div class="tag-input-wrap" id="tagWrap" onclick="document.getElementById('tagInput').focus()">
+                        <input class="tag-input" id="tagInput" placeholder="Type and press Enter…"
+                            onkeydown="addTag(event)">
+                    </div>
+                    <span class="form-hint">Press Enter or comma to add a tag.</span>
+                </div>
+                <div class="nm-grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Prerequisites</label>
+                        <input type="text" class="form-control" id="nmPrereq" placeholder="e.g. Module 1, Module 2">
+                        <span class="form-hint">Comma-separated module names or numbers.</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Cover Image URL</label>
+                        <input type="text" class="form-control" id="nmCover"
+                            placeholder="https://… or leave blank for default">
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 1: OBJECTIVES -->
+            <div class="nm-body hidden" id="nmTab1">
+                <div class="nm-section-title"><i class="fa-solid fa-bullseye"></i> Learning Objectives</div>
+                <p style="font-size:0.74rem;font-weight:600;color:var(--text-secondary)">Define what students will be
+                    able to do upon completing this module. Use action verbs (e.g. Identify, Explain, Demonstrate).</p>
+                <div id="objectiveList" style="display:flex;flex-direction:column;gap:8px">
+                    <div class="objective-row">
+                        <input type="text" class="form-control"
+                            placeholder="e.g. Identify the main components of a motorcycle brake system">
+                        <button class="rm-obj" onclick="removeObjective(this)" title="Remove"><i
+                                class="fa-solid fa-trash"></i></button>
+                    </div>
+                    <div class="objective-row">
+                        <input type="text" class="form-control"
+                            placeholder="e.g. Explain how hydraulic brakes function">
+                        <button class="rm-obj" onclick="removeObjective(this)" title="Remove"><i
+                                class="fa-solid fa-trash"></i></button>
+                    </div>
+                    <div class="objective-row">
+                        <input type="text" class="form-control"
+                            placeholder="e.g. Demonstrate correct brake pad replacement procedure">
+                        <button class="rm-obj" onclick="removeObjective(this)" title="Remove"><i
+                                class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+                <button class="add-row-btn" onclick="addObjective()"><i class="fa-solid fa-plus"></i> Add
+                    Objective</button>
+                <div class="nm-section-title" style="margin-top:4px"><i class="fa-solid fa-award"></i> Competency
+                    Standards</div>
+                <div class="form-group">
+                    <label class="form-label">TESDA / Curriculum Standard Reference</label>
+                    <input type="text" class="form-control"
+                        placeholder="e.g. NC II — Motorcycle/Small Engine Servicing">
+                </div>
+                <div class="nm-grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Knowledge Component</label>
+                        <textarea class="form-control-textarea" rows="3"
+                            placeholder="What students must know…"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Skills Component</label>
+                        <textarea class="form-control-textarea" rows="3"
+                            placeholder="What students must be able to do…"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Attitude / Values Component</label>
+                    <textarea class="form-control-textarea" rows="2"
+                        placeholder="Expected professional attitudes or safety behaviors…"></textarea>
+                </div>
+            </div>
+
+            <!-- TAB 2: CONTENT -->
+            <div class="nm-body hidden" id="nmTab2">
+                <div class="nm-section-title"><i class="fa-solid fa-file-lines"></i> Lesson Outline</div>
+                <div id="lessonList" style="display:flex;flex-direction:column;gap:8px">
+                    <div class="objective-row">
+                        <input type="text" class="form-control"
+                            placeholder="Lesson 1 title — e.g. Introduction to Brake Systems">
+                        <button class="rm-obj" onclick="removeObjective(this)" title="Remove"><i
+                                class="fa-solid fa-trash"></i></button>
+                    </div>
+                    <div class="objective-row">
+                        <input type="text" class="form-control" placeholder="Lesson 2 title — e.g. Types of Brakes">
+                        <button class="rm-obj" onclick="removeObjective(this)" title="Remove"><i
+                                class="fa-solid fa-trash"></i></button>
+                    </div>
+                    <div class="objective-row">
+                        <input type="text" class="form-control"
+                            placeholder="Lesson 3 title — e.g. Brake Maintenance & Replacement">
+                        <button class="rm-obj" onclick="removeObjective(this)" title="Remove"><i
+                                class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+                <button class="add-row-btn" onclick="addLesson()"><i class="fa-solid fa-plus"></i> Add Lesson</button>
+                <div class="nm-section-title" style="margin-top:4px"><i class="fa-solid fa-paperclip"></i> Attachments &
+                    Resources</div>
+                <div class="upload-zone" onclick="document.getElementById('nmFileInput').click()">
+                    <input type="file" id="nmFileInput" multiple style="display:none" onchange="handleFileUpload(this)">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <p>Click to upload or drag & drop files here</p>
+                    <span>PDF, DOCX, PPTX, MP4, images — Max 50 MB each</span>
+                </div>
+                <div id="uploadedFiles" style="display:flex;flex-direction:column;gap:6px;margin-top:6px"></div>
+                <div class="nm-section-title" style="margin-top:4px"><i class="fa-solid fa-link"></i> External Links
+                </div>
+                <div id="linkList" style="display:flex;flex-direction:column;gap:8px">
+                    <div class="nm-grid-2">
+                        <input type="text" class="form-control" placeholder="Label — e.g. Reference Video">
+                        <input type="url" class="form-control" placeholder="https://…">
+                    </div>
+                </div>
+                <button class="add-row-btn" onclick="addLink()"><i class="fa-solid fa-plus"></i> Add Link</button>
+                <div class="form-group" style="margin-top:4px">
+                    <label class="form-label">Additional Notes for Students</label>
+                    <textarea class="form-control-textarea" rows="3"
+                        placeholder="Any supplementary instructions, reading materials, or safety reminders for students…"></textarea>
+                </div>
+            </div>
+
+            <!-- TAB 3: ASSESSMENT -->
+            <div class="nm-body hidden" id="nmTab3">
+                <div class="nm-section-title"><i class="fa-solid fa-clipboard-question"></i> Assessment Configuration
+                </div>
+                <div class="nm-grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Assessment Type</label>
+                        <select class="form-control">
+                            <option selected>Quiz (Multiple Choice)</option>
+                            <option>Written Exam</option>
+                            <option>Practical / Performance</option>
+                            <option>Mixed</option>
+                            <option>No Assessment</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Number of Questions</label>
+                        <input type="number" class="form-control" value="20" min="1" max="100">
+                    </div>
+                </div>
+                <div class="nm-grid-3">
+                    <div class="form-group">
+                        <label class="form-label">Passing Score (%)</label>
+                        <input type="number" class="form-control" value="75" min="1" max="100">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Time Limit (minutes)</label>
+                        <input type="number" class="form-control" value="60" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Max Attempts</label>
+                        <input type="number" class="form-control" value="3" min="1">
+                    </div>
+                </div>
+                <div class="nm-grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Show Answers After Submission</label>
+                        <select class="form-control">
+                            <option selected>Immediately</option>
+                            <option>After deadline</option>
+                            <option>Never</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Grading Weight</label>
+                        <select class="form-control">
+                            <option>Not graded</option>
+                            <option selected>10% of final grade</option>
+                            <option>20% of final grade</option>
+                            <option>30% of final grade</option>
+                            <option>Custom…</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="nm-section-title" style="margin-top:4px"><i class="fa-solid fa-star"></i> Scoring Rubric
+                </div>
+                <table style="width:100%;border-collapse:collapse;font-size:0.76rem">
+                    <thead>
+                        <tr style="background:var(--bg-color)">
+                            <th
+                                style="padding:7px 12px;text-align:left;border:1px solid var(--border-color);font-size:0.62rem;font-weight:800;color:var(--text-secondary);text-transform:uppercase">
+                                Score Range</th>
+                            <th
+                                style="padding:7px 12px;text-align:left;border:1px solid var(--border-color);font-size:0.62rem;font-weight:800;color:var(--text-secondary);text-transform:uppercase">
+                                Grade</th>
+                            <th
+                                style="padding:7px 12px;text-align:left;border:1px solid var(--border-color);font-size:0.62rem;font-weight:800;color:var(--text-secondary);text-transform:uppercase">
+                                Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding:6px 12px;border:1px solid var(--border-color)">90 – 100%</td>
+                            <td style="padding:6px 12px;border:1px solid var(--border-color)">Excellent</td>
+                            <td style="padding:6px 12px;border:1px solid var(--border-color)"><input type="text"
+                                    class="form-control" value="Outstanding performance" style="padding:4px 8px"></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:6px 12px;border:1px solid var(--border-color)">75 – 89%</td>
+                            <td style="padding:6px 12px;border:1px solid var(--border-color)">Passed</td>
+                            <td style="padding:6px 12px;border:1px solid var(--border-color)"><input type="text"
+                                    class="form-control" value="Satisfactory" style="padding:4px 8px"></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:6px 12px;border:1px solid var(--border-color)">Below 75%</td>
+                            <td style="padding:6px 12px;border:1px solid var(--border-color)">Failed</td>
+                            <td style="padding:6px 12px;border:1px solid var(--border-color)"><input type="text"
+                                    class="form-control" value="Needs remediation" style="padding:4px 8px"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="form-group" style="margin-top:4px">
+                    <label class="form-label">Assessment Instructions for Students</label>
+                    <textarea class="form-control-textarea" rows="3"
+                        placeholder="Enter specific instructions students will see before starting the assessment…"></textarea>
+                </div>
+            </div>
+
+            <!-- TAB 4: SETTINGS -->
+            <div class="nm-body hidden" id="nmTab4">
+                <div class="nm-section-title"><i class="fa-solid fa-calendar"></i> Availability & Scheduling</div>
+                <div class="nm-grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Available From</label>
+                        <input type="datetime-local" class="form-control" id="nmAvailFrom">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Available Until</label>
+                        <input type="datetime-local" class="form-control" id="nmAvailUntil">
+                        <span class="form-hint">Leave blank for no end date.</span>
+                    </div>
+                </div>
+                <div class="nm-grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Visibility</label>
+                        <select class="form-control">
+                            <option selected>All enrolled students</option>
+                            <option>Specific sections only</option>
+                            <option>Hidden (draft)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Enrollment Requirement</label>
+                        <select class="form-control">
+                            <option selected>Auto-enrolled (all students)</option>
+                            <option>Manual enrollment</option>
+                            <option>Prerequisites must be completed</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="nm-section-title" style="margin-top:4px"><i class="fa-solid fa-sliders"></i> Completion &
+                    Navigation</div>
+                <div class="nm-grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Completion Criteria</label>
+                        <select class="form-control">
+                            <option selected>Read all lessons + pass assessment</option>
+                            <option>Pass assessment only</option>
+                            <option>Read all lessons only</option>
+                            <option>Manual mark by teacher</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Lesson Navigation</label>
+                        <select class="form-control">
+                            <option selected>Sequential (must complete in order)</option>
+                            <option>Free navigation</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="nm-section-title" style="margin-top:4px"><i class="fa-solid fa-bell"></i> Notifications
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px">
+                    <label
+                        style="display:flex;align-items:center;gap:8px;font-size:0.76rem;font-weight:700;cursor:pointer">
+                        <input type="checkbox" checked> Notify students when module is published
+                    </label>
+                    <label
+                        style="display:flex;align-items:center;gap:8px;font-size:0.76rem;font-weight:700;cursor:pointer">
+                        <input type="checkbox" checked> Send reminder 24 hours before assessment deadline
+                    </label>
+                    <label
+                        style="display:flex;align-items:center;gap:8px;font-size:0.76rem;font-weight:700;cursor:pointer">
+                        <input type="checkbox"> Notify me when a student submits the assessment
+                    </label>
+                    <label
+                        style="display:flex;align-items:center;gap:8px;font-size:0.76rem;font-weight:700;cursor:pointer">
+                        <input type="checkbox"> Notify me when a student fails (below passing score)
+                    </label>
+                </div>
+                <div class="nm-section-title" style="margin-top:4px"><i class="fa-solid fa-certificate"></i> Completion
+                    Certificate</div>
+                <div class="nm-grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Issue Certificate</label>
+                        <select class="form-control" id="nmCertSelect" onchange="toggleCertOptions()">
+                            <option value="no" selected>No</option>
+                            <option value="yes">Yes — upon module completion</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="certTemplateGroup" style="display:none">
+                        <label class="form-label">Certificate Template</label>
+                        <select class="form-control">
+                            <option>MotoMaster Standard</option>
+                            <option>TESDA Aligned</option>
+                            <option>Custom Upload</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL FOOTER -->
+            <div class="nm-footer">
+                <div class="nm-footer-left" id="nmTabIndicator">Step 1 of 5 — Basic Info</div>
+                <div class="nm-footer-right">
+                    <button class="btn-save-draft" onclick="saveModuleAsDraft()"><i class="fa-solid fa-floppy-disk"></i>
+                        Save Draft</button>
+                    <button class="btn-save-nm" id="nmPrevBtn" style="display:none;background:#6b7280"
+                        onclick="prevNMTab()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                    <button class="btn-save-nm" id="nmNextBtn" onclick="nextNMTab()">Next <i
+                            class="fa-solid fa-arrow-right"></i></button>
+                    <button class="btn-publish" id="nmPublishBtn" style="display:none" onclick="publishModule()"><i
+                            class="fa-solid fa-rocket"></i> Publish Module</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="teacher-profile.js"></script>
+    <script>
+        let progressChartInstance = null;
+
+        function initChart(moduleData) {
+            const ctx = document.getElementById('progressChart').getContext('2d');
+            const labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'];
+            
+            if (progressChartInstance) {
+                progressChartInstance.destroy();
+            }
+
+            progressChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: moduleData
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top', labels: { font: { family: 'Nunito', size: 11, weight: '700' }, boxWidth: 12, padding: 14 } }
+                    },
+                    scales: {
+                        x: { grid: { color: '#f3f4f6' }, ticks: { font: { family: 'Nunito', size: 10 }, color: '#9ca3af' } },
+                        y: { min: 0, max: 100, grid: { color: '#f3f4f6' }, ticks: { font: { family: 'Nunito', size: 10 }, color: '#9ca3af', callback: v => v + '%' } }
+                    }
+                }
+            });
+        }
+
+        function updateDashboard(data) {
+            if (!data || !data.success) return;
+
+            const stats = data.stats;
+            const students = data.students;
+            const assessments = data.assessments;
+            const activities = data.recent_activities;
+
+            const pendingReviewsText = document.querySelector('.welcome-banner strong:nth-of-type(1)');
+            if (pendingReviewsText) pendingReviewsText.textContent = `${stats.pending_reviews} pending assessments`;
+            const needsAttentionText = document.querySelector('.welcome-banner strong:nth-of-type(2)');
+            if (needsAttentionText) needsAttentionText.textContent = `${stats.at_risk_count} students`;
+
+            const wbStats = document.querySelectorAll('.wb-stats .wb-stat-val');
+            if (wbStats.length >= 4) {
+                wbStats[0].textContent = stats.active_modules || 6;
+                wbStats[1].textContent = stats.total_students;
+                wbStats[2].textContent = `${stats.avg_progress}%`;
+                wbStats[3].textContent = stats.pending_reviews;
+            }
+
+            const kpiValues = document.querySelectorAll('.kpi-row .kpi-value');
+            if (kpiValues.length >= 4) {
+                kpiValues[0].textContent = stats.active_modules || 6;
+                kpiValues[1].textContent = stats.total_students;
+                kpiValues[2].textContent = stats.pending_reviews;
+                kpiValues[3].textContent = `${stats.avg_score}%`;
+            }
+
+            updateModulesTable(students);
+            updatePendingReviews(assessments);
+            updateNeedsAttention(students);
+            updateRecentActivity(activities);
+
+            const moduleData = [
+                {
+                    label: 'Engine Oil Change',
+                    data: [15, 30, 45, 60, 75, 82, 88, 91],
+                    borderColor: '#2563eb',
+                    backgroundColor: 'rgba(37,99,235,0.06)',
+                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 3,
+                    fill: false
+                },
+                {
+                    label: 'Brake Pad Replacement',
+                    data: [5, 12, 28, 40, 55, 64, 71, 76],
+                    borderColor: '#16a34a',
+                    backgroundColor: 'rgba(22,163,74,0.06)',
+                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 3,
+                    fill: false
+                },
+                {
+                    label: 'Air Filter Replacement',
+                    data: [0, 5, 10, 15, 25, 33, 40, 48],
+                    borderColor: '#d97706',
+                    backgroundColor: 'rgba(217,119,6,0.06)',
+                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 3,
+                    fill: false
+                }
+            ];
+
+            if (stats.avg_progress > 0) {
+                const currentAvg = stats.avg_progress;
+                moduleData[0].data = [
+                    Math.round(currentAvg * 0.4),
+                    Math.round(currentAvg * 0.55),
+                    Math.round(currentAvg * 0.7),
+                    Math.round(currentAvg * 0.8),
+                    Math.round(currentAvg * 0.88),
+                    Math.round(currentAvg * 0.94),
+                    Math.round(currentAvg * 0.98),
+                    currentAvg
+                ];
+                moduleData[1].data = [
+                    Math.round(currentAvg * 0.3),
+                    Math.round(currentAvg * 0.42),
+                    Math.round(currentAvg * 0.55),
+                    Math.round(currentAvg * 0.65),
+                    Math.round(currentAvg * 0.75),
+                    Math.round(currentAvg * 0.82),
+                    Math.round(currentAvg * 0.86),
+                    Math.round(currentAvg * 0.9)
+                ];
+            }
+
+            initChart(moduleData);
+        }
+
+        function updateModulesTable(students) {
+            const moduleSums = {};
+            students.forEach(s => {
+                s.moduleProgress.forEach(mp => {
+                    if (!moduleSums[mp.n]) {
+                        moduleSums[mp.n] = { totalProg: 0, totalScore: 0, countScore: 0 };
+                    }
+                    moduleSums[mp.n].totalProg += mp.p;
+                    if (mp.s > 0) {
+                        moduleSums[mp.n].totalScore += mp.s;
+                        moduleSums[mp.n].countScore++;
+                    }
+                });
+            });
+
+            const tableBody = document.querySelector('.mod-table tbody');
+            if (!tableBody) return;
+
+            tableBody.innerHTML = '';
+
+            const modulesMeta = [
+                { name: 'Engine Oil Change', num: 1, label: 'Module 1: Engine Oil Change', icon: 'fa-oil-can', color: '#eff6ff', textColor: '#2563eb' },
+                { name: 'Brake Pad Replacement', num: 2, label: 'Module 2: Brake Pad Replacement', icon: 'fa-gears', color: '#f0fdf4', textColor: '#16a34a' },
+                { name: 'Air Filter Replacement', num: 3, label: 'Module 3: Air Filter Replacement', icon: 'fa-wind', color: '#fff7ed', textColor: '#d97706' },
+                { name: 'Fuel Filter Replacement', num: 4, label: 'Module 4: Fuel Filter Replacement', icon: 'fa-gas-pump', color: '#fdf4ff', textColor: '#9333ea' },
+                { name: 'Battery Maintenance', num: 5, label: 'Module 5: Battery Maintenance', icon: 'fa-car-battery', color: '#ecfeff', textColor: '#0891b2' },
+                { name: 'Spark Plug Replacement', num: 6, label: 'Module 6: Spark Plug Replacement', icon: 'fa-bolt', color: '#fdf2f8', textColor: '#db2777' }
+            ];
+
+            modulesMeta.forEach(meta => {
+                const data = moduleSums[meta.name] || { totalProg: 0, totalScore: 0, countScore: 0 };
+                const avgProg = students.length > 0 ? Math.round(data.totalProg / students.length) : 0;
+                const avgScore = data.countScore > 0 ? Math.round(data.totalScore / data.countScore) : 0;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                       <div class="mod-cell">
+                           <div class="mod-icon" style="background:${meta.color};color:${meta.textColor}"><i class="fa-solid ${meta.icon}"></i></div>
+                           <div>
+                               <div class="mod-name">${meta.label}</div>
+                               <div class="mod-sub">Published Module</div>
+                           </div>
+                       </div>
+                    </td>
+                    <td class="muted">${students.length}</td>
+                    <td>
+                       <div class="prog-wrap">
+                           <div class="prog-track">
+                               <div class="prog-fill" style="width:${avgProg}%;background:${avgProg >= 75 ? '#16a34a' : '#d97706'}"></div>
+                           </div><span class="prog-pct">${avgProg}%</span>
+                       </div>
+                    </td>
+                    <td class="muted">${avgScore > 0 ? avgScore + '%' : '—'}</td>
+                    <td><span class="badge badge-green">Published</span></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function updatePendingReviews(assessments) {
+            const container = document.querySelector('#pendingReviewsPanel > div:last-child');
+            if (!container) return;
+
+            const buttonHtml = `
+                <div style="padding:10px 16px;border-top:1px solid var(--border-color)">
+                    <button class="btn-primary" style="width:100%;justify-content:center;font-size:0.7rem" onclick="window.location.href='teacherassess.html'">
+                        <i class="fa-solid fa-pen-to-square"></i> Review All
+                    </button>
+                </div>
+            `;
+
+            if (!assessments || assessments.length === 0) {
+                container.innerHTML = `
+                    <div class="stud-item" style="padding:16px 20px;text-align:center;color:var(--text-secondary)">
+                        No pending assessments to review.
+                    </div>
+                    ${buttonHtml}
+                `;
+                return;
+            }
+
+            let html = '';
+            assessments.slice(0, 3).forEach(a => {
+                const names = a.student_name.split(' ');
+                const initials = names.map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                const statusColor = a.score >= 75 ? 'badge-green' : 'badge-orange';
+                const statusText = a.score >= 75 ? 'Passed' : 'Needs Review';
+                html += `
+                    <div class="stud-item">
+                        <div class="stud-avatar" style="background:#eff6ff;color:#2563eb">${initials}</div>
+                        <div>
+                            <div class="stud-name">${a.student_name}</div>
+                            <div class="stud-sub">${a.title}</div>
+                        </div>
+                        <span class="badge ${statusColor}" style="margin-left:auto">${statusText}</span>
+                    </div>
+                `;
+            });
+            container.innerHTML = html + buttonHtml;
+        }
+
+        function updateNeedsAttention(students) {
+            const container = document.querySelector('#needsAttentionPanel > div:last-child');
+            if (!container) return;
+
+            const buttonHtml = `
+                <div style="padding:10px 16px;border-top:1px solid var(--border-color)">
+                    <button class="btn-outline" style="width:100%;justify-content:center;font-size:0.7rem" onclick="window.location.href='teacherstudents.html'">
+                        <i class="fa-solid fa-users"></i> View All Students
+                    </button>
+                </div>
+            `;
+
+            const atRisk = students.filter(s => s.status === 'at-risk');
+
+            if (atRisk.length === 0) {
+                container.innerHTML = `
+                    <div class="stud-item" style="padding:16px 20px;text-align:center;color:var(--text-secondary)">
+                        All students are on track!
+                    </div>
+                    ${buttonHtml}
+                `;
+                return;
+            }
+
+            let html = '';
+            atRisk.slice(0, 2).forEach(s => {
+                html += `
+                    <div class="stud-item">
+                        <div class="stud-avatar" style="background:#fef2f2;color:#dc2626">${s.initials}</div>
+                        <div>
+                            <div class="stud-name">${s.name}</div>
+                            <div class="stud-sub">${s.lastAssessment !== 'None' ? 'Last assessment: ' + s.lastAssessment : 'No attempts yet'}</div>
+                        </div>
+                        <div class="stud-prog" style="color:#dc2626">${s.progress}%</div>
+                    </div>
+                `;
+            });
+
+            if (atRisk.length > 2) {
+                html += `
+                    <div class="stud-item" style="padding:10px 16px;border-bottom:none">
+                        <div style="font-size:0.7rem;font-weight:700;color:var(--text-secondary)">And ${atRisk.length - 2} other students need attention.</div>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="stud-item" style="padding:10px 16px;border-bottom:none">
+                        <div style="font-size:0.7rem;font-weight:700;color:var(--text-secondary)">All other students are on track.</div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html + buttonHtml;
+        }
+
+        function updateRecentActivity(activities) {
+            const container = document.querySelector('#recentActivityPanel');
+            if (!container) return;
+
+            container.innerHTML = `
+                <div class="panel-top">
+                    <div class="panel-title">Recent Activity</div>
+                </div>
+            `;
+
+            if (!activities || activities.length === 0) {
+                container.innerHTML += `
+                    <div class="act-item" style="padding:16px 20px;color:var(--text-secondary)">
+                        No recent student activity recorded.
+                    </div>
+                `;
+                return;
+            }
+
+            activities.slice(0, 5).forEach(act => {
+                const dotColor = act.type === 'assessment' ? '#2563eb' : '#16a34a';
+                container.innerHTML += `
+                    <div class="act-item">
+                        <div class="act-dot" style="background:${dotColor}"></div>
+                        <div>
+                            <div class="act-text">${act.student_name} completed ${act.title} (${act.status})</div>
+                            <div class="act-time">${act.timeStr}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function fetchDashboardData() {
+            fetch('teacher_data_api.php?action=get_dashboard_data')
+                .then(res => res.json())
+                .then(data => {
+                    updateDashboard(data);
+                })
+                .catch(err => {
+                    console.error('Error fetching dashboard stats:', err);
+                });
+        }
+
+        // Task toggle
+        function toggleTask(check) {
+            const row = check.closest('.task-item');
+            const title = row.querySelector('.task-title');
+            check.classList.toggle('done');
+            title.classList.toggle('done-text');
+            updateTaskCount();
+        }
+
+        function updateTaskCount() {
+            const total = document.querySelectorAll('.task-check').length;
+            const done = document.querySelectorAll('.task-check.done').length;
+            const left = total - done;
+            document.getElementById('taskCount').textContent = left + ' left';
+        }
+
+        // ── NEW MODULE MODAL ──
+        let nmCurrentTab = 0;
+        const nmTabLabels = ['Basic Info', 'Objectives', 'Content', 'Assessment', 'Settings'];
+
+        function openNewModuleModal() {
+            document.getElementById('newModuleModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeNewModuleModal() {
+            document.getElementById('newModuleModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('newModuleModal').addEventListener('click', function (e) {
+            if (e.target === this) closeNewModuleModal();
+        });
+
+        function switchNMTab(idx, tabEl) {
+            document.querySelectorAll('.nm-tab').forEach(t => t.classList.remove('active'));
+            tabEl.classList.add('active');
+            for (let i = 0; i < 5; i++) {
+                document.getElementById('nmTab' + i).classList.toggle('hidden', i !== idx);
+            }
+            nmCurrentTab = idx;
+            updateNMNav();
+        }
+
+        function updateNMNav() {
+            const prev = document.getElementById('nmPrevBtn');
+            const next = document.getElementById('nmNextBtn');
+            const pub = document.getElementById('nmPublishBtn');
+            const ind = document.getElementById('nmTabIndicator');
+            prev.style.display = nmCurrentTab > 0 ? 'flex' : 'none';
+            next.style.display = nmCurrentTab < 4 ? 'flex' : 'none';
+            pub.style.display = nmCurrentTab === 4 ? 'flex' : 'none';
+            ind.textContent = 'Step ' + (nmCurrentTab + 1) + ' of 5 — ' + nmTabLabels[nmCurrentTab];
+        }
+
+        function nextNMTab() {
+            if (nmCurrentTab < 4) {
+                const tabs = document.querySelectorAll('.nm-tab');
+                switchNMTab(nmCurrentTab + 1, tabs[nmCurrentTab + 1]);
+                document.querySelector('.nm-modal').scrollTop = 0;
+            }
+        }
+
+        function prevNMTab() {
+            if (nmCurrentTab > 0) {
+                const tabs = document.querySelectorAll('.nm-tab');
+                switchNMTab(nmCurrentTab - 1, tabs[nmCurrentTab - 1]);
+            }
+        }
+
+        function updateCharCount(el, countId, max) {
+            const len = el.value.length;
+            const el2 = document.getElementById(countId);
+            el2.textContent = len;
+            el2.style.color = len > max * 0.9 ? '#dc2626' : '';
+        }
+
+        // Tags
+        function addTag(e) {
+            if (e.key === 'Enter' || e.key === ',') {
+                e.preventDefault();
+                const input = document.getElementById('tagInput');
+                const val = input.value.trim().replace(/,$/, '');
+                if (!val) return;
+                const pill = document.createElement('span');
+                pill.className = 'tag-pill';
+                pill.innerHTML = val + ' <button onclick="this.parentElement.remove()">×</button>';
+                document.getElementById('tagWrap').insertBefore(pill, input);
+                input.value = '';
+            }
+        }
+
+        // Objectives
+        function addObjective() {
+            const row = document.createElement('div');
+            row.className = 'objective-row';
+            row.innerHTML = '<input type="text" class="form-control" placeholder="e.g. Demonstrate proper brake adjustment"><button class="rm-obj" onclick="removeObjective(this)" title="Remove"><i class="fa-solid fa-trash"></i></button>';
+            document.getElementById('objectiveList').appendChild(row);
+        }
+
+        function removeObjective(btn) {
+            btn.closest('.objective-row').remove();
+        }
+
+        // Lessons
+        function addLesson() {
+            const row = document.createElement('div');
+            row.className = 'objective-row';
+            const n = document.querySelectorAll('#lessonList .objective-row').length + 1;
+            row.innerHTML = '<input type="text" class="form-control" placeholder="Lesson ' + n + ' title"><button class="rm-obj" onclick="removeObjective(this)" title="Remove"><i class="fa-solid fa-trash"></i></button>';
+            document.getElementById('lessonList').appendChild(row);
+        }
+
+        // Links
+        function addLink() {
+            const row = document.createElement('div');
+            row.className = 'nm-grid-2';
+            row.innerHTML = '<input type="text" class="form-control" placeholder="Label"><input type="url" class="form-control" placeholder="https://…">';
+            document.getElementById('linkList').appendChild(row);
+        }
+
+        // File upload
+        function handleFileUpload(input) {
+            const container = document.getElementById('uploadedFiles');
+            Array.from(input.files).forEach(file => {
+                const row = document.createElement('div');
+                row.className = 'resource-row';
+                const ext = file.name.split('.').pop().toLowerCase();
+                const icon = ['pdf'].includes(ext) ? 'fa-file-pdf' : ['mp4', 'mov'].includes(ext) ? 'fa-file-video' : ['pptx', 'ppt'].includes(ext) ? 'fa-file-powerpoint' : ['docx', 'doc'].includes(ext) ? 'fa-file-word' : 'fa-file';
+                row.innerHTML = '<i class="fa-solid ' + icon + ' font-awesome-file"></i><span>' + file.name + ' <small>(' + (file.size / 1024 / 1024).toFixed(2) + ' MB)</small></span><button class="rm" onclick="this.closest(\'.resource-row\').remove()"><i class="fa-solid fa-xmark"></i></button>';
+                container.appendChild(row);
+            });
+        }
+
+        // Certificate toggle
+        function toggleCertOptions() {
+            const val = document.getElementById('nmCertSelect').value;
+            document.getElementById('certTemplateGroup').style.display = val === 'yes' ? '' : 'none';
+        }
+
+        function saveModuleAsDraft() {
+            const title = document.getElementById('nmTitle').value.trim() || 'Untitled Module';
+            closeNewModuleModal();
+            const btn = document.querySelector('.btn-primary');
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> Draft Saved!';
+            btn.style.background = '#6b7280';
+            setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; }, 2000);
+        }
+
+        function publishModule() {
+            const title = document.getElementById('nmTitle').value.trim();
+            if (!title) {
+                alert('Please fill in the Module Title before publishing.');
+                const tabs = document.querySelectorAll('.nm-tab');
+                switchNMTab(0, tabs[0]);
+                document.getElementById('nmTitle').focus();
+                return;
+            }
+            closeNewModuleModal();
+            const btn = document.querySelector('.btn-primary');
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> Published!';
+            btn.style.background = '#16a34a';
+            setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; }, 2500);
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchDashboardData);
+    </script>
+
+</body>
+
+</html>

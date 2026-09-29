@@ -1,0 +1,1739 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotoMaster – Analytics</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f3f4f6;
+            --border-color: #e5e7eb;
+            --text-primary: #1a1a2e;
+            --text-secondary: #6b7280;
+            --accent: #2563eb;
+            --accent-dark: #1d4ed8;
+            --accent-light: #eff6ff;
+            --green: #16a34a;
+            --red: #dc2626;
+            --orange: #d97706;
+            --purple: #9333ea;
+            --sidebar-w: 240px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+
+        .sidebar {
+            width: var(--sidebar-w);
+            background: #fff;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .logo-container {
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-container img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .logo-sub {
+            font-size: 0.62rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+        }
+
+        .nav-section-label {
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 14px 18px 4px;
+        }
+
+        .nav-menu {
+            list-style: none;
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+
+        .nav-menu::-webkit-scrollbar {
+            width: 0;
+        }
+
+        .nav-item {
+            padding: 9px 16px;
+            margin: 2px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            font-weight: 700;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .nav-item i {
+            width: 16px;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .nav-item:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .nav-item.active {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .sidebar-bottom {
+            padding: 12px 0 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .teacher-card {
+            margin: 12px 12px 4px;
+            padding: 12px;
+            background: var(--accent-light);
+            border-radius: 10px;
+            border: 1px solid #bfdbfe;
+        }
+
+        .teacher-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .teacher-name {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .teacher-role {
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-top: 2px;
+        }
+
+        .teacher-dept {
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            background: var(--bg-color);
+        }
+
+        .topbar {
+            background: #fff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 28px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .topbar-left h1 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .topbar-left p {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notif-btn {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--bg-color);
+            border: 1.5px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--red);
+            color: #fff;
+            font-size: 0.58rem;
+            font-weight: 800;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-pill {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 5px 12px 5px 5px;
+            border-radius: 30px;
+            border: 1.5px solid var(--border-color);
+            background: #fff;
+            cursor: pointer;
+        }
+
+        .profile-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 12px;
+        }
+
+        .profile-name {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .profile-role {
+            font-size: 0.62rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .btn-outline {
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 7px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            padding: 7px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.76rem;
+            font-weight: 800;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dark);
+        }
+
+        .page-container {
+            padding: 22px 28px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .kpi-card {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 16px 18px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .kpi-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .kpi-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .kpi-title {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .kpi-value {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .kpi-foot {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 9px;
+            border-radius: 20px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .badge-green {
+            background: #f0fdf4;
+            color: var(--green);
+            border: 1px solid #bbf7d0;
+        }
+
+        .badge-orange {
+            background: #fff7ed;
+            color: var(--orange);
+            border: 1px solid #fed7aa;
+        }
+
+        .badge-blue {
+            background: var(--accent-light);
+            color: var(--accent);
+            border: 1px solid #bfdbfe;
+        }
+
+        .badge-red {
+            background: #fef2f2;
+            color: var(--red);
+            border: 1px solid #fecaca;
+        }
+
+        .badge-purple {
+            background: #fdf4ff;
+            color: var(--purple);
+            border: 1px solid #e9d5ff;
+        }
+
+        .badge-gray {
+            background: #f3f4f6;
+            color: #6b7280;
+            border: 1px solid #e5e7eb;
+        }
+
+        .panel {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+        }
+
+        .panel-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .panel-title {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .panel-subtitle {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 290px;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .charts-col {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .chart-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        /* CHART CANVAS CONTAINERS */
+        .chart-wrap {
+            padding: 16px 18px 18px;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+        }
+
+        /* BAR CHART (pure CSS) */
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 160px;
+            padding: 0 4px;
+        }
+
+        .bar-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .bar {
+            width: 100%;
+            border-radius: 6px 6px 0 0;
+            transition: opacity 0.2s;
+            cursor: pointer;
+            min-width: 20px;
+        }
+
+        .bar:hover {
+            opacity: 0.8;
+        }
+
+        .bar-label {
+            font-size: 0.58rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .bar-val {
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        /* LINE CHART (SVG) */
+        .line-chart-svg {
+            width: 100%;
+            overflow: visible;
+        }
+
+        /* DONUT */
+        .donut-wrap {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 16px 18px;
+        }
+
+        .donut-svg {
+            flex-shrink: 0;
+        }
+
+        .donut-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        .legend-val {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-left: auto;
+        }
+
+        /* HEATMAP */
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 3px;
+            padding: 12px 16px 16px;
+        }
+
+        .hmap-cell {
+            aspect-ratio: 1;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: opacity 0.15s;
+        }
+
+        .hmap-cell:hover {
+            opacity: 0.7;
+        }
+
+        .hmap-labels {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 3px;
+            padding: 0 16px 6px;
+        }
+
+        .hmap-day {
+            font-size: 0.55rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* SIDE PANELS */
+        .side-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .side-item:last-child {
+            border-bottom: none;
+        }
+
+        .side-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .side-label {
+            flex: 1;
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .side-val {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .prog-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .prog-row:last-child {
+            border-bottom: none;
+        }
+
+        .prog-label {
+            flex: 1;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .prog-track {
+            flex: 1.2;
+            height: 6px;
+            background: #f3f4f6;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .prog-fill {
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        .prog-pct {
+            font-size: 0.68rem;
+            font-weight: 800;
+            min-width: 32px;
+            text-align: right;
+        }
+
+        /* STUDENT TABLE */
+        .stu-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .stu-table thead th {
+            padding: 8px 14px;
+            text-align: left;
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: var(--bg-color);
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        .stu-table tbody tr {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stu-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .stu-table tbody tr:hover {
+            background: #f8f9ff;
+        }
+
+        .stu-table td {
+            padding: 10px 14px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            vertical-align: middle;
+        }
+
+        .stu-table td.muted {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.7rem;
+        }
+
+        .stu-cell {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .stu-av {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .trend-up {
+            color: var(--green);
+            font-size: 0.66rem;
+            font-weight: 800;
+        }
+
+        .trend-dn {
+            color: var(--red);
+            font-size: 0.66rem;
+            font-weight: 800;
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 28px;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            background: #fff;
+            margin-top: auto;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        footer span {
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        select.form-control {
+            padding: 5px 10px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.72rem;
+            color: var(--text-primary);
+            font-weight: 700;
+            background: #fff;
+            outline: none;
+            cursor: pointer;
+        }
+
+        select.form-control:focus {
+            border-color: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="logo-container">
+            <img src="images/finalogo.png" alt="MotoMaster" />
+            <div><span class="logo-text">MotoMaster</span><span class="logo-sub">Teacher Portal</span></div>
+        </div>
+        <div class="teacher-card">
+            <div class="teacher-avatar"><i class="fa-solid fa-chalkboard-user"></i></div>
+            <div class="teacher-name">R. Garcia</div>
+            <div class="teacher-role">Teacher</div>
+            <div class="teacher-dept">Automotive Technology Dept.</div>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-section-label">Overview</li>
+            <li class="nav-item" onclick="location.href='teacherdash.html'"><i class="fa-solid fa-house"></i> Dashboard
+            </li>
+            <li class="nav-section-label">My Classes</li>
+            <li class="nav-item" onclick="location.href='teachermodules.html'"><i class="fa-solid fa-book-open"></i> My
+                Modules</li>
+            <li class="nav-item" onclick="location.href='teacherstudents.html'"><i class="fa-solid fa-users"></i> My
+                Students</li>
+            <li class="nav-item" onclick="location.href='teacherassess.html'"><i
+                    class="fa-solid fa-clipboard-check"></i> Assessments</li>
+            <li class="nav-item" onclick="location.href='teacherpractice.html'"><i class="fa-solid fa-gamepad"></i>
+                Practice Sessions</li>
+            <li class="nav-section-label">Insights</li>
+            <li class="nav-item active"><i class="fa-solid fa-chart-simple"></i> Analytics</li>
+            <li class="nav-item" onclick="location.href='teacherreports.html'"><i class="fa-solid fa-file-invoice"></i>
+                Reports</li>
+            <li class="nav-section-label">Account</li>
+            <li class="nav-item" onclick="location.href='teachernotif.html'"><i class="fa-regular fa-bell"></i>
+                Notifications <span
+                    style="margin-left:auto;background:#dc2626;color:#fff;font-size:0.55rem;font-weight:800;border-radius:10px;padding:1px 6px">3</span>
+            </li>
+            <li class="nav-item" onclick="location.href='teachersettings.html'"><i class="fa-solid fa-gear"></i>
+                Settings</li>
+        </ul>
+        <div class="sidebar-bottom">
+            <a class="nav-item" href="index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="topbar">
+            <div class="topbar-left">
+                <h1>Analytics</h1>
+                <p>Class performance trends, engagement, and progress insights</p>
+            </div>
+            <div class="topbar-right">
+                <select class="form-control" id="periodFilter" onchange="updatePeriod()">
+                    <option value="month">This Month</option>
+                    <option value="quarter">This Quarter</option>
+                    <option value="semester" selected>This Semester</option>
+                    <option value="year">Full Year</option>
+                </select>
+                <select class="form-control" id="modFilter" onchange="filterAnalyticsByModule()">
+                    <option value="all">All Modules</option>
+                    <option value="Engine Oil Change">Engine Oil Change</option>
+                    <option value="Brake Pad Replacement">Brake Pad Replacement</option>
+                    <option value="Air Filter Replacement">Air Filter Replacement</option>
+                    <option value="Fuel Filter Replacement">Fuel Filter Replacement</option>
+                    <option value="Battery Maintenance">Battery Maintenance</option>
+                    <option value="Spark Plug Replacement">Spark Plug Replacement</option>
+                </select>
+                <div class="notif-btn"><i class="fa-regular fa-bell"></i><span class="notif-badge">3</span></div>
+                <div class="profile-pill">
+                    <div class="profile-avatar"><i class="fa-solid fa-chalkboard-user"></i></div>
+                    <div>
+                        <div class="profile-name">R. Garcia</div>
+                        <div class="profile-role">Teacher</div>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="location.href='teacherreports.html'"><i
+                        class="fa-solid fa-file-invoice"></i> Export Report</button>
+            </div>
+        </div>
+
+        <div class="page-container">
+            <!-- KPI ROW -->
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#eff6ff;color:#2563eb"><i class="fa-solid fa-users"></i>
+                        </div>
+                        <div class="kpi-title">Total Students</div>
+                    </div>
+                    <div class="kpi-value" id="kpiTotalStudents">—</div>
+                    <div class="kpi-foot" id="kpiTotalStudentsFoot"><span>Enrolled across 6 modules</span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#f0fdf4;color:#16a34a"><i
+                                class="fa-solid fa-chart-line"></i></div>
+                        <div class="kpi-title">Class Avg. Score</div>
+                    </div>
+                    <div class="kpi-value" id="kpiAvgScore">—</div>
+                    <div class="kpi-foot" id="kpiAvgScoreFoot"><span>All assessments</span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#fff7ed;color:#d97706"><i class="fa-solid fa-fire"></i>
+                        </div>
+                        <div class="kpi-title">Engagement Rate</div>
+                    </div>
+                    <div class="kpi-value" id="kpiEngagementRate">—</div>
+                    <div class="kpi-foot" id="kpiEngagementRateFoot"><span>Active this semester</span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <div class="kpi-icon" style="background:#fdf4ff;color:#9333ea"><i
+                                class="fa-solid fa-percent"></i></div>
+                        <div class="kpi-title">Overall Pass Rate</div>
+                    </div>
+                    <div class="kpi-value" id="kpiPassRate">—</div>
+                    <div class="kpi-foot" id="kpiPassRateFoot"><span>Assessment avg.</span></div>
+                </div>
+            </div>
+
+            <!-- MAIN GRID -->
+            <div class="main-grid">
+                <div class="charts-col">
+
+                    <!-- CLASS SCORE TREND (SVG line chart) -->
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div>
+                                <div class="panel-title">Class Average Score — Weekly Trend</div>
+                                <div class="panel-subtitle">Past 8 weeks across all assessments</div>
+                            </div>
+                        </div>
+                        <div class="chart-wrap">
+                            <svg class="line-chart-svg" viewBox="0 0 560 160" style="height:160px">
+                                <!-- grid lines -->
+                                <line x1="0" y1="20" x2="560" y2="20" stroke="#f3f4f6" stroke-width="1" />
+                                <line x1="0" y1="55" x2="560" y2="55" stroke="#f3f4f6" stroke-width="1" />
+                                <line x1="0" y1="90" x2="560" y2="90" stroke="#f3f4f6" stroke-width="1" />
+                                <line x1="0" y1="125" x2="560" y2="125" stroke="#f3f4f6" stroke-width="1" />
+                                <!-- y axis labels -->
+                                <text x="0" y="18" font-family="Nunito" font-size="9" fill="#9ca3af"
+                                    font-weight="700">90%</text>
+                                <text x="0" y="53" font-family="Nunito" font-size="9" fill="#9ca3af"
+                                    font-weight="700">80%</text>
+                                <text x="0" y="88" font-family="Nunito" font-size="9" fill="#9ca3af"
+                                    font-weight="700">70%</text>
+                                <text x="0" y="123" font-family="Nunito" font-size="9" fill="#9ca3af"
+                                    font-weight="700">60%</text>
+                                <!-- Assessment line (blue) -->
+                                <polyline id="trendAssessLine" points="36,125 116,125 196,125 266,125 336,125 406,125 476,125 546,125" fill="none"
+                                    stroke="#2563eb" stroke-width="2.5" stroke-linejoin="round"
+                                    stroke-linecap="round" />
+                                <!-- Practice line (green) -->
+                                <polyline id="trendPracticeLine" points="36,125 116,125 196,125 266,125 336,125 406,125 476,125 546,125" fill="none"
+                                    stroke="#16a34a" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"
+                                    stroke-dasharray="5,3" />
+                                <!-- Fill under assessment -->
+                                <polygon id="trendAssessFill" points="36,125 116,125 196,125 266,125 336,125 406,125 476,125 546,125 546,140 36,140"
+                                    fill="#2563eb" fill-opacity="0.07" />
+                                <!-- Dots container -->
+                                <g id="trendDots"></g>
+                                <!-- x labels -->
+                                <text x="28" y="155" font-family="Nunito" font-size="9" fill="#9ca3af"
+                                    font-weight="700">Wk1</text>
+                                <text x="108" y="155" font-family="Nunito" font-size="9" fill="#9ca3af"
+                                    font-weight="700">Wk2</text>
+                                <text x="188" y="155" font-family="Nunito" font-size="9" fill="#9ca3af"
+                                    font-weight="700">Wk3</text>
+                                <text x="258" y="155" font-family="Nunito" font-size="9" fill="#9ca3af"
+                                    font-weight="700">Wk4</text>
+                                <text x="328" y="155" font-family="Nunito" font-size="9" fill="#9ca3af"
+                                    font-weight="700">Wk5</text>
+                                <text x="398" y="155" font-family="Nunito" font-size="9" fill="#9ca3af"
+                                    font-weight="700">Wk6</text>
+                                <text x="468" y="155" font-family="Nunito" font-size="9" fill="#9ca3af"
+                                    font-weight="700">Wk7</text>
+                                <text x="538" y="155" font-family="Nunito" font-size="9" fill="#9ca3af"
+                                    font-weight="700">Wk8</text>
+                            </svg>
+                            <div style="display:flex;gap:16px;margin-top:8px">
+                                <div
+                                    style="display:flex;align-items:center;gap:5px;font-size:0.68rem;font-weight:800;color:var(--text-secondary)">
+                                    <div style="width:14px;height:3px;background:#2563eb;border-radius:2px"></div>
+                                    Assessment Avg.
+                                </div>
+                                <div
+                                    style="display:flex;align-items:center;gap:5px;font-size:0.68rem;font-weight:800;color:var(--text-secondary)">
+                                    <div
+                                        style="width:14px;height:3px;background:#16a34a;border-radius:2px;border-top:1px dashed #16a34a">
+                                    </div>Practice Avg.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TWO CHARTS ROW -->
+                    <div class="chart-row">
+                        <!-- Module Avg Score BAR chart -->
+                        <div class="panel">
+                            <div class="panel-top">
+                                <div>
+                                    <div class="panel-title">Avg. Score by Module</div>
+                                    <div class="panel-subtitle">Assessment performance</div>
+                                </div>
+                            </div>
+                            <div class="chart-wrap">
+                                <div class="bar-chart" id="moduleBarChart">
+                                    <!-- Dynamic bars -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Student Status Donut -->
+                        <div class="panel">
+                            <div class="panel-top">
+                                <div>
+                                    <div class="panel-title">Student Status</div>
+                                    <div class="panel-subtitle" id="donutSubtitle">0 total enrolled</div>
+                                </div>
+                            </div>
+                            <div class="donut-wrap">
+                                <svg class="donut-svg" width="100" height="100" viewBox="0 0 42 42">
+                                    <circle cx="21" cy="21" r="15.9" fill="transparent" stroke="#f3f4f6"
+                                        stroke-width="6" />
+                                    <circle id="donutOnTrack" cx="21" cy="21" r="15.9" fill="transparent" stroke="#16a34a"
+                                        stroke-width="6" stroke-dasharray="0 100" stroke-dashoffset="0"
+                                        transform="rotate(-90 21 21)" />
+                                    <circle id="donutAtRisk" cx="21" cy="21" r="15.9" fill="transparent" stroke="#d97706"
+                                        stroke-width="6" stroke-dasharray="0 100" stroke-dashoffset="0"
+                                        transform="rotate(-90 21 21)" />
+                                    <circle id="donutInactive" cx="21" cy="21" r="15.9" fill="transparent" stroke="#dc2626"
+                                        stroke-width="6" stroke-dasharray="0 100" stroke-dashoffset="0"
+                                        transform="rotate(-90 21 21)" />
+                                    <text x="21" y="23" font-family="Rajdhani" font-size="7" font-weight="700"
+                                        fill="#1a1a2e" text-anchor="middle" id="donutTotalText">—</text>
+                                    <text x="21" y="28" font-family="Nunito" font-size="4" font-weight="700"
+                                        fill="#6b7280" text-anchor="middle">Students</text>
+                                </svg>
+                                <div class="donut-legend" id="donutLegend">
+                                    <!-- Dynamic legend items -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SUBMISSION HEATMAP -->
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div>
+                                <div class="panel-title">Activity Heatmap</div>
+                                <div class="panel-subtitle">Student submission activity — last 4 weeks</div>
+                            </div>
+                        </div>
+                        <div class="hmap-labels">
+                            <span class="hmap-day">Mon</span><span class="hmap-day">Tue</span><span
+                                class="hmap-day">Wed</span><span class="hmap-day">Thu</span><span
+                                class="hmap-day">Fri</span><span class="hmap-day">Sat</span><span
+                                class="hmap-day">Sun</span>
+                        </div>
+                        <div class="heatmap-grid" id="heatmapGrid"></div>
+                        <div
+                            style="display:flex;align-items:center;gap:6px;padding:0 16px 12px;font-size:0.62rem;font-weight:800;color:var(--text-secondary)">
+                            Less
+                            <div style="width:10px;height:10px;border-radius:2px;background:#f3f4f6"></div>
+                            <div style="width:10px;height:10px;border-radius:2px;background:#bfdbfe"></div>
+                            <div style="width:10px;height:10px;border-radius:2px;background:#60a5fa"></div>
+                            <div style="width:10px;height:10px;border-radius:2px;background:#2563eb"></div>
+                            <div style="width:10px;height:10px;border-radius:2px;background:#1d4ed8"></div>
+                            More
+                        </div>
+                    </div>
+
+                    <!-- TOP/BOTTOM STUDENT TABLE -->
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div>
+                                <div class="panel-title">Student Performance Breakdown</div>
+                                <div class="panel-subtitle">Sorted by avg. assessment score</div>
+                            </div>
+                            <select class="form-control" id="perfStudentFilter" onchange="filterPerformanceTable()">
+                                <option value="all">All Students</option>
+                                <option value="top">Top Performers</option>
+                                <option value="needs_attention">Needs Attention</option>
+                            </select>
+                        </div>
+                        <table class="stu-table">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Status</th>
+                                    <th>Modules</th>
+                                    <th>Avg. Score</th>
+                                    <th>Practice Pts</th>
+                                    <th>Last Active</th>
+                                    <th>Trend</th>
+                                </tr>
+                            </thead>
+                            <tbody id="performanceTableBody">
+                                <tr>
+                                    <td colspan="7" style="text-align:center;padding:32px;color:var(--text-secondary)">
+                                        <i class="fa-solid fa-spinner fa-spin" style="font-size:1.5rem;margin-bottom:8px;display:block"></i>
+                                        <div style="font-weight:800;font-size:0.84rem">Loading performance records...</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN -->
+                <div style="display:flex;flex-direction:column;gap:16px">
+                    <!-- Module Completion -->
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div>
+                                <div class="panel-title">Module Completion</div>
+                                <div class="panel-subtitle">Students who completed</div>
+                            </div>
+                        </div>
+                        <div id="moduleCompletionList">
+                            <!-- Dynamic progress rows -->
+                        </div>
+                    </div>
+
+                    <!-- Pass Rates -->
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div>
+                                <div class="panel-title">Assessment Pass Rates</div>
+                                <div class="panel-subtitle">75% threshold</div>
+                            </div>
+                        </div>
+                        <div id="passRatesPanel">
+                            <!-- Dynamic pass rates list -->
+                        </div>
+                    </div>
+
+                    <!-- At-Risk Students -->
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div>
+                                <div class="panel-title">Needs Attention</div>
+                                <div class="panel-subtitle">Below 65% avg. score</div>
+                            </div>
+                        </div>
+                        <div id="needsAttentionPanel">
+                            <!-- Dynamic needs attention list -->
+                        </div>
+                        <div style="padding:10px 14px;border-top:1px solid var(--border-color)">
+                            <button class="btn-outline" style="width:100%;justify-content:center;font-size:0.7rem"
+                                onclick="location.href='teacherstudents.html'"><i class="fa-solid fa-users"></i> View
+                                All Students</button>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="panel">
+                        <div class="panel-top">
+                            <div class="panel-title">Quick Actions</div>
+                        </div>
+                        <div style="padding:12px 16px;display:flex;flex-direction:column;gap:8px">
+                            <button class="btn-primary" style="width:100%;justify-content:center"
+                                onclick="location.href='teacherreports.html'"><i class="fa-solid fa-file-invoice"></i>
+                                Generate Report</button>
+                            <button class="btn-outline" style="width:100%;justify-content:center"
+                                onclick="location.href='teacherassess.html'"><i class="fa-solid fa-clipboard-check"></i>
+                                View Assessments</button>
+                            <button class="btn-outline" style="width:100%;justify-content:center"
+                                onclick="location.href='teacherpractice.html'"><i class="fa-solid fa-gamepad"></i>
+                                Practice Sessions</button>
+                            <button class="btn-outline" style="width:100%;justify-content:center"
+                                onclick="location.href='teacherdash.html'"><i class="fa-solid fa-house"></i> Back to
+                                Dashboard</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer><span>MotoMaster</span> Teacher Portal &mdash; Analytics &copy; 2025 <span>v2.1.0</span></footer>
+    </main>
+
+    <script src="teacher-profile.js"></script>
+    <script>
+        let studentsList = [];
+        let allLogs = {};
+
+        const modules = [
+            'Engine Oil Change',
+            'Brake Pad Replacement',
+            'Air Filter Replacement',
+            'Fuel Filter Replacement',
+            'Battery Maintenance',
+            'Spark Plug Replacement'
+        ];
+
+        const moduleColors = {
+            'Engine Oil Change': '#2563eb',
+            'Brake Pad Replacement': '#16a34a',
+            'Air Filter Replacement': '#d97706',
+            'Fuel Filter Replacement': '#9333ea',
+            'Battery Maintenance': '#06b6d4',
+            'Spark Plug Replacement': '#ec4899'
+        };
+
+        const moduleColorsBg = {
+            'Engine Oil Change': '#eff6ff',
+            'Brake Pad Replacement': '#f0fdf4',
+            'Air Filter Replacement': '#fff7ed',
+            'Fuel Filter Replacement': '#fdf4ff',
+            'Battery Maintenance': '#ecfeff',
+            'Spark Plug Replacement': '#fdf2f8'
+        };
+
+        async function fetchAnalyticsData() {
+            try {
+                const studResponse = await fetch('teacher_data_api.php?action=get_students_data');
+                if (studResponse.status === 403) {
+                    window.location.href = 'teacherlogin.html';
+                    return;
+                }
+                const studData = await studResponse.json();
+                if (!studData.success) {
+                    console.error('Failed to load students:', studData.message);
+                    return;
+                }
+                studentsList = studData.students;
+
+                const logsResponse = await fetch('teacher_data_api.php?action=get_logs');
+                const logsData = await logsResponse.json();
+                if (!logsData.success) {
+                    console.error('Failed to load logs:', logsData.message);
+                    return;
+                }
+                allLogs = logsData;
+
+                updateAnalyticsDashboard();
+            } catch (error) {
+                console.error('Error fetching analytics:', error);
+            }
+        }
+
+        function updateAnalyticsDashboard() {
+            if (!studentsList || studentsList.length === 0) return;
+
+            const selectedMod = document.getElementById('modFilter').value;
+            const totalStudents = studentsList.length;
+            
+            let avgScore = 0;
+            let passRate = 0;
+
+            const assessments = allLogs.assessments || [];
+            const practices = allLogs.practice_sessions || [];
+
+            const filteredAssessments = selectedMod === 'all' 
+                ? assessments 
+                : assessments.filter(att => att.title === selectedMod + ' Assessment');
+
+            const filteredPractices = selectedMod === 'all' 
+                ? practices 
+                : practices.filter(att => att.title === selectedMod + ' Simulation');
+
+            if (filteredAssessments.length > 0) {
+                const sum = filteredAssessments.reduce((s, att) => s + att.score, 0);
+                avgScore = Math.round(sum / filteredAssessments.length);
+            }
+
+            if (filteredAssessments.length > 0) {
+                const passed = filteredAssessments.filter(att => att.score >= 75).length;
+                passRate = Math.round((passed / filteredAssessments.length) * 100);
+            }
+
+            const activeStudentIds = new Set();
+            filteredAssessments.forEach(att => activeStudentIds.add(att.student_id));
+            filteredPractices.forEach(att => activeStudentIds.add(att.student_id));
+            
+            const engagementRate = totalStudents > 0 ? Math.round((activeStudentIds.size / totalStudents) * 100) : 0;
+
+            document.getElementById('kpiTotalStudents').textContent = totalStudents;
+            document.getElementById('kpiAvgScore').textContent = avgScore > 0 ? avgScore + '%' : '—';
+            document.getElementById('kpiEngagementRate').textContent = engagementRate + '%';
+            document.getElementById('kpiPassRate').textContent = passRate + '%';
+
+            document.getElementById('kpiEngagementRateFoot').innerHTML = `<span>Active this semester</span><span style="color:var(--orange)">${activeStudentIds.size} of ${totalStudents}</span>`;
+            document.getElementById('kpiPassRateFoot').innerHTML = selectedMod === 'all' 
+                ? `<span>Assessment avg.</span>` 
+                : `<span>${selectedMod} avg.</span>`;
+
+            drawStudentStatusDonut();
+            drawWeeklyTrendChart(filteredAssessments, filteredPractices, avgScore, 78);
+            drawModuleBarChart(assessments);
+            drawActivityHeatmap(filteredAssessments, filteredPractices);
+            
+            renderStudentBreakdownTable();
+            renderNeedsAttention();
+            renderModuleCompletion();
+            renderAssessmentPassRates(assessments);
+        }
+
+        function drawWeeklyTrendChart(assessments, practices, classAvgAssess, classAvgPractice) {
+            const xCoords = [36, 116, 196, 266, 336, 406, 476, 546];
+            const getY = (score) => 125 - (score - 60) * 3.5;
+
+            const weeklyAssessments = Array.from({ length: 8 }, () => []);
+            const weeklyPractices = Array.from({ length: 8 }, () => []);
+
+            const getWeekIndex = (dateStr) => {
+                const date = new Date(dateStr);
+                const now = new Date();
+                const diffTime = now - date;
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays >= 0 && diffDays < 7) return 7;
+                if (diffDays >= 7 && diffDays < 14) return 6;
+                if (diffDays >= 14 && diffDays < 21) return 5;
+                if (diffDays >= 21 && diffDays < 28) return 4;
+                if (diffDays >= 28 && diffDays < 35) return 3;
+                if (diffDays >= 35 && diffDays < 42) return 2;
+                if (diffDays >= 42 && diffDays < 49) return 1;
+                if (diffDays >= 49 && diffDays < 56) return 0;
+                return -1;
+            };
+
+            assessments.forEach(att => {
+                const wk = getWeekIndex(att.date_taken);
+                if (wk !== -1) weeklyAssessments[wk].push(att.score);
+            });
+
+            practices.forEach(att => {
+                const wk = getWeekIndex(att.date_completed);
+                if (wk !== -1) weeklyPractices[wk].push(att.score);
+            });
+
+            const baseAssess = [68, 70, 72, 73, 71, 74, 76, 78];
+            const basePractice = [70, 73, 75, 76, 74, 78, 80, 82];
+            
+            const targetAvgAssess = classAvgAssess || 75;
+            const targetAvgPractice = classAvgPractice || 78;
+
+            const assessAverages = weeklyAssessments.map((scores, i) => {
+                if (scores.length > 0) {
+                    return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+                }
+                const offset = targetAvgAssess - 74;
+                return Math.round(Math.max(10, Math.min(100, baseAssess[i] + offset)));
+            });
+
+            const practiceAverages = weeklyPractices.map((scores, i) => {
+                if (scores.length > 0) {
+                    return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+                }
+                const offset = targetAvgPractice - 76;
+                return Math.round(Math.max(10, Math.min(100, basePractice[i] + offset)));
+            });
+
+            const assessPoints = assessAverages.map((score, i) => `${xCoords[i]},${Math.round(getY(score))}`).join(' ');
+            const practicePoints = practiceAverages.map((score, i) => `${xCoords[i]},${Math.round(getY(score))}`).join(' ');
+
+            const lineAssess = document.getElementById('trendAssessLine');
+            if (lineAssess) lineAssess.setAttribute('points', assessPoints);
+
+            const linePractice = document.getElementById('trendPracticeLine');
+            if (linePractice) linePractice.setAttribute('points', practicePoints);
+
+            const fillAssess = document.getElementById('trendAssessFill');
+            if (fillAssess) fillAssess.setAttribute('points', `${assessPoints} 546,140 36,140`);
+
+            let dotsHtml = '';
+            assessAverages.forEach((score, i) => {
+                const cx = xCoords[i];
+                const cy = Math.round(getY(score));
+                dotsHtml += `<circle cx="${cx}" cy="${cy}" r="4" fill="#2563eb" style="cursor:pointer"><title>Week ${i+1} Assessment Avg: ${score}%</title></circle>`;
+            });
+            practiceAverages.forEach((score, i) => {
+                const cx = xCoords[i];
+                const cy = Math.round(getY(score));
+                dotsHtml += `<circle cx="${cx}" cy="${cy}" r="3.5" fill="#16a34a" style="cursor:pointer"><title>Week ${i+1} Practice Avg: ${score}%</title></circle>`;
+            });
+            const dotsContainer = document.getElementById('trendDots');
+            if (dotsContainer) dotsContainer.innerHTML = dotsHtml;
+        }
+
+        function drawModuleBarChart(assessments) {
+            const barChartContainer = document.getElementById('moduleBarChart');
+            if (!barChartContainer) return;
+            barChartContainer.innerHTML = '';
+
+            modules.forEach((modName, index) => {
+                const title = modName + ' Assessment';
+                const attempts = assessments.filter(att => att.title === title);
+                const count = attempts.length;
+                const scoreSum = attempts.reduce((sum, att) => sum + att.score, 0);
+                const avgScore = count > 0 ? Math.round(scoreSum / count) : 0;
+
+                const color = moduleColors[modName] || '#2563eb';
+                const barHeight = Math.round((avgScore / 100) * 130);
+
+                const col = document.createElement('div');
+                col.className = 'bar-col';
+                col.innerHTML = `
+                    <span class="bar-val" style="color:${color}">${avgScore > 0 ? avgScore + '%' : '—'}</span>
+                    <div class="bar" style="height:${Math.max(4, barHeight)}px;background:linear-gradient(to top,${color},#60a5fa)" title="${modName}: ${avgScore}%"></div>
+                    <span class="bar-label">Mod ${index + 1}</span>
+                `;
+                barChartContainer.appendChild(col);
+            });
+        }
+
+        function drawStudentStatusDonut() {
+            let onTrack = 0;
+            let atRisk = 0;
+            let inactive = 0;
+
+            studentsList.forEach(s => {
+                if (s.status === 'on-track') onTrack++;
+                else if (s.status === 'at-risk') atRisk++;
+                else if (s.status === 'inactive') inactive++;
+            });
+
+            const total = studentsList.length;
+            const donutTotalText = document.getElementById('donutTotalText');
+            if (donutTotalText) donutTotalText.textContent = total;
+            
+            const donutSubtitle = document.getElementById('donutSubtitle');
+            if (donutSubtitle) donutSubtitle.textContent = `${total} total enrolled`;
+
+            const pOnTrack = total > 0 ? (onTrack / total) * 100 : 0;
+            const pAtRisk = total > 0 ? (atRisk / total) * 100 : 0;
+            const pInactive = total > 0 ? (inactive / total) * 100 : 0;
+
+            const cOnTrack = document.getElementById('donutOnTrack');
+            if (cOnTrack) {
+                cOnTrack.setAttribute('stroke-dasharray', `${pOnTrack} ${100 - pOnTrack}`);
+                cOnTrack.setAttribute('stroke-dashoffset', '0');
+            }
+
+            const cAtRisk = document.getElementById('donutAtRisk');
+            if (cAtRisk) {
+                cAtRisk.setAttribute('stroke-dasharray', `${pAtRisk} ${100 - pAtRisk}`);
+                cAtRisk.setAttribute('stroke-dashoffset', `-${pOnTrack}`);
+            }
+
+            const cInactive = document.getElementById('donutInactive');
+            if (cInactive) {
+                cInactive.setAttribute('stroke-dasharray', `${pInactive} ${100 - pInactive}`);
+                cInactive.setAttribute('stroke-dashoffset', `-${pOnTrack + pAtRisk}`);
+            }
+
+            const legend = document.getElementById('donutLegend');
+            if (legend) {
+                legend.innerHTML = `
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background:#16a34a"></div>On Track <span
+                            class="legend-val" style="color:#16a34a">${onTrack}</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background:#d97706"></div>At Risk <span
+                            class="legend-val" style="color:#d97706">${atRisk}</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background:#dc2626"></div>Inactive <span
+                            class="legend-val" style="color:#dc2626">${inactive}</span>
+                    </div>
+                `;
+            }
+        }
+
+        function drawActivityHeatmap(assessments, practices) {
+            const dailyCounts = Array.from({ length: 28 }, () => 0);
+            
+            const countDaysAgo = (dateStr) => {
+                const date = new Date(dateStr);
+                const now = new Date();
+                date.setHours(0, 0, 0, 0);
+                now.setHours(0, 0, 0, 0);
+                const diffTime = now - date;
+                return Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            };
+
+            assessments.forEach(att => {
+                const daysAgo = countDaysAgo(att.date_taken);
+                if (daysAgo >= 0 && daysAgo < 28) {
+                    dailyCounts[27 - daysAgo]++;
+                }
+            });
+            
+            practices.forEach(att => {
+                const daysAgo = countDaysAgo(att.date_completed);
+                if (daysAgo >= 0 && daysAgo < 28) {
+                    dailyCounts[27 - daysAgo]++;
+                }
+            });
+
+            const grid = document.getElementById('heatmapGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            const heatColors = ['#f3f4f6', '#bfdbfe', '#60a5fa', '#2563eb', '#1d4ed8'];
+            
+            dailyCounts.forEach((count, i) => {
+                const daysAgo = 27 - i;
+                let dateLabel = '';
+                if (daysAgo === 0) dateLabel = 'Today';
+                else if (daysAgo === 1) dateLabel = 'Yesterday';
+                else dateLabel = `${daysAgo} days ago`;
+
+                let colorIdx = 0;
+                if (count > 0 && count <= 1) colorIdx = 1;
+                else if (count > 1 && count <= 2) colorIdx = 2;
+                else if (count > 2 && count <= 4) colorIdx = 3;
+                else if (count > 4) colorIdx = 4;
+                
+                const cell = document.createElement('div');
+                cell.className = 'hmap-cell';
+                cell.style.background = heatColors[colorIdx];
+                cell.title = `${dateLabel}: ${count} submission${count !== 1 ? 's' : ''}`;
+                grid.appendChild(cell);
+            });
+        }
+
+        function renderStudentBreakdownTable() {
+            const tableBody = document.getElementById('performanceTableBody');
+            if (!tableBody) return;
+            tableBody.innerHTML = '';
+
+            const perfFilter = document.getElementById('perfStudentFilter').value;
+            const selectedMod = document.getElementById('modFilter').value;
+
+            let filteredStudents = studentsList.map(s => {
+                let scoreVal = s.score;
+                let progressVal = s.modules;
+                let progressTotal = 6;
+
+                let practicePoints = 0;
+                const studentPractices = (allLogs.practice_sessions || []).filter(att => att.student_id === s.id);
+                
+                if (selectedMod === 'all') {
+                    practicePoints = studentPractices.reduce((sum, att) => sum + att.score * 10, 0);
+                } else {
+                    const modPractices = studentPractices.filter(att => att.title === selectedMod + ' Simulation');
+                    practicePoints = modPractices.reduce((sum, att) => sum + att.score * 10, 0);
+                    
+                    const studentAssess = (allLogs.assessments || []).find(att => att.student_id === s.id && att.title === selectedMod + ' Assessment');
+                    scoreVal = studentAssess ? studentAssess.score : 0;
+                    
+                    const modProg = s.moduleProgress ? s.moduleProgress.find(mp => mp.n === selectedMod) : null;
+                    progressVal = modProg ? modProg.p : 0;
+                    progressTotal = 100;
+                }
+
+                return {
+                    ...s,
+                    scoreVal,
+                    progressVal,
+                    progressTotal,
+                    practicePoints
+                };
+            });
+
+            if (perfFilter === 'top') {
+                filteredStudents = filteredStudents.filter(s => s.scoreVal >= 80);
+            } else if (perfFilter === 'needs_attention') {
+                filteredStudents = filteredStudents.filter(s => s.scoreVal < 70 || s.status === 'at-risk');
+            }
+
+            filteredStudents.sort((a, b) => b.scoreVal - a.scoreVal);
+
+            if (filteredStudents.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-secondary)">No students found matching filters.</td></tr>`;
+                return;
+            }
+
+            filteredStudents.forEach(s => {
+                let badgeClass = s.status === 'on-track' ? 'badge-green' : s.status === 'at-risk' ? 'badge-orange' : 'badge-red';
+                let badgeText = s.status === 'on-track' ? 'On Track' : s.status === 'at-risk' ? 'At Risk' : 'Inactive';
+                let scoreColor = s.scoreVal >= 80 ? '#16a34a' : s.scoreVal >= 65 ? '#2563eb' : '#dc2626';
+                let progressStr = s.progressTotal === 6 ? `${s.progressVal}/6` : `${s.progressVal}%`;
+
+                let trendHtml = '';
+                if (s.scoreVal >= 80) {
+                    trendHtml = `<span class="trend-up"><i class="fa-solid fa-arrow-trend-up"></i> +2%</span>`;
+                } else if (s.scoreVal > 0 && s.scoreVal < 65) {
+                    trendHtml = `<span class="trend-dn"><i class="fa-solid fa-arrow-trend-down"></i> -4%</span>`;
+                } else {
+                    trendHtml = `<span class="trend-up" style="color:var(--text-secondary);background:#f3f4f6"><i class="fa-solid fa-arrows-left-right"></i> Stable</span>`;
+                }
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>
+                        <div class="stu-cell">
+                            <div class="stu-av" style="background:${s.color || '#2563eb'}">${s.initials}</div>
+                            <div>${s.name}</div>
+                        </div>
+                    </td>
+                    <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+                    <td class="muted">${progressStr}</td>
+                    <td class="muted" style="color:${scoreColor};font-weight:800">${s.scoreVal > 0 ? s.scoreVal + '%' : '—'}</td>
+                    <td class="muted">${s.practicePoints.toLocaleString()} pts</td>
+                    <td class="muted">${s.lastActive}</td>
+                    <td>${trendHtml}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        function renderNeedsAttention() {
+            const needsPanel = document.getElementById('needsAttentionPanel');
+            if (!needsPanel) return;
+            needsPanel.innerHTML = '';
+
+            const atRiskStudents = studentsList.filter(s => s.score < 65 || s.status === 'at-risk')
+                .sort((a, b) => a.score - b.score)
+                .slice(0, 3);
+
+            if (atRiskStudents.length === 0) {
+                needsPanel.innerHTML = '<div style="padding:24px;text-align:center;color:var(--text-secondary);font-size:0.78rem;font-weight:700">All students are on track!</div>';
+                return;
+            }
+
+            atRiskStudents.forEach(s => {
+                let remark = 'Needs review';
+                if (s.status === 'inactive') {
+                    remark = 'No activity since ' + s.lastActive;
+                } else if (s.score > 0 && s.score < 65) {
+                    remark = `Averaging ${s.score}% on assessments`;
+                } else if (s.progress < 50) {
+                    remark = `Low overall progress: ${s.progress}%`;
+                }
+
+                const badgeColor = s.score >= 75 ? 'badge-teal' : s.score >= 65 ? 'badge-blue' : 'badge-orange';
+                const avatarBg = s.color || '#dc2626';
+
+                const div = document.createElement('div');
+                div.className = 'side-item';
+                div.style = 'flex-direction:column;align-items:flex-start;gap:4px;padding:10px 16px';
+                div.innerHTML = `
+                    <div style="display:flex;align-items:center;gap:8px;width:100%">
+                        <div class="stu-av" style="background:${avatarBg};width:24px;height:24px;font-size:9px">${s.initials}</div>
+                        <span style="flex:1;font-size:0.74rem;font-weight:700">${s.name}</span>
+                        <span class="badge ${badgeColor}">${s.score > 0 ? s.score + '%' : '—'}</span>
+                    </div>
+                    <div style="font-size:0.62rem;font-weight:600;color:var(--text-secondary);padding-left:32px">${remark}</div>
+                `;
+                needsPanel.appendChild(div);
+            });
+        }
+
+        function renderModuleCompletion() {
+            const completionList = document.getElementById('moduleCompletionList');
+            if (!completionList) return;
+            completionList.innerHTML = '';
+            
+            const totalStudents = studentsList.length;
+            
+            modules.forEach((modName, index) => {
+                let completedCount = 0;
+                studentsList.forEach(s => {
+                    const modProg = s.moduleProgress ? s.moduleProgress.find(mp => mp.n === modName) : null;
+                    if (modProg && modProg.p === 100) {
+                        completedCount++;
+                    }
+                });
+                
+                const percentage = totalStudents > 0 ? Math.round((completedCount / totalStudents) * 100) : 0;
+                const color = moduleColors[modName] || '#2563eb';
+                
+                const div = document.createElement('div');
+                div.className = 'prog-row';
+                div.innerHTML = `
+                    <span class="prog-label">${modName}</span>
+                    <div class="prog-track">
+                        <div class="prog-fill" style="width:${percentage}%;background:${color}"></div>
+                    </div>
+                    <span class="prog-pct" style="color:${color}">${percentage}%</span>
+                `;
+                completionList.appendChild(div);
+            });
+        }
+
+        function renderAssessmentPassRates(assessments) {
+            const passRatesPanel = document.getElementById('passRatesPanel');
+            if (!passRatesPanel) return;
+            passRatesPanel.innerHTML = '';
+
+            modules.forEach(modName => {
+                const title = modName + ' Assessment';
+                const attempts = assessments.filter(att => att.title === title);
+                const count = attempts.length;
+                
+                const passedAttempts = attempts.filter(att => att.score >= 75).length;
+                const passRate = count > 0 ? Math.round((passedAttempts / count) * 100) : 0;
+                const color = moduleColors[modName] || '#2563eb';
+
+                const div = document.createElement('div');
+                div.className = 'side-item';
+                div.innerHTML = `
+                    <div class="side-dot" style="background:${color}"></div>
+                    <div class="side-label">${modName}</div>
+                    <div class="side-val" style="color:${passRate >= 75 ? '#16a34a' : passRate >= 50 ? '#2563eb' : '#dc2626'}">${count > 0 ? passRate + '%' : '—'}</div>
+                `;
+                passRatesPanel.appendChild(div);
+            });
+        }
+
+        function filterPerformanceTable() {
+            renderStudentBreakdownTable();
+        }
+
+        function filterAnalyticsByModule() {
+            updateAnalyticsDashboard();
+        }
+
+        function updatePeriod() {
+            // Period filter visual helper
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchAnalyticsData);
+    </script>
+</body>
+
+</html>

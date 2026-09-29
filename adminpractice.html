@@ -1,0 +1,2229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotoMaster Admin – Practice Sessions</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f3f4f6;
+            --panel-bg: #ffffff;
+            --border-color: #e5e7eb;
+            --text-primary: #1a1a2e;
+            --text-secondary: #6b7280;
+            --accent: #2563eb;
+            --accent-dark: #1d4ed8;
+            --accent-light: #eff6ff;
+            --green: #16a34a;
+            --red: #dc2626;
+            --orange: #d97706;
+            --sidebar-w: 240px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: #fff;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .logo-container {
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-container img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .logo-sub {
+            font-size: 0.62rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+        }
+
+        .nav-section-label {
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 14px 18px 4px;
+        }
+
+        .nav-menu {
+            list-style: none;
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+
+        .nav-menu::-webkit-scrollbar {
+            width: 0;
+        }
+
+        .nav-item {
+            padding: 9px 16px;
+            margin: 2px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            font-weight: 700;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .nav-item i {
+            width: 16px;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .nav-item:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .nav-item.active {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .nav-item.active i {
+            color: var(--accent);
+        }
+
+        .sidebar-bottom {
+            padding: 12px 0 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* ── MAIN ── */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            background: var(--bg-color);
+        }
+
+        /* ── TOPBAR ── */
+        .topbar {
+            background: #fff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 28px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .topbar-left h1 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .topbar-left p {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-color);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            padding: 7px 12px;
+        }
+
+        .search-bar i {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .search-bar input {
+            background: none;
+            border: none;
+            outline: none;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.8rem;
+            color: var(--text-primary);
+            width: 180px;
+        }
+
+        .search-bar input::placeholder {
+            color: #9ca3af;
+        }
+
+        .notif-btn {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--bg-color);
+            border: 1.5px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: border-color 0.2s;
+        }
+
+        .notif-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--red);
+            color: #fff;
+            font-size: 0.58rem;
+            font-weight: 800;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-pill {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 5px 12px 5px 5px;
+            border-radius: 30px;
+            border: 1.5px solid var(--border-color);
+            background: #fff;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .profile-pill:hover {
+            border-color: var(--accent);
+        }
+
+        .profile-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 12px;
+        }
+
+        .profile-name {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .profile-role {
+            font-size: 0.62rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* ── DASHBOARD BODY ── */
+        .dashboard-container {
+            padding: 22px 28px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        /* ── KPI CARDS ── */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 14px;
+        }
+
+        .kpi-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .kpi-card:hover {
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.10);
+            border-color: #bfdbfe;
+        }
+
+        .kpi-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .kpi-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            background: var(--accent-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .kpi-title {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .kpi-value {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .kpi-foot {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            padding-top: 8px;
+        }
+
+        .kpi-foot span:last-child {
+            color: var(--text-primary);
+        }
+
+        /* ── BUTTONS ── */
+        .btn-outline {
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 7px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            transition: border-color 0.2s;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            padding: 7px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 800;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dark);
+        }
+
+        /* ── PANEL ── */
+        .panel {
+            background: #fff;
+            border-radius: 12px;
+            padding: 0;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .panel-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .panel-title {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .panel-subtitle {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        /* ── FILTERS BAR ── */
+        .filters-bar {
+            display: flex;
+            gap: 10px;
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+        }
+
+        .filter-search {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-color);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            padding: 7px 12px;
+            flex: 1;
+        }
+
+        .filter-search i {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .filter-search input {
+            background: none;
+            border: none;
+            outline: none;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.8rem;
+            color: var(--text-primary);
+            width: 100%;
+        }
+
+        .filter-search input::placeholder {
+            color: #9ca3af;
+        }
+
+        .filter-select {
+            background: var(--bg-color);
+            color: var(--text-secondary);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            padding: 7px 10px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .filter-divider {
+            width: 1px;
+            height: 28px;
+            background: var(--border-color);
+            flex-shrink: 0;
+        }
+
+        /* ── PRACTICE SESSIONS TABLE ── */
+        .assess-table-wrap {
+            overflow-x: auto;
+        }
+
+        .assess-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .assess-table thead th {
+            padding: 10px 16px;
+            text-align: left;
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: var(--bg-color);
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        .assess-table tbody tr {
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.15s;
+            cursor: pointer;
+        }
+
+        .assess-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .assess-table tbody tr:hover {
+            background: #f8f9ff;
+        }
+
+        .assess-table td {
+            padding: 12px 16px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            vertical-align: middle;
+        }
+
+        .assess-table td.muted {
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .assess-title-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .assess-icon-box {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .assess-name {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .assess-module-link {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-top: 1px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.62rem;
+            font-weight: 800;
+        }
+
+        .badge-published {
+            background: #f0fdf4;
+            color: #16a34a;
+            border: 1px solid #bbf7d0;
+        }
+
+        .badge-draft {
+            background: #fefce8;
+            color: #ca8a04;
+            border: 1px solid #fde68a;
+        }
+
+        .badge-archived {
+            background: #f3f4f6;
+            color: #6b7280;
+            border: 1px solid #e5e7eb;
+        }
+
+        .badge-quiz {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+        }
+
+        .badge-final {
+            background: #fdf4ff;
+            color: #9333ea;
+            border: 1px solid #e9d5ff;
+        }
+
+        .badge-practice {
+            background: #fff7ed;
+            color: #c2410c;
+            border: 1px solid #fed7aa;
+        }
+
+        .pass-rate-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pass-rate-bar {
+            flex: 1;
+            height: 5px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+            min-width: 60px;
+        }
+
+        .pass-rate-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+
+        .pass-rate-pct {
+            font-size: 0.72rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .action-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .action-btn.edit {
+            background: var(--bg-color);
+            border: 1.5px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .action-btn.edit:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .action-btn.view {
+            background: var(--bg-color);
+            border: 1.5px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .action-btn.view:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .action-btn.del {
+            background: #fef2f2;
+            border: 1.5px solid #fecaca;
+            color: var(--red);
+        }
+
+        .action-btn.del:hover {
+            background: #fee2e2;
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 5px;
+        }
+
+        /* ── PAGINATION ── */
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .pagination-info {
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            font-weight: 700;
+        }
+
+        .pagination-btns {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .pg-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: 1.5px solid var(--border-color);
+            background: #fff;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .pg-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .pg-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        /* ── BOTTOM GRID ── */
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        /* ── RECENT SUBMISSIONS ── */
+        .submission-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .submission-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 20px;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.15s;
+        }
+
+        .submission-item:last-child {
+            border-bottom: none;
+        }
+
+        .submission-item:hover {
+            background: #f8f9ff;
+        }
+
+        .sub-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .sub-name {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .sub-meta {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        .sub-score {
+            text-align: right;
+        }
+
+        .sub-score-val {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .sub-score-lbl {
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .sub-badge {
+            font-size: 0.6rem;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-top: 3px;
+            display: inline-block;
+        }
+
+        .sub-pass {
+            background: #f0fdf4;
+            color: #16a34a;
+            border: 1px solid #bbf7d0;
+        }
+
+        .sub-fail {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        /* ── TOP PERFORMERS ── */
+        .performer-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .performer-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 20px;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.15s;
+        }
+
+        .performer-item:last-child {
+            border-bottom: none;
+        }
+
+        .performer-item:hover {
+            background: #f8f9ff;
+        }
+
+        .performer-rank {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .rank-gold {
+            background: #fef9c3;
+            color: #a16207;
+            border: 1px solid #fde047;
+        }
+
+        .rank-silver {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .rank-bronze {
+            background: #fff7ed;
+            color: #c2410c;
+            border: 1px solid #fed7aa;
+        }
+
+        .rank-default {
+            background: var(--bg-color);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .performer-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .performer-name {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .performer-meta {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        .performer-score {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-left: auto;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 28px;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            background: #fff;
+            margin-top: auto;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        footer span {
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        /* ── MODALS ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
+            width: 100%;
+            max-width: 520px;
+            overflow: hidden;
+            animation: slideUp 0.22s ease;
+        }
+
+        .modal.modal-sm {
+            max-width: 400px;
+        }
+
+        .modal.modal-lg {
+            max-width: 680px;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(24px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 22px 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            padding: 4px;
+            border-radius: 6px;
+            transition: background 0.15s;
+        }
+
+        .modal-close:hover {
+            background: var(--bg-color);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 20px 22px;
+        }
+
+        .modal-body-scroll {
+            max-height: 68vh;
+            overflow-y: auto;
+            padding: 20px 22px;
+        }
+
+        .modal-body-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .modal-body-scroll::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            padding: 14px 22px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn-danger {
+            background: var(--red);
+            border: none;
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 800;
+            transition: background 0.2s;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+
+        .btn-save {
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 800;
+            transition: background 0.2s;
+        }
+
+        .btn-save:hover {
+            background: var(--accent-dark);
+        }
+
+        .btn-cancel {
+            background: #fff;
+            border: 1.5px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            transition: border-color 0.2s;
+        }
+
+        .btn-cancel:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.82rem;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.2s;
+            background: #fff;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .del-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #fef2f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 14px;
+        }
+
+        .del-icon i {
+            font-size: 1.4rem;
+            color: var(--red);
+        }
+
+        .del-msg {
+            text-align: center;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .del-msg strong {
+            color: var(--text-primary);
+        }
+
+        .view-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .view-stat-box {
+            background: var(--bg-color);
+            border-radius: 10px;
+            padding: 10px 12px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .view-stat-val {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .view-stat-lbl {
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-top: 2px;
+        }
+
+        .section-heading {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            margin-top: 16px;
+        }
+
+        .view-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .view-label {
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            min-width: 120px;
+            padding-top: 2px;
+        }
+
+        .view-val {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .view-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 12px 0;
+        }
+
+        .q-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .q-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 9px;
+            background: #fff;
+        }
+
+        .q-num {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            color: var(--accent);
+            font-size: 0.68rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .q-text {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .q-pts {
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .prog-view-bar {
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .prog-view-fill {
+            height: 100%;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar">
+        <div class="logo-container">
+            <img src="images/finalogo.png" alt="MotoMaster" />
+            <div>
+                <span class="logo-text">MotoMaster</span>
+                <span class="logo-sub">Admin Panel</span>
+            </div>
+        </div>
+
+        <ul class="nav-menu">
+            <li class="nav-section-label">Main</li>
+            <li class="nav-item" onclick="window.location.href='admindash.html'"><i class="fa-solid fa-house"></i>
+                Dashboard</li>
+            <li class="nav-item" onclick="window.location.href='admintech.html'"><i
+                    class="fa-solid fa-chalkboard-user"></i> Teachers</li>
+            <li class="nav-item" onclick="window.location.href='adminstud.html'"><i class="fa-solid fa-users"></i>
+                Students</li>
+            <li class="nav-item" onclick="window.location.href='adminmod.html'"><i class="fa-solid fa-book-open"></i>
+                Modules</li>
+            <li class="nav-item" onclick="window.location.href='adminassess.html'"><i
+                    class="fa-solid fa-clipboard-check"></i> Assessments</li>
+            <li class="nav-item active" onclick="window.location.href='adminpractice.html'"><i
+                    class="fa-solid fa-gamepad"></i> Practice Sessions</li>
+
+            <li class="nav-section-label">Insights</li>
+            <li class="nav-item" onclick="window.location.href='adminanalytics.html'"><i
+                    class="fa-solid fa-chart-simple"></i> Analytics</li>
+            <li class="nav-item" onclick="window.location.href='adminreports.html'"><i
+                    class="fa-solid fa-file-invoice"></i> Reports</li>
+
+            <li class="nav-section-label">System</li>
+            <li class="nav-item" onclick="window.location.href='adminsettings.html'"><i class="fa-solid fa-gear"></i> Settings</li>
+            <li class="nav-item" onclick="window.location.href='adminactivitylogs.html'"><i class="fa-solid fa-list-check"></i> Activity Logs</li>
+            <li class="nav-item" onclick="window.location.href='adminsystembackup.html'"><i class="fa-solid fa-server"></i> System Backup</li>
+            <li class="nav-item" onclick="window.location.href='adminnotif.html'"><i class="fa-regular fa-bell"></i> Notifications</li>
+        </ul>
+
+        <div class="sidebar-bottom">
+            <a class="nav-item" href="index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+        </div>
+    </aside>
+
+    <!-- ── MAIN ── -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <h1>Practice Sessions Management</h1>
+                <p>View and monitor practice simulations across the 6 system modules.</p>
+            </div>
+            <div class="topbar-right">
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input id="topSearch" type="text" placeholder="Search practice simulation..." oninput="handleTopSearch(this.value)">
+                </div>
+                <div class="notif-btn" onclick="window.location.href='adminnotif.html'">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notif-badge">3</span>
+                </div>
+                <div class="profile-pill">
+                    <div class="profile-avatar"><i class="fa-solid fa-user"></i></div>
+                    <div>
+                        <div class="profile-name">Administrator</div>
+                        <div class="profile-role">Super Admin</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-container">
+
+            <!-- Page actions -->
+            <div style="display:flex; justify-content:flex-end; gap:8px;">
+                <button class="btn-outline" onclick="exportPracticeCSV()"><i class="fa-solid fa-arrow-up-from-bracket"></i> Export</button>
+                <button class="btn-primary" onclick="openCreate()"><i class="fa-solid fa-plus"></i> New Practice Session</button>
+            </div>
+
+            <!-- KPI Row -->
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <div class="kpi-header"><div class="kpi-icon"><i class="fa-solid fa-clipboard-check"></i></div><div class="kpi-title">Total Practice Sessions</div></div>
+                    <div class="kpi-value" id="kpiTotalPractice">6</div>
+                    <div class="kpi-foot"><span>Published</span><span style="color:var(--green)" id="kpiPublishedCount">6</span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header"><div class="kpi-icon"><i class="fa-solid fa-paper-plane"></i></div><div class="kpi-title">Total Submissions</div></div>
+                    <div class="kpi-value" id="kpiTotalSubmissions">0</div>
+                    <div class="kpi-foot"><span>Registered Students</span><span id="kpiRegisteredStudentCount">0 attempts</span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header"><div class="kpi-icon"><i class="fa-solid fa-circle-check"></i></div><div class="kpi-title">Avg. Pass Rate</div></div>
+                    <div class="kpi-value" id="kpiAvgPassRate">0%</div>
+                    <div class="kpi-foot"><span>Passed Attempts</span><span style="color:var(--green)" id="kpiPassedCount">0</span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header"><div class="kpi-icon"><i class="fa-solid fa-star-half-stroke"></i></div><div class="kpi-title">Avg. Score</div></div>
+                    <div class="kpi-value" id="kpiAvgScore">0</div>
+                    <div class="kpi-foot"><span>Passing Mark</span><span id="kpiPassingMark">75 pts</span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header"><div class="kpi-icon"><i class="fa-solid fa-triangle-exclamation" style="color:var(--orange)"></i></div><div class="kpi-title">Needs Review</div></div>
+                    <div class="kpi-value" style="color:var(--orange)" id="kpiNeedsReview">0</div>
+                    <div class="kpi-foot"><span>In Progress / Review</span><span style="color:var(--orange)" id="kpiNeedsReviewFoot">0</span></div>
+                </div>
+            </div>
+
+            <!-- Practice Sessions Table Panel -->
+            <div class="panel">
+                <div class="panel-top">
+                    <div>
+                        <div class="panel-title">Practice Simulations</div>
+                        <div class="panel-subtitle" id="tablePanelSubtitle">Showing 6 of 6 practice simulations</div>
+                    </div>
+                    <div style="display:flex;gap:8px">
+                        <button class="btn-outline" style="padding:6px 10px" onclick="loadPracticeData()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="filters-bar">
+                    <div class="filter-search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input id="filterSearch" type="text" placeholder="Search by practice title or module..." oninput="filterAndRenderPractice()">
+                    </div>
+                    <select id="filterStatus" class="filter-select" onchange="filterAndRenderPractice()">
+                        <option value="all">All Status</option>
+                        <option value="Published">Published</option>
+                        <option value="Draft">Draft</option>
+                        <option value="Archived">Archived</option>
+                    </select>
+                    <select id="filterType" class="filter-select" onchange="filterAndRenderPractice()">
+                        <option value="all">All Types</option>
+                        <option value="Practice Simulation">Practice Simulation</option>
+                    </select>
+                    <select id="filterModule" class="filter-select" onchange="filterAndRenderPractice()">
+                        <option value="all">All Modules</option>
+                        <option value="Engine Oil Change & Maintenance">Engine Oil Change &amp; Maintenance</option>
+                        <option value="Brake Pad Replacement & Adjustment">Brake Pad Replacement &amp; Adjustment</option>
+                        <option value="Air Filter Cleaning & Replacement">Air Filter Cleaning &amp; Replacement</option>
+                        <option value="Fuel System Inspection & Cleaning">Fuel System Inspection &amp; Cleaning</option>
+                        <option value="Battery & Electrical Diagnostics">Battery &amp; Electrical Diagnostics</option>
+                        <option value="Spark Plug Inspection & Replacement">Spark Plug Inspection &amp; Replacement</option>
+                    </select>
+                    <div class="filter-divider"></div>
+                    <button class="btn-outline" style="padding:7px 10px;" title="Reset Filters" onclick="resetFilters()"><i class="fa-solid fa-filter-circle-xmark"></i></button>
+                </div>
+
+                <!-- Table -->
+                <div class="assess-table-wrap">
+                    <table class="assess-table">
+                        <thead>
+                            <tr>
+                                <th style="width:30px"><input type="checkbox" style="cursor:pointer" id="selectAllPractice"></th>
+                                <th>Practice Session</th>
+                                <th>Type</th>
+                                <th>Module</th>
+                                <th>Simulation Steps</th>
+                                <th>Time Limit</th>
+                                <th>Submissions</th>
+                                <th>Pass Rate</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="assessTableBody">
+                            <!-- Rows injected by JS from database -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination">
+                    <div class="pagination-info" id="paginationInfo">Showing 1–6 of 6 practice simulations</div>
+                    <div class="pagination-btns">
+                        <button class="pg-btn" disabled><i class="fa-solid fa-chevron-left" style="font-size:9px"></i></button>
+                        <button class="pg-btn active">1</button>
+                        <button class="pg-btn" disabled><i class="fa-solid fa-chevron-right" style="font-size:9px"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Grid -->
+            <div class="bottom-grid">
+
+                <!-- Recent Submissions -->
+                <div class="panel">
+                    <div class="panel-top">
+                        <div>
+                            <div class="panel-title">Recent Submissions</div>
+                            <div class="panel-subtitle">Latest student practice attempts from database</div>
+                        </div>
+                        <button class="btn-outline" style="font-size:0.72rem;padding:5px 12px" onclick="loadPracticeData()"><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
+                    </div>
+                    <div class="submission-list" id="recentSubmissionsList">
+                        <!-- Loaded dynamically from database -->
+                    </div>
+                </div>
+
+                <!-- Top Performers -->
+                <div class="panel">
+                    <div class="panel-top">
+                        <div>
+                            <div class="panel-title">Top Performers</div>
+                            <div class="panel-subtitle">Highest registered student practice scores</div>
+                        </div>
+                        <button class="btn-outline" style="font-size:0.72rem;padding:5px 12px" onclick="window.location.href='adminstud.html'"><i class="fa-solid fa-users"></i> View Students</button>
+                    </div>
+                    <div class="performer-list" id="topPerformersList">
+                        <!-- Loaded dynamically from database -->
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <footer>
+            <span>MotoMaster</span> Admin Panel &mdash; Practice Sessions Management &copy; 2025
+            <span>v2.1.0</span>
+        </footer>
+
+    </main>
+
+    <!-- ══════════════════════════════
+         VIEW MODAL
+    ══════════════════════════════ -->
+    <div class="modal-overlay" id="viewModal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-eye" style="color:var(--accent);margin-right:8px;font-size:0.9rem"></i> Practice Session Details</h3>
+                <button class="modal-close" onclick="closeModal('viewModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body-scroll">
+                <!-- Stats -->
+                <div class="view-stats-grid">
+                    <div class="view-stat-box">
+                        <div class="view-stat-val" id="vQuestions">—</div>
+                        <div class="view-stat-lbl">Simulation Steps</div>
+                    </div>
+                    <div class="view-stat-box">
+                        <div class="view-stat-val" id="vTimeLimit">—</div>
+                        <div class="view-stat-lbl">Time Limit</div>
+                    </div>
+                    <div class="view-stat-box">
+                        <div class="view-stat-val" id="vPassMark">—</div>
+                        <div class="view-stat-lbl">Passing Mark</div>
+                    </div>
+                    <div class="view-stat-box">
+                        <div class="view-stat-val" id="vPassRate">—</div>
+                        <div class="view-stat-lbl">Pass Rate</div>
+                    </div>
+                </div>
+
+                <!-- Info rows -->
+                <div class="view-row"><div class="view-label">Title</div><div class="view-val" id="vTitle">—</div></div>
+                <div class="view-row"><div class="view-label">Type</div><div class="view-val" id="vType">—</div></div>
+                <div class="view-row"><div class="view-label">Linked Module</div><div class="view-val" id="vModule">—</div></div>
+                <div class="view-row"><div class="view-label">Status</div><div id="vStatus">—</div></div>
+                <div class="view-row"><div class="view-label">Submissions</div><div class="view-val" id="vSubmissions">—</div></div>
+                <div class="view-row"><div class="view-label">Avg. Score</div><div class="view-val" id="vAvgScore">—</div></div>
+
+                <div class="view-divider"></div>
+
+                <!-- Pass rate bar -->
+                <div style="margin-bottom:16px">
+                    <div style="display:flex;justify-content:space-between;font-size:0.68rem;font-weight:800;color:var(--text-secondary);margin-bottom:4px">
+                        <span>PASS RATE</span><span id="vPassRateBar">0%</span>
+                    </div>
+                    <div class="prog-view-bar"><div class="prog-view-fill" id="vPassFill" style="background:var(--green)"></div></div>
+                </div>
+
+                <!-- Simulation Rubric Steps -->
+                <div class="section-heading">Simulation Evaluation Rubric &amp; Steps</div>
+                <ul class="q-list" id="vQuestionsList"></ul>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('viewModal')">Close</button>
+                <button class="btn-save" onclick="switchToEdit()"><i class="fa-solid fa-pen" style="font-size:11px"></i> Edit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════
+         EDIT MODAL
+    ══════════════════════════════ -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-pen" style="color:var(--accent);margin-right:8px;font-size:0.9rem"></i> Edit Practice Simulation</h3>
+                <button class="modal-close" onclick="closeModal('editModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body-scroll">
+                <div class="form-group">
+                    <label class="form-label">Simulation Title</label>
+                    <input class="form-control" id="eTitle" type="text">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Type</label>
+                        <select class="form-control" id="eType">
+                            <option value="Practice Simulation">Practice Simulation</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Linked Module</label>
+                        <select class="form-control" id="eModule">
+                            <option value="Engine Oil Change & Maintenance">Engine Oil Change &amp; Maintenance</option>
+                            <option value="Brake Pad Replacement & Adjustment">Brake Pad Replacement &amp; Adjustment</option>
+                            <option value="Air Filter Cleaning & Replacement">Air Filter Cleaning &amp; Replacement</option>
+                            <option value="Fuel System Inspection & Cleaning">Fuel System Inspection &amp; Cleaning</option>
+                            <option value="Battery & Electrical Diagnostics">Battery &amp; Electrical Diagnostics</option>
+                            <option value="Spark Plug Inspection & Replacement">Spark Plug Inspection &amp; Replacement</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Number of Simulation Steps</label>
+                        <input class="form-control" id="eQuestions" type="number" min="1" max="20">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Time Limit</label>
+                        <input class="form-control" id="eTimeLimit" type="text" placeholder="e.g. 20 mins">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Passing Mark (pts / %)</label>
+                        <input class="form-control" id="ePassMark" type="number" min="1" max="100">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select class="form-control" id="eStatus">
+                            <option value="Published">Published</option>
+                            <option value="Draft">Draft</option>
+                            <option value="Archived">Archived</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('editModal')">Cancel</button>
+                <button class="btn-save" onclick="saveEdit()"><i class="fa-solid fa-floppy-disk" style="font-size:11px"></i> Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════
+         DELETE MODAL
+    ══════════════════════════════ -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-box-archive" style="color:var(--red);margin-right:8px;font-size:0.9rem"></i> Archive Practice Session</h3>
+                <button class="modal-close" onclick="closeModal('deleteModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="del-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <div class="del-msg">Are you sure you want to archive<br><strong id="dTitle">this practice simulation</strong>?<br>This will set its status to Archived.</div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('deleteModal')">Cancel</button>
+                <button class="btn-danger" onclick="confirmDelete()"><i class="fa-solid fa-box-archive" style="font-size:11px"></i> Archive</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════
+         CREATE MODAL
+    ══════════════════════════════ -->
+    <div class="modal-overlay" id="createModal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-plus" style="color:var(--accent);margin-right:8px;font-size:0.9rem"></i> New Practice Simulation</h3>
+                <button class="modal-close" onclick="closeModal('createModal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body-scroll">
+                <div class="form-group">
+                    <label class="form-label">Simulation Title</label>
+                    <input class="form-control" id="cTitle" type="text" placeholder="e.g. Engine Oil Change Practice">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Type</label>
+                        <select class="form-control" id="cType">
+                            <option value="Practice Simulation">Practice Simulation</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Linked Module</label>
+                        <select class="form-control" id="cModule">
+                            <option value="Engine Oil Change & Maintenance">Engine Oil Change &amp; Maintenance</option>
+                            <option value="Brake Pad Replacement & Adjustment">Brake Pad Replacement &amp; Adjustment</option>
+                            <option value="Air Filter Cleaning & Replacement">Air Filter Cleaning &amp; Replacement</option>
+                            <option value="Fuel System Inspection & Cleaning">Fuel System Inspection &amp; Cleaning</option>
+                            <option value="Battery & Electrical Diagnostics">Battery &amp; Electrical Diagnostics</option>
+                            <option value="Spark Plug Inspection & Replacement">Spark Plug Inspection &amp; Replacement</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Number of Simulation Steps</label>
+                        <input class="form-control" id="cQuestions" type="number" min="1" value="5">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Time Limit</label>
+                        <input class="form-control" id="cTimeLimit" type="text" placeholder="e.g. 20 mins" value="20 mins">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Passing Mark (pts / %)</label>
+                        <input class="form-control" id="cPassMark" type="number" min="1" value="75">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select class="form-control" id="cStatus">
+                            <option value="Published">Published</option>
+                            <option value="Draft">Draft</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('createModal')">Cancel</button>
+                <button class="btn-save" onclick="confirmCreate()"><i class="fa-solid fa-plus" style="font-size:11px"></i> Add Simulation</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'admin_data_api.php';
+        let practiceSessions = [];
+        let rawPractice = [];
+        let recentSubmissions = [];
+        let topPerformers = [];
+        let currentId = null;
+
+        /* ── FETCH ALL DATA FROM DATABASE ── */
+        async function loadPracticeData() {
+            try {
+                const res = await fetch(`${API_BASE}?action=get_practice_data`);
+                if (!res.ok) throw new Error('Network response error');
+                const data = await res.json();
+                if (!data || !data.success) throw new Error(data.message || 'API error');
+
+                // Update KPI Cards from database
+                updateKPICards(data.kpis);
+
+                // Store practice sessions
+                rawPractice = data.practice_sessions || [];
+                practiceSessions = [...rawPractice];
+
+                // Render recent submissions and top performers
+                recentSubmissions = data.recent_submissions || [];
+                topPerformers = data.top_performers || [];
+
+                renderRecentSubmissions(recentSubmissions);
+                renderTopPerformers(topPerformers);
+
+                // Render Table
+                filterAndRenderPractice();
+            } catch (err) {
+                console.error('Error loading practice data:', err);
+            }
+        }
+
+        /* ── UPDATE KPIS ── */
+        function updateKPICards(kpis) {
+            if (!kpis) return;
+            const setTxt = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = val;
+            };
+
+            setTxt('kpiTotalPractice', kpis.total_practice ?? 6);
+            setTxt('kpiPublishedCount', kpis.published_practice ?? 6);
+            setTxt('kpiTotalSubmissions', (kpis.total_submissions ?? 0).toLocaleString());
+            setTxt('kpiRegisteredStudentCount', (kpis.total_submissions ?? 0) > 0 ? (kpis.total_submissions + ' submissions') : '0 attempts');
+            setTxt('kpiAvgPassRate', (kpis.avg_pass_rate ?? 0) + '%');
+            setTxt('kpiPassedCount', (kpis.passed_count ?? 0).toLocaleString());
+            setTxt('kpiAvgScore', (kpis.avg_score ?? 0));
+            setTxt('kpiPassingMark', (kpis.passing_mark ?? 75) + ' pts');
+            setTxt('kpiNeedsReview', kpis.needs_review ?? 0);
+            setTxt('kpiNeedsReviewFoot', kpis.needs_review ?? 0);
+        }
+
+        /* ── RENDER RECENT SUBMISSIONS ── */
+        function renderRecentSubmissions(items) {
+            const list = document.getElementById('recentSubmissionsList');
+            if (!list) return;
+
+            if (!items || items.length === 0) {
+                list.innerHTML = `
+                    <div style="padding: 24px; text-align: center; color: var(--text-secondary); font-size: 0.78rem; font-weight: 700;">
+                        <i class="fa-solid fa-clock-rotate-left" style="font-size: 20px; color: #9ca3af; margin-bottom: 8px; display: block;"></i>
+                        No practice simulation attempts recorded yet from registered students.
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = items.map(sub => {
+                const badgeClass = sub.passed ? 'sub-pass' : 'sub-fail';
+                const badgeText = sub.passed ? 'PASSED' : (sub.completion_status || 'FAILED');
+                const scoreColor = sub.passed ? 'var(--green)' : (sub.score > 0 ? 'var(--orange)' : 'var(--red)');
+
+                return `
+                    <div class="submission-item">
+                        <div class="sub-avatar" style="background:${sub.avatar_color || '#2563eb'}">${escapeHtml(sub.initials)}</div>
+                        <div style="flex:1;min-width:0">
+                            <div class="sub-name">${escapeHtml(sub.student_name)}</div>
+                            <div class="sub-meta">${escapeHtml(sub.title)} &bull; ${escapeHtml(sub.time_ago)}</div>
+                        </div>
+                        <div class="sub-score" style="text-align:right">
+                            <div class="sub-score-val" style="color:${scoreColor}">${sub.score}</div>
+                            <div class="sub-score-lbl">/ 100</div>
+                            <span class="sub-badge ${badgeClass}">${badgeText}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        /* ── RENDER TOP PERFORMERS ── */
+        function renderTopPerformers(items) {
+            const list = document.getElementById('topPerformersList');
+            if (!list) return;
+
+            if (!items || items.length === 0) {
+                list.innerHTML = `
+                    <div style="padding: 24px; text-align: center; color: var(--text-secondary); font-size: 0.78rem; font-weight: 700;">
+                        <i class="fa-solid fa-trophy" style="font-size: 20px; color: #9ca3af; margin-bottom: 8px; display: block;"></i>
+                        No student practice rankings available yet.
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = items.map(perf => {
+                let rankClass = 'rank-default';
+                if (perf.rank === 1) rankClass = 'rank-gold';
+                else if (perf.rank === 2) rankClass = 'rank-silver';
+                else if (perf.rank === 3) rankClass = 'rank-bronze';
+
+                const meta = perf.count > 0 ? `${perf.count} attempt${perf.count > 1 ? 's' : ''} &bull; Avg. ${perf.avg_score}` : 'Registered Student';
+
+                return `
+                    <div class="performer-item">
+                        <div class="performer-rank ${rankClass}">${perf.rank}</div>
+                        <div class="performer-avatar" style="background:${perf.avatar_color || '#2563eb'}">${escapeHtml(perf.initials)}</div>
+                        <div style="flex:1;min-width:0">
+                            <div class="performer-name">${escapeHtml(perf.name)}</div>
+                            <div class="performer-meta">${meta}</div>
+                        </div>
+                        <div class="performer-score">${perf.avg_score}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        /* ── HELPER UTILS ── */
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function getTypeClass(type) {
+            return 'badge-practice';
+        }
+
+        function getStatusClass(status) {
+            if (status === 'Published') return 'badge-published';
+            if (status === 'Draft') return 'badge-draft';
+            return 'badge-archived';
+        }
+
+        function getPassColor(rate) {
+            if (rate >= 80) return 'var(--green)';
+            if (rate >= 60) return 'var(--orange)';
+            return 'var(--red)';
+        }
+
+        /* ── TABLE FILTER & RENDER ── */
+        function filterAndRenderPractice() {
+            const searchVal = (document.getElementById('filterSearch')?.value || document.getElementById('topSearch')?.value || '').toLowerCase().trim();
+            const statusVal = document.getElementById('filterStatus')?.value || 'all';
+            const typeVal = document.getElementById('filterType')?.value || 'all';
+            const moduleVal = document.getElementById('filterModule')?.value || 'all';
+
+            practiceSessions = rawPractice.filter(item => {
+                const matchSearch = !searchVal || item.title.toLowerCase().includes(searchVal) || item.module.toLowerCase().includes(searchVal);
+                const matchStatus = (statusVal === 'all') || (item.status === statusVal);
+                const matchType = (typeVal === 'all') || (item.type === typeVal);
+                const matchModule = (moduleVal === 'all') || (item.module === moduleVal);
+                return matchSearch && matchStatus && matchType && matchModule;
+            });
+
+            renderPracticeTable();
+        }
+
+        function renderPracticeTable() {
+            const tbody = document.getElementById('assessTableBody');
+            if (!tbody) return;
+
+            const total = practiceSessions.length;
+            const subtitle = document.getElementById('tablePanelSubtitle');
+            if (subtitle) subtitle.textContent = `Showing ${total} of 6 practice simulations`;
+
+            const pageInfo = document.getElementById('paginationInfo');
+            if (pageInfo) pageInfo.textContent = `Showing 1–${total} of ${total} practice simulations`;
+
+            if (total === 0) {
+                tbody.innerHTML = `<tr><td colspan="10" style="padding:28px 16px;text-align:center;color:var(--text-secondary);font-weight:700">No practice simulations match the selected filters.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = practiceSessions.map(a => `
+                <tr>
+                    <td><input type="checkbox" style="cursor:pointer"></td>
+                    <td>
+                        <div class="assess-title-cell">
+                            <div class="assess-icon-box" style="background:${a.moduleColor}">
+                                <i class="fa-solid fa-gamepad"></i>
+                            </div>
+                            <div>
+                                <div class="assess-name">${escapeHtml(a.title)}</div>
+                                <div class="assess-module-link">${escapeHtml(a.module)}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="badge ${getTypeClass(a.type)}">${escapeHtml(a.type)}</span></td>
+                    <td class="muted">${escapeHtml(a.module)}</td>
+                    <td><strong>${a.questions} Steps</strong></td>
+                    <td class="muted">${escapeHtml(a.timeLimit)}</td>
+                    <td><strong>${a.submissions}</strong></td>
+                    <td>
+                        <div class="pass-rate-cell">
+                            <div class="pass-rate-bar">
+                                <div class="pass-rate-fill" style="width:${a.passRate}%;background:${getPassColor(a.passRate)}"></div>
+                            </div>
+                            <span class="pass-rate-pct" style="color:${getPassColor(a.passRate)}">${a.passRate}%</span>
+                        </div>
+                    </td>
+                    <td><span class="badge ${getStatusClass(a.status)}">${escapeHtml(a.status)}</span></td>
+                    <td>
+                        <div class="actions-cell">
+                            <button class="action-btn view" title="View Simulation Details" onclick="openView(${a.id})"><i class="fa-solid fa-eye"></i></button>
+                            <button class="action-btn edit" title="Edit Settings" onclick="openEdit(${a.id})"><i class="fa-solid fa-pen"></i></button>
+                            <button class="action-btn del" title="Archive Simulation" onclick="openDelete(${a.id})"><i class="fa-solid fa-box-archive"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function handleTopSearch(val) {
+            const filterInput = document.getElementById('filterSearch');
+            if (filterInput) filterInput.value = val;
+            filterAndRenderPractice();
+        }
+
+        function resetFilters() {
+            const f1 = document.getElementById('filterSearch'); if (f1) f1.value = '';
+            const f2 = document.getElementById('topSearch'); if (f2) f2.value = '';
+            const s = document.getElementById('filterStatus'); if (s) s.value = 'all';
+            const t = document.getElementById('filterType'); if (t) t.value = 'all';
+            const m = document.getElementById('filterModule'); if (m) m.value = 'all';
+            loadPracticeData();
+        }
+
+        /* ── MODAL MANAGEMENT ── */
+        function openModal(id) {
+            const el = document.getElementById(id);
+            if (el) el.classList.add('open');
+        }
+
+        function closeModal(id) {
+            const el = document.getElementById(id);
+            if (el) el.classList.remove('open');
+        }
+
+        document.querySelectorAll('.modal-overlay').forEach(o => {
+            o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+        });
+
+        /* ── VIEW MODAL ── */
+        function openView(id) {
+            const a = rawPractice.find(x => x.id === id);
+            if (!a) return;
+            currentId = id;
+
+            document.getElementById('vTitle').textContent = a.title;
+            document.getElementById('vType').innerHTML = `<span class="badge ${getTypeClass(a.type)}">${escapeHtml(a.type)}</span>`;
+            document.getElementById('vModule').textContent = a.module;
+            document.getElementById('vQuestions').textContent = a.questions;
+            document.getElementById('vTimeLimit').textContent = a.timeLimit;
+            document.getElementById('vPassMark').textContent = a.passMark + ' pts';
+            document.getElementById('vPassRate').textContent = a.passRate + '%';
+            document.getElementById('vSubmissions').textContent = a.submissions.toLocaleString();
+            document.getElementById('vAvgScore').textContent = a.avgScore + ' / 100';
+
+            const statusEl = document.getElementById('vStatus');
+            statusEl.innerHTML = `<span class="badge ${getStatusClass(a.status)}">${escapeHtml(a.status)}</span>`;
+
+            const fill = document.getElementById('vPassFill');
+            fill.style.width = a.passRate + '%';
+            fill.style.background = getPassColor(a.passRate);
+            document.getElementById('vPassRateBar').textContent = a.passRate + '%';
+
+            const ql = document.getElementById('vQuestionsList');
+            if (ql && Array.isArray(a.questionList)) {
+                ql.innerHTML = a.questionList.map((q, i) =>
+                    `<li class="q-item">
+                        <div class="q-num">${i + 1}</div>
+                        <div class="q-text">${escapeHtml(q.text)}</div>
+                        <div class="q-pts">${q.pts} pts</div>
+                    </li>`
+                ).join('');
+            }
+
+            openModal('viewModal');
+        }
+
+        function switchToEdit() {
+            closeModal('viewModal');
+            openEdit(currentId);
+        }
+
+        /* ── EDIT MODAL ── */
+        function openEdit(id) {
+            const a = rawPractice.find(x => x.id === id);
+            if (!a) return;
+            currentId = id;
+
+            document.getElementById('eTitle').value = a.title;
+            document.getElementById('eType').value = 'Practice Simulation';
+            document.getElementById('eModule').value = a.module;
+            document.getElementById('eQuestions').value = a.questions;
+            document.getElementById('eTimeLimit').value = a.timeLimit;
+            document.getElementById('ePassMark').value = a.passMark;
+            document.getElementById('eStatus').value = a.status;
+
+            openModal('editModal');
+        }
+
+        async function saveEdit() {
+            if (!currentId) return;
+            const a = rawPractice.find(x => x.id === currentId);
+            if (!a) return;
+
+            const payload = {
+                id: currentId,
+                title: document.getElementById('eTitle').value.trim() || a.title,
+                timeLimit: document.getElementById('eTimeLimit').value.trim() || a.timeLimit,
+                passMark: parseInt(document.getElementById('ePassMark').value) || a.passMark,
+                status: document.getElementById('eStatus').value,
+                questions: parseInt(document.getElementById('eQuestions').value) || a.questions
+            };
+
+            try {
+                const res = await fetch(`${API_BASE}?action=update_practice`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await res.json();
+                if (result.success) {
+                    closeModal('editModal');
+                    loadPracticeData();
+                } else {
+                    alert('Failed to update: ' + (result.message || 'Unknown error'));
+                }
+            } catch (err) {
+                console.error('Error updating practice simulation:', err);
+                closeModal('editModal');
+                loadPracticeData();
+            }
+        }
+
+        /* ── DELETE / ARCHIVE ── */
+        function openDelete(id) {
+            const a = rawPractice.find(x => x.id === id);
+            if (!a) return;
+            currentId = id;
+            document.getElementById('dTitle').textContent = '"' + a.title + '"';
+            openModal('deleteModal');
+        }
+
+        async function confirmDelete() {
+            if (!currentId) return;
+            const a = rawPractice.find(x => x.id === currentId);
+            if (!a) return;
+
+            try {
+                await fetch(`${API_BASE}?action=update_practice`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: currentId,
+                        title: a.title,
+                        timeLimit: a.timeLimit,
+                        passMark: a.passMark,
+                        status: 'Archived',
+                        questions: a.questions
+                    })
+                });
+            } catch (e) {
+                console.error('Error archiving simulation:', e);
+            }
+
+            closeModal('deleteModal');
+            loadPracticeData();
+        }
+
+        /* ── CREATE ── */
+        function openCreate() {
+            document.getElementById('cTitle').value = '';
+            document.getElementById('cType').value = 'Practice Simulation';
+            document.getElementById('cModule').value = 'Engine Oil Change & Maintenance';
+            document.getElementById('cQuestions').value = 5;
+            document.getElementById('cTimeLimit').value = '20 mins';
+            document.getElementById('cPassMark').value = 75;
+            document.getElementById('cStatus').value = 'Published';
+            openModal('createModal');
+        }
+
+        async function confirmCreate() {
+            const title = document.getElementById('cTitle').value.trim();
+            if (!title) {
+                document.getElementById('cTitle').focus();
+                return;
+            }
+            const mod = document.getElementById('cModule').value;
+            // Map module to ID
+            const moduleMap = {
+                'Engine Oil Change & Maintenance': 1,
+                'Brake Pad Replacement & Adjustment': 2,
+                'Air Filter Cleaning & Replacement': 3,
+                'Fuel System Inspection & Cleaning': 4,
+                'Battery & Electrical Diagnostics': 5,
+                'Spark Plug Inspection & Replacement': 6
+            };
+            const targetId = moduleMap[mod] || 1;
+
+            try {
+                await fetch(`${API_BASE}?action=update_practice`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: targetId,
+                        title: title,
+                        timeLimit: document.getElementById('cTimeLimit').value.trim() || '20 mins',
+                        passMark: parseInt(document.getElementById('cPassMark').value) || 75,
+                        status: document.getElementById('cStatus').value,
+                        questions: parseInt(document.getElementById('cQuestions').value) || 5
+                    })
+                });
+            } catch (e) {
+                console.error('Error saving new simulation configuration:', e);
+            }
+
+            closeModal('createModal');
+            loadPracticeData();
+        }
+
+        /* ── EXPORT CSV ── */
+        function exportPracticeCSV() {
+            if (!rawPractice || !rawPractice.length) return;
+            let csv = 'ID,Title,Type,Module,Simulation Steps,Time Limit,Submissions,Pass Rate,Avg Score,Status\n';
+            rawPractice.forEach(a => {
+                csv += `"${a.id}","${a.title}","${a.type}","${a.module}","${a.questions}","${a.timeLimit}","${a.submissions}","${a.passRate}%","${a.avgScore}","${a.status}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `MotoMaster_Practice_Simulations_${new Date().toISOString().slice(0,10)}.csv`;
+            link.click();
+        }
+
+        /* ── INITIAL LOAD ── */
+        document.addEventListener('DOMContentLoaded', loadPracticeData);
+        loadPracticeData();
+    </script>
+</body>
+
+</html>

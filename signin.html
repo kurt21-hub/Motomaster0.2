@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MotoMaster – Login</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Nunito:wght@400;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+            background: #e8edf4;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .signin-page {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        /* Card — relative so panels can be absolutely positioned inside */
+        .signin-card {
+            position: relative;
+            width: 100%;
+            max-width: 920px;
+            height: min(560px, 92vh);
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18);
+        }
+
+        /* ── Shared panel base ── */
+        .sc-form-panel {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 52%;
+            background: #fff;
+            padding: 40px 44px 32px 44px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            transition: transform 0.65s cubic-bezier(.65, 0, .35, 1), opacity 0.4s ease;
+            z-index: 2;
+            will-change: transform;
+        }
+
+        /* Sign-in form: starts on left, visible */
+        #panel-signin {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        /* Sign-up form: starts off-screen to the right, hidden */
+        #panel-signup {
+            transform: translateX(200%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Blue branding panel */
+        .sc-right {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 52%;
+            width: 48%;
+            background: #2563eb;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 32px 32px 36px 32px;
+            overflow: hidden;
+            transition: transform 0.65s cubic-bezier(.65, 0, .35, 1);
+            z-index: 1;
+            will-change: transform;
+        }
+
+        .sc-right::before {
+            content: '';
+            position: absolute;
+            width: 340px;
+            height: 340px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .sc-right::after {
+            content: '';
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.07);
+            top: 12%;
+            left: 6%;
+            pointer-events: none;
+        }
+
+        /* ── SIGNUP mode: blue panel slides to LEFT, sign-up form slides in from right ── */
+        .signin-card.signup-mode .sc-right {
+            transform: translateX(-108.33%);
+            /* moves from 52% to 0% of card */
+        }
+
+        .signin-card.signup-mode #panel-signin {
+            transform: translateX(-200%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .signin-card.signup-mode #panel-signup {
+            transform: translateX(92%);
+            /* slides to sit right of blue panel */
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* ── Form content styles ── */
+        .sc-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .sc-brand-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .sc-brand-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .sc-brand-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .sc-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 5px;
+        }
+
+        .sc-subtitle {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        .sc-subtitle a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .sc-subtitle a:hover {
+            text-decoration: underline;
+        }
+
+        .sc-social-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .sc-social-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 9px 14px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            background: #fff;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #374151;
+            cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .sc-social-btn:hover {
+            border-color: #2563eb;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.12);
+        }
+
+        .sc-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            color: #9ca3af;
+            font-size: 0.82rem;
+        }
+
+        .sc-divider::before,
+        .sc-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e5e7eb;
+        }
+
+        .sc-field {
+            margin-bottom: 13px;
+        }
+
+        .sc-field input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.92rem;
+            color: #1a1a2e;
+            background: #fff;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .sc-field input::placeholder {
+            color: #9ca3af;
+        }
+
+        .sc-field input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        /* ── Error message ── */
+        .sc-error {
+            display: none;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            font-size: 0.78rem;
+            font-weight: 700;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 14px;
+        }
+
+        .sc-error.show {
+            display: block;
+        }
+
+        .sc-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            font-size: 0.85rem;
+        }
+
+        .sc-options label {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #374151;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .sc-options input[type="checkbox"] {
+            width: 15px;
+            height: 15px;
+            accent-color: #2563eb;
+            cursor: pointer;
+        }
+
+        .sc-options a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .sc-options a:hover {
+            text-decoration: underline;
+        }
+
+        .forgot-link {
+            color: #6b7280 !important;
+            font-weight: 600 !important;
+            transition: text-decoration 0.2s;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline !important;
+            color: #6b7280 !important;
+        }
+
+        .sc-btn-signin,
+        .sc-btn-signup {
+            width: 100%;
+            padding: 12px;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+        }
+
+        .sc-btn-signin:hover,
+        .sc-btn-signup:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+        }
+
+        /* ── Blue panel internals ── */
+
+        .sc-logo-wrap {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .sc-logo-wrap img {
+            width: 300px;
+            height: 300px;
+            object-fit: contain;
+            filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.3));
+            animation: scPulse 3.5s ease-in-out infinite;
+        }
+
+        @keyframes scPulse {
+
+            0%,
+            100% {
+                filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.28));
+            }
+
+            50% {
+                filter: drop-shadow(0 8px 48px rgba(255, 255, 255, 0.22));
+            }
+        }
+
+        .sc-bottom {
+            z-index: 2;
+            align-self: flex-start;
+            width: 100%;
+        }
+
+        .sc-tagline h2 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 3px;
+        }
+
+        .sc-tagline p {
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .sc-social-icons {
+            display: flex;
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .sc-social-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-decoration: none;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .sc-social-icon:hover {
+            background: rgba(255, 255, 255, 0.32);
+            transform: translateY(-2px);
+        }
+
+        .sc-social-icon svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(37, 99, 235, 0.15);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 99999;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+            border-radius: 22px;
+            padding: 36px 32px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            transform: scale(0.85);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            color: #1a1a2e;
+        }
+        .modal-overlay.active .modal-card {
+            transform: scale(1);
+        }
+        .modal-icon-wrap {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .modal-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+            animation: scaleInCheck 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+        .modal-icon svg {
+            width: 36px;
+            height: 36px;
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: drawCheck 0.6s ease-in-out 0.3s forwards;
+        }
+        .modal-card h2 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+            color: #1a1a2e;
+        }
+        .modal-card p {
+            font-size: 0.92rem;
+            color: #6b7280;
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+        .modal-btn {
+            width: 100%;
+            padding: 14px;
+            background: #2563eb;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+        }
+        .modal-btn:hover {
+            transform: translateY(-1px);
+            background: #1d4ed8;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+        }
+        .modal-btn:active {
+            transform: translateY(0);
+        }
+        @keyframes scaleInCheck {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+        @keyframes drawCheck {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-icon-wrap">
+                <div class="modal-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <h2>Success!</h2>
+            <p id="successMessage">Your account has been created successfully.</p>
+            <button class="modal-btn" id="modalConfirmBtn">Continue</button>
+        </div>
+    </div>
+
+    <div class="signin-page">
+        <div class="signin-card" id="authCard">
+
+            <!-- SIGN-IN form panel -->
+            <div class="sc-form-panel" id="panel-signin">
+                <div class="sc-brand">
+                    <div class="sc-brand-icon">
+                        <img src="images/tesdalogo.png" alt="MotoMaster" />
+                    </div>
+                    <span class="sc-brand-name">Tesda</span>
+                </div>
+
+                <h1 class="sc-title">Sign in to MotoMaster</h1>
+                <p class="sc-subtitle">
+                    Don't have an account? <a onclick="switchToSignup()" href="#">Sign up</a>
+                </p>
+
+                <div class="sc-social-row">
+                    <button class="sc-social-btn" id="googleBtn">
+                        <svg width="18" height="18" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path fill="#EA4335"
+                                d="M24 9.5c3.14 0 5.95 1.08 8.17 2.86l6.09-6.09C34.46 3.19 29.5 1 24 1 14.82 1 7.07 6.48 3.64 14.22l7.09 5.51C12.4 13.59 17.73 9.5 24 9.5z" />
+                            <path fill="#4285F4"
+                                d="M46.14 24.55c0-1.64-.15-3.22-.42-4.75H24v9h12.44c-.54 2.9-2.18 5.36-4.65 7.01l7.19 5.59C43.09 37.19 46.14 31.34 46.14 24.55z" />
+                            <path fill="#FBBC05"
+                                d="M10.73 28.27A14.6 14.6 0 0 1 9.5 24c0-1.48.26-2.91.73-4.27l-7.09-5.51A23.93 23.93 0 0 0 0 24c0 3.87.93 7.53 2.57 10.76l8.16-6.49z" />
+                            <path fill="#34A853"
+                                d="M24 47c5.5 0 10.12-1.82 13.49-4.95l-7.19-5.59c-1.82 1.22-4.15 1.94-6.3 1.94-6.27 0-11.6-4.09-13.27-9.73l-8.16 6.49C7.07 41.52 14.82 47 24 47z" />
+                        </svg>
+                        Google
+                    </button>
+                </div>
+
+                <div class="sc-divider">Or sign in with your email</div>
+
+                <div class="sc-error" id="loginError">Invalid email or password.</div>
+
+                <div class="sc-field">
+                    <input type="email" id="loginEmail" placeholder="Email" autocomplete="email" />
+                </div>
+
+                <div class="sc-field">
+                    <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
+                </div>
+
+                <div class="sc-options">
+                    <label>
+                        <input type="checkbox" id="showPwd" onchange="togglePwd()" />
+                        Show Password
+                    </label>
+                    <a href="#" class="forgot-link">Forgot Password?</a>
+                </div>
+
+                <button class="sc-btn-signin" onclick="studentLogin()">
+                    Sign in
+                </button>
+            </div>
+
+            <!-- SIGN-UP form panel -->
+            <div class="sc-form-panel" id="panel-signup">
+                <div class="sc-brand">
+                    <div class="sc-brand-icon">
+                        <img src="images/tesdalogo.png" alt="MotoMaster" />
+                    </div>
+                    <span class="sc-brand-name">Tesda</span>
+                </div>
+
+                <h1 class="sc-title">Create an Account</h1>
+                <p class="sc-subtitle">
+                    Already have an account? <a onclick="switchToSignin()" href="#">Sign in</a>
+                </p>
+
+                <div class="sc-social-row">
+                    <button class="sc-social-btn" id="googleBtnSignup">
+                        <svg width="18" height="18" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path fill="#EA4335"
+                                d="M24 9.5c3.14 0 5.95 1.08 8.17 2.86l6.09-6.09C34.46 3.19 29.5 1 24 1 14.82 1 7.07 6.48 3.64 14.22l7.09 5.51C12.4 13.59 17.73 9.5 24 9.5z" />
+                            <path fill="#4285F4"
+                                d="M46.14 24.55c0-1.64-.15-3.22-.42-4.75H24v9h12.44c-.54 2.9-2.18 5.36-4.65 7.01l7.19 5.59C43.09 37.19 46.14 31.34 46.14 24.55z" />
+                            <path fill="#FBBC05"
+                                d="M10.73 28.27A14.6 14.6 0 0 1 9.5 24c0-1.48.26-2.91.73-4.27l-7.09-5.51A23.93 23.93 0 0 0 0 24c0 3.87.93 7.53 2.57 10.76l8.16-6.49z" />
+                            <path fill="#34A853"
+                                d="M24 47c5.5 0 10.12-1.82 13.49-4.95l-7.19-5.59c-1.82 1.22-4.15 1.94-6.3 1.94-6.27 0-11.6-4.09-13.27-9.73l-8.16 6.49C7.07 41.52 14.82 47 24 47z" />
+                        </svg>
+                        Google
+                    </button>
+                </div>
+
+                <div class="sc-divider">Or sign up with your details</div>
+
+                <div class="sc-field">
+                    <input type="text" id="regFirst" placeholder="First name" autocomplete="given-name" />
+                </div>
+
+                <div class="sc-field">
+                    <input type="text" id="regLast" placeholder="Last name" autocomplete="family-name" />
+                </div>
+
+                <div class="sc-field">
+                    <input type="email" id="regEmail" placeholder="you@example.com" autocomplete="email" />
+                </div>
+
+                <div class="sc-field">
+                    <input type="text" id="regSection" placeholder="Section / class" />
+                </div>
+
+                <div class="sc-field">
+                    <input type="password" id="regPassword" placeholder="Create a password" />
+                </div>
+
+                <div class="sc-field">
+                    <input type="password" id="confirmPassword" placeholder="Repeat your password" />
+                </div>
+
+                <div class="sc-options">
+                    <label>
+                        <input type="checkbox" id="showPwdReg" onchange="togglePwdReg()" />
+                        Show Password
+                    </label>
+                    <a href="#" class="forgot-link">Forgot Password?</a>
+                </div>
+
+                <button class="sc-btn-signup" id="signupBtn" onclick="registerStudent()">
+                    Sign Up
+                </button>
+            </div>
+
+            <!-- BLUE branding panel -->
+            <div class="sc-right">
+                <div class="sc-logo-wrap">
+                    <img src="images/finalogo.png" alt="MotoMaster Logo" />
+                </div>
+
+                <div class="sc-bottom">
+                    <div class="sc-tagline">
+                        <h2>MotoMaster Workspace.</h2>
+                        <p>Your reliable hub for motorcycle parts &amp; services.</p>
+                    </div>
+                    <div class="sc-social-icons">
+                        <a href="#" class="sc-social-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="sc-social-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="sc-social-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.919-.058-1.265-.069-1.644-.069-4.849 0-3.204.013-3.583.069-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function switchToSignup() {
+            document.getElementById('authCard').classList.add('signup-mode');
+        }
+        function switchToSignin() {
+            document.getElementById('authCard').classList.remove('signup-mode');
+        }
+        function togglePwdReg() {
+            var p = document.getElementById('regPassword');
+            var c = document.getElementById('confirmPassword');
+            var t = document.getElementById('showPwdReg').checked ? 'text' : 'password';
+            p.type = t; c.type = t;
+        }
+
+        function togglePwd() {
+            var p = document.getElementById('password');
+            p.type = document.getElementById('showPwd').checked ? 'text' : 'password';
+        }
+
+        function saveStudentProfile(student) {
+            const serialized = JSON.stringify(student);
+            sessionStorage.setItem('motomasterStudent', serialized);
+            localStorage.setItem('motomasterStudent', serialized);
+        }
+
+        async function studentLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const pass = document.getElementById('password').value;
+            const errEl = document.getElementById('loginError');
+
+            if (!email || !pass) {
+                errEl.textContent = 'Please enter email and password.';
+                errEl.classList.add('show');
+                return;
+            }
+
+            try {
+                const res = await fetch('login_student.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, password: pass })
+                });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    errEl.classList.remove('show');
+                    if (data.student) {
+                        saveStudentProfile(data.student);
+                    }
+                    window.location.href = 'feature.html';
+                } else {
+                    errEl.textContent = data.message || 'Invalid credentials';
+                    errEl.classList.add('show');
+                    // Focus the appropriate field depending on error
+                    if (data.message && data.message.toLowerCase().includes('not registered')) {
+                        document.getElementById('loginEmail').focus();
+                    } else {
+                        document.getElementById('password').focus();
+                    }
+                }
+            } catch (err) {
+                errEl.textContent = 'Network or server error';
+                errEl.classList.add('show');
+            }
+        }
+
+        async function registerStudent() {
+            const first = document.getElementById('regFirst').value.trim();
+            const last = document.getElementById('regLast').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const section = document.getElementById('regSection').value.trim();
+            const pass = document.getElementById('regPassword').value;
+            const confirm = document.getElementById('confirmPassword').value;
+
+            if (!first || !last || !email || !pass || !confirm) {
+                alert('Please fill in all fields.');
+                return;
+            }
+            if (pass !== confirm) {
+                alert('Passwords do not match.');
+                return;
+            }
+            if (pass.length < 6) {
+                alert('Password must be at least 6 characters.');
+                return;
+            }
+
+            const signupBtn = document.getElementById('signupBtn');
+            if (signupBtn) {
+                signupBtn.disabled = true;
+                signupBtn.textContent = 'Creating account...';
+            }
+
+            try {
+                const res = await fetch('register_student.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        first_name: first,
+                        last_name: last,
+                        email: email,
+                        section: section,
+                        password: pass
+                    })
+                });
+                let data = {};
+                try {
+                    data = await res.json();
+                } catch (parseErr) {
+                    alert('Server error during signup. Please try again.');
+                    return;
+                }
+                if (res.ok && data.success) {
+                    if (data.student) {
+                        saveStudentProfile(data.student);
+                    }
+                    showSuccessModal('Your account has been created successfully. Welcome to MotoMaster!', () => {
+                        window.location.href = 'feature.html';
+                    });
+                } else {
+                    alert(data.message || 'Signup failed');
+                }
+            } catch (err) {
+                alert('Network or server error. Make sure XAMPP Apache and MySQL are running.');
+            } finally {
+                if (signupBtn) {
+                    signupBtn.disabled = false;
+                    signupBtn.textContent = 'Sign Up';
+                }
+            }
+        }
+
+        function showSuccessModal(message, onConfirm) {
+            document.getElementById('successMessage').textContent = message;
+            const modal = document.getElementById('successModal');
+            const confirmBtn = document.getElementById('modalConfirmBtn');
+            modal.classList.add('active');
+            confirmBtn.onclick = function() {
+                modal.classList.remove('active');
+                if (onConfirm) onConfirm();
+            };
+        }
+    </script>
+
+</body>
+
+</html>
