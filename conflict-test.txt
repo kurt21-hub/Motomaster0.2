@@ -1,2 +1,2 @@
 MotoMaster Merge Conflict Activity
-Project Description: This is the original project description.
+Project Description: This is version from Branch 2.
